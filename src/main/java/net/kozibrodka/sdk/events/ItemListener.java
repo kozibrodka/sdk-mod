@@ -67,12 +67,6 @@ public class ItemListener {
         //TODO: ADD TO MAPS
     }
 
-    @EventListener
-    public void registerBlocks(BlockRegistryEvent event){
-//        blockRope
-//                blockGrapplingHook
-    }
-
     //BRONIE
     public static TemplateItemBase itemGunAk47;
     public static TemplateItemBase itemGunMp5;
@@ -110,7 +104,7 @@ public class ItemListener {
     public static TemplateItemBase itemGrenadeIncendiaryLit;
 
     //util
-    public static TemplateArmour itemJetPack; //TODO API...
+    public static TemplateArmour itemJetPack;
     public static TemplateItemBase itemGoldCoin;
     public static TemplateItemBase itemLightometer;
     public static TemplateArmour itemNightvisionGoggles;
@@ -124,7 +118,4 @@ public class ItemListener {
     public static TemplateItemBase itemRope;
     public static TemplateItemBase itemGrapplingHook;
 
-    //blocks
-    public static TemplateBlockBase blockRope;
-    public static TemplateBlockBase blockGrapplingHook;
 }

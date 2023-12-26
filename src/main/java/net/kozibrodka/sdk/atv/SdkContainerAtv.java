@@ -1,6 +1,8 @@
 package net.kozibrodka.sdk.atv;
 
 
+import net.kozibrodka.sdk.atv.SdkEntityAtv;
+import net.kozibrodka.sdk.atv.SdkSlotGun;
 import net.minecraft.container.ContainerBase;
 import net.minecraft.container.slot.Slot;
 import net.minecraft.entity.player.PlayerBase;

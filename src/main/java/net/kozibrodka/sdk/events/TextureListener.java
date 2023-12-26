@@ -2,6 +2,10 @@ package net.kozibrodka.sdk.events;
 
 import net.kozibrodka.sdk.atv.SdkEntityAtv;
 import net.kozibrodka.sdk.atv.SdkRenderAtv;
+import net.kozibrodka.sdk.entity.SdkEntityGrapplingHook;
+import net.kozibrodka.sdk.entity.SdkEntityNukePrimed;
+import net.kozibrodka.sdk.render.SdkRenderGrapplingHook;
+import net.kozibrodka.sdk.render.SdkRenderNukePrimed;
 import net.kozibrodka.sdk_api.events.utils.SdkEntityBulletCasing;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.client.event.render.entity.EntityRendererRegisterEvent;
@@ -26,14 +30,12 @@ public class TextureListener {
         ItemListener.itemBulletRocket.setTexture(Identifier.of(MOD_ID, "item/itemBulletRocket"));
         ItemListener.itemBulletRocketLaser.setTexture(Identifier.of(MOD_ID, "item/itemBulletRocketLaser"));
         ItemListener.itemBulletShell.setTexture(Identifier.of(MOD_ID, "item/itemBulletShell"));
-        ItemListener.itemOil.setTexture(Identifier.of(MOD_ID, "item/itemOil"));
 
         ItemListener.itemGunAk47.setTexture(Identifier.of(MOD_ID, "item/itemGunAk47"));
 
         ItemListener.itemWrench.setTexture(Identifier.of(MOD_ID, "item/itemWrench"));
         ItemListener.itemAtv.setTexture(Identifier.of(MOD_ID, "item/itemAtv"));
         ItemListener.itemTelescope.setTexture(Identifier.of(MOD_ID, "item/itemTelescope"));
-
         ItemListener.itemJetPack.setTexture(Identifier.of(MOD_ID, "item/itemJetPack"));
         ItemListener.itemGoldCoin.setTexture(Identifier.of(MOD_ID, "item/itemGoldCoin"));
         ItemListener.itemLightometer.setTexture(Identifier.of(MOD_ID, "item/itemLightometer"));
@@ -41,6 +43,19 @@ public class TextureListener {
         ItemListener.itemScubaTank.setTexture(Identifier.of(MOD_ID, "item/itemScubaTank"));
         ItemListener.itemParachute.setTexture(Identifier.of(MOD_ID, "item/itemParachute"));
         ItemListener.itemTelescope.setTexture(Identifier.of(MOD_ID, "item/itemTelescope"));
+        ItemListener.itemOil.setTexture(Identifier.of(MOD_ID, "item/itemOil"));
+        ItemListener.itemGrapplingHook.setTexture(Identifier.of(MOD_ID, "item/itemGrapplingHook"));
+        ItemListener.itemRope.setTexture(Identifier.of(MOD_ID, "item/itemRope"));
+
+        lighter_top = registerBlockTexture("block/blockLighterTop");
+        lighter_side = registerBlockTexture("block/blockLighterSide");
+        cannon = registerBlockTexture("block/blockCannon");
+        grinder = registerBlockTexture("block/blockGrinder");
+        rope = registerBlockTexture("block/blockRope");
+        nuke = registerBlockTexture("block/blockNuke");
+        grappling = registerBlockTexture("block/itemGrapplingHookThrown");
+        oil_juction = registerBlockTexture("block/blockOilJunction");
+        oil_line = registerBlockTexture("block/blockOilLine");
     }
 
     private int registerBlockTexture(String s) {
@@ -56,6 +71,17 @@ public class TextureListener {
         }
         return Atlases.getStationGuiItems().addTexture(Identifier.of(MOD_ID, s)).index;
     }
+
+    public static int lighter_top;
+    public static int lighter_side;
+    public static int cannon;
+    public static int grinder;
+    public static int rope;
+    public static int nuke;
+    public static int grappling;
+    public static int oil_juction;
+    public static int oil_line;
+
 
 
     @EventListener
@@ -75,5 +101,7 @@ public class TextureListener {
 //        event.renderers.put(SdkEntityBulletRocketLaser.class, new SdkRenderBulletRocketLaser());
 //        event.renderers.put(SdkEntityBulletLaser.class, new SdkRenderBulletLaser());
         event.renderers.put(SdkEntityAtv.class, new SdkRenderAtv());
+        event.renderers.put(SdkEntityGrapplingHook.class, new SdkRenderGrapplingHook());
+        event.renderers.put(SdkEntityNukePrimed.class, new SdkRenderNukePrimed());
     }
 }

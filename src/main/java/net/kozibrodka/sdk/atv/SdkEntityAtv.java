@@ -65,7 +65,7 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
 
     public void onHurt()
     {
-        level.playSound(this, "ofensywa:mechhurt", 1.0F, (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1.0F);
+        level.playSound(this, "sdk:mechhurt", 1.0F, (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1.0F);
     }
 
     public void onDeath()

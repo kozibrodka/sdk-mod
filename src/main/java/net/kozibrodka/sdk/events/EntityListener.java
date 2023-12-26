@@ -1,6 +1,8 @@
 package net.kozibrodka.sdk.events;
 
 import net.kozibrodka.sdk.atv.SdkEntityAtv;
+import net.kozibrodka.sdk.entity.SdkEntityGrapplingHook;
+import net.kozibrodka.sdk.entity.SdkEntityNukePrimed;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.event.entity.EntityRegister;
 import net.modificationstation.stationapi.api.event.registry.EntityHandlerRegistryEvent;
@@ -18,6 +20,8 @@ public class EntityListener {
     @EventListener
     private static void registerEntities(EntityRegister event) {
         event.register(SdkEntityAtv.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityAtv")));
+        event.register(SdkEntityGrapplingHook.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityGrapplingHook")));
+        event.register(SdkEntityNukePrimed.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityNukePrimed")));
 
 //        event.register(SdkEntityBulletCasing.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityBulletCasing")));
 //        event.register(SdkEntityBulletCasingShell.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityBulletCasingShell")));
@@ -38,6 +42,8 @@ public class EntityListener {
     @EventListener
     private static void registerMobHandlers(EntityHandlerRegistryEvent event) {
         Registry.register(event.registry, MOD_ID.id("SdkEntityAtv"), SdkEntityAtv::new);
+        Registry.register(event.registry, MOD_ID.id("SdkEntityGrapplingHook"), SdkEntityGrapplingHook::new);
+        Registry.register(event.registry, MOD_ID.id("SdkEntityNukePrimed"), SdkEntityNukePrimed::new);
 
 //        Registry.register(event.registry, MOD_ID.id("SdkEntityBulletCasing"), SdkEntityBulletCasing::new);
 //        Registry.register(event.registry, MOD_ID.id("SdkEntityBulletCasingShell"), SdkEntityBulletCasingShell::new);

@@ -4,6 +4,8 @@
   "package": "net.kozibrodka.sdk.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "EntityBaseAccessor",
+    "ItemBaseAccessor",
     "ScreenBaseAccessor"
   ],
   "server": [

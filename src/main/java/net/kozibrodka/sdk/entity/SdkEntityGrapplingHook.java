@@ -1,11 +1,25 @@
 package net.kozibrodka.sdk.entity;
 
+import net.kozibrodka.sdk.events.BlockListener;
+import net.kozibrodka.sdk.events.HookListener;
+import net.kozibrodka.sdk.events.ItemListener;
+import net.minecraft.block.BlockBase;
 import net.minecraft.entity.EntityBase;
+import net.minecraft.entity.player.PlayerBase;
+import net.minecraft.item.ItemInstance;
+import net.minecraft.level.Level;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.io.CompoundTag;
+import net.minecraft.util.maths.Box;
+import net.minecraft.util.maths.MathHelper;
+import net.minecraft.util.maths.Vec3f;
+
+import java.util.List;
 
 public class SdkEntityGrapplingHook extends EntityBase
 {
 
-    public SdkEntityGrapplingHook(World world)
+    public SdkEntityGrapplingHook(Level world)
     {
         super(world);
         xTile = -1;
@@ -17,40 +31,40 @@ public class SdkEntityGrapplingHook extends EntityBase
         ticksCatchable = 0;
         bobber = null;
         setSize(0.25F, 0.25F);
-        ignoreFrustumCheck = true;
+        field_1622 = true;
     }
 
-    public SdkEntityGrapplingHook(World world, double d, double d1, double d2)
+    public SdkEntityGrapplingHook(Level world, double d, double d1, double d2)
     {
         this(world);
         setPosition(d, d1, d2);
     }
 
-    public SdkEntityGrapplingHook(World world, EntityPlayer entityplayer)
+    public SdkEntityGrapplingHook(Level world, PlayerBase entityplayer)
     {
         this(world);
         owner = entityplayer;
-        mod_SdkGrapplingHook.grapplingHooks.put(entityplayer, this);
-        setLocationAndAngles(entityplayer.posX, (entityplayer.posY + 1.6200000000000001D) - (double)entityplayer.yOffset, entityplayer.posZ, entityplayer.rotationYaw, entityplayer.rotationPitch);
-        posX -= MathHelper.cos((rotationYaw / 180F) * 3.141593F) * 0.16F;
-        posY -= 0.10000000149011612D;
-        posZ -= MathHelper.sin((rotationYaw / 180F) * 3.141593F) * 0.16F;
-        setPosition(posX, posY, posZ);
-        yOffset = 0.0F;
+        HookListener.grapplingHooks.put(entityplayer, this);
+        setPositionAndAngles(entityplayer.x, (entityplayer.y + 1.6200000000000001D) - (double)entityplayer.standingEyeHeight, entityplayer.z, entityplayer.yaw, entityplayer.pitch);
+        x -= MathHelper.cos((yaw / 180F) * 3.141593F) * 0.16F;
+        y -= 0.10000000149011612D;
+        z -= MathHelper.sin((yaw / 180F) * 3.141593F) * 0.16F;
+        setPosition(x, y, z);
+        standingEyeHeight = 0.0F;
         float f = 0.4F;
-        motionX = -MathHelper.sin((rotationYaw / 180F) * 3.141593F) * MathHelper.cos((rotationPitch / 180F) * 3.141593F) * f;
-        motionZ = MathHelper.cos((rotationYaw / 180F) * 3.141593F) * MathHelper.cos((rotationPitch / 180F) * 3.141593F) * f;
-        motionY = -MathHelper.sin((rotationPitch / 180F) * 3.141593F) * f;
-        func_4042_a(motionX, motionY, motionZ, 1.5F, 1.0F);
-        startPosX = owner.posX;
-        startPosZ = owner.posZ;
+        velocityX = -MathHelper.sin((yaw / 180F) * 3.141593F) * MathHelper.cos((pitch / 180F) * 3.141593F) * f;
+        velocityZ = MathHelper.cos((yaw / 180F) * 3.141593F) * MathHelper.cos((pitch / 180F) * 3.141593F) * f;
+        velocityY = -MathHelper.sin((pitch / 180F) * 3.141593F) * f;
+        func_4042_a(velocityX, velocityY, velocityZ, 1.5F, 1.0F);
+        startPosX = owner.x;
+        startPosZ = owner.z;
     }
 
-    protected void entityInit()
+    protected void initDataTracker()
     {
     }
 
-    public boolean isInRangeToRenderDist(double d)
+    public boolean shouldRenderAtDistance(double d)
     {
         return true;
     }
@@ -58,7 +72,7 @@ public class SdkEntityGrapplingHook extends EntityBase
     public void func_4042_a(double d, double d1, double d2, float f,
                             float f1)
     {
-        float f2 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
+        float f2 = MathHelper.sqrt(d * d + d1 * d1 + d2 * d2);
         d /= f2;
         d1 /= f2;
         d2 /= f2;
@@ -68,16 +82,16 @@ public class SdkEntityGrapplingHook extends EntityBase
         d *= f;
         d1 *= f;
         d2 *= f;
-        motionX = d;
-        motionY = d1;
-        motionZ = d2;
-        float f3 = MathHelper.sqrt_double(d * d + d2 * d2);
-        prevRotationYaw = rotationYaw = (float)((Math.atan2(d, d2) * 180D) / 3.1415927410125732D);
-        prevRotationPitch = rotationPitch = (float)((Math.atan2(d1, f3) * 180D) / 3.1415927410125732D);
+        velocityX = d;
+        velocityY = d1;
+        velocityZ = d2;
+        float f3 = MathHelper.sqrt(d * d + d2 * d2);
+        prevYaw = yaw = (float)((Math.atan2(d, d2) * 180D) / 3.1415927410125732D);
+        prevPitch = pitch = (float)((Math.atan2(d1, f3) * 180D) / 3.1415927410125732D);
         ticksInGround = 0;
     }
 
-    public void setPositionAndRotation2(double d, double d1, double d2, float f,
+    public void method_1311(double d, double d1, double d2, float f,
                                         float f1, int i)
     {
         field_6387_m = d;
@@ -86,72 +100,72 @@ public class SdkEntityGrapplingHook extends EntityBase
         field_6384_p = f;
         field_6383_q = f1;
         field_6388_l = i;
-        motionX = velocityX;
-        motionY = velocityY;
-        motionZ = velocityZ;
+        velocityX = veloocityX;
+        velocityY = veloocityY;
+        velocityZ = veloocityZ;
     }
 
     public void setVelocity(double d, double d1, double d2)
     {
-        velocityX = motionX = d;
-        velocityY = motionY = d1;
-        velocityZ = motionZ = d2;
+        veloocityX = velocityX = d;
+        veloocityY = velocityY = d1;
+        velocityZ = veloocityZ = d2;
     }
 
-    public void onUpdate()
+    public void tick()
     {
-        super.onUpdate();
+        super.tick();
         if(field_6388_l > 0)
         {
-            double d = posX + (field_6387_m - posX) / (double)field_6388_l;
-            double d1 = posY + (field_6386_n - posY) / (double)field_6388_l;
-            double d2 = posZ + (field_6385_o - posZ) / (double)field_6388_l;
+            double d = x + (field_6387_m - x) / (double)field_6388_l;
+            double d1 = y + (field_6386_n - y) / (double)field_6388_l;
+            double d2 = z + (field_6385_o - z) / (double)field_6388_l;
             double d4;
-            for(d4 = field_6384_p - (double)rotationYaw; d4 < -180D; d4 += 360D) { }
+            for(d4 = field_6384_p - (double)yaw; d4 < -180D; d4 += 360D) { }
             for(; d4 >= 180D; d4 -= 360D) { }
-            rotationYaw += d4 / (double)field_6388_l;
-            rotationPitch += (field_6383_q - (double)rotationPitch) / (double)field_6388_l;
+            yaw += d4 / (double)field_6388_l;
+            pitch += (field_6383_q - (double)pitch) / (double)field_6388_l;
             field_6388_l--;
             setPosition(d, d1, d2);
-            setRotation(rotationYaw, rotationPitch);
+            setRotation(yaw, pitch);
             return;
         }
-        if(!worldObj.multiplayerWorld)
+        if(!level.isServerSide)
         {
             if(owner == null)
             {
-                setEntityDead();
+                remove();
                 return;
             }
-            ItemStack itemstack = owner.getCurrentEquippedItem();
-            if(owner.isDead || !owner.isEntityAlive() || itemstack == null || itemstack.getItem() != mod_SdkGrapplingHook.itemGrapplingHook || getDistanceSqToEntity(owner) > 1024D)
+            ItemInstance itemstack = owner.getHeldItem();
+            if(owner.removed || !owner.isAlive() || itemstack == null || itemstack.getType() != ItemListener.itemGrapplingHook || method_1352(owner) > 1024D)
             {
-                setEntityDead();
+                remove();
                 return;
             }
             if(bobber != null)
             {
-                if(bobber.isDead)
+                if(bobber.removed)
                 {
                     bobber = null;
                 } else
                 {
-                    posX = bobber.posX;
-                    posY = bobber.boundingBox.minY + (double)bobber.height * 0.80000000000000004D;
-                    posZ = bobber.posZ;
+                    x = bobber.x;
+                    y = bobber.boundingBox.minY + (double)bobber.height * 0.80000000000000004D;
+                    z = bobber.z;
                     return;
                 }
             }
         }
         if(inGround)
         {
-            int i = worldObj.getBlockId(xTile, yTile, zTile);
+            int i = level.getTileId(xTile, yTile, zTile);
             if(i != inTile)
             {
                 inGround = false;
-                motionX *= rand.nextFloat() * 0.2F;
-                motionY *= rand.nextFloat() * 0.2F;
-                motionZ *= rand.nextFloat() * 0.2F;
+                velocityX *= rand.nextFloat() * 0.2F;
+                velocityY *= rand.nextFloat() * 0.2F;
+                velocityZ *= rand.nextFloat() * 0.2F;
                 ticksInGround = 0;
                 ticksInAir = 0;
             } else
@@ -159,7 +173,7 @@ public class SdkEntityGrapplingHook extends EntityBase
                 ticksInGround++;
                 if(ticksInGround == 1200)
                 {
-                    setEntityDead();
+                    remove();
                 }
                 return;
             }
@@ -167,33 +181,33 @@ public class SdkEntityGrapplingHook extends EntityBase
         {
             ticksInAir++;
         }
-        Vec3D vec3d = Vec3D.createVector(posX, posY, posZ);
-        Vec3D vec3d1 = Vec3D.createVector(posX + motionX, posY + motionY, posZ + motionZ);
-        MovingObjectPosition movingobjectposition = worldObj.rayTraceBlocks(vec3d, vec3d1);
-        vec3d = Vec3D.createVector(posX, posY, posZ);
-        vec3d1 = Vec3D.createVector(posX + motionX, posY + motionY, posZ + motionZ);
+        Vec3f vec3d = Vec3f.from(x, y, z);
+        Vec3f vec3d1 = Vec3f.from(x + velocityX, y + velocityY, z + velocityZ);
+        HitResult movingobjectposition = level.method_160(vec3d, vec3d1);
+        vec3d = Vec3f.from(x, y, z);
+        vec3d1 = Vec3f.from(x + velocityX, y + velocityY, z + velocityZ);
         if(movingobjectposition != null)
         {
-            vec3d1 = Vec3D.createVector(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord, movingobjectposition.hitVec.zCoord);
+            vec3d1 = Vec3f.from(movingobjectposition.field_1988.x, movingobjectposition.field_1988.y, movingobjectposition.field_1988.z);
         }
-        Entity entity = null;
-        List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.addCoord(motionX, motionY, motionZ).expand(1.0D, 1.0D, 1.0D));
+        EntityBase entity = null;
+        List list = level.getEntities(this, boundingBox.method_86(velocityX, velocityY, velocityZ).expand(1.0D, 1.0D, 1.0D));
         double d3 = 0.0D;
         for(int j = 0; j < list.size(); j++)
         {
-            Entity entity1 = (Entity)list.get(j);
-            if(!entity1.canBeCollidedWith() || entity1 == owner && ticksInAir < 5)
+            EntityBase entity1 = (EntityBase)list.get(j);
+            if(!entity1.method_1356() || entity1 == owner && ticksInAir < 5)
             {
                 continue;
             }
             float f2 = 0.3F;
-            AxisAlignedBB axisalignedbb = entity1.boundingBox.expand(f2, f2, f2);
-            MovingObjectPosition movingobjectposition1 = axisalignedbb.func_1169_a(vec3d, vec3d1);
+            Box axisalignedbb = entity1.boundingBox.expand(f2, f2, f2);
+            HitResult movingobjectposition1 = axisalignedbb.method_89(vec3d, vec3d1);
             if(movingobjectposition1 == null)
             {
                 continue;
             }
-            double d8 = vec3d.distanceTo(movingobjectposition1.hitVec);
+            double d8 = vec3d.method_1294(movingobjectposition1.field_1988);
             if(d8 < d3 || d3 == 0.0D)
             {
                 entity = entity1;
@@ -203,42 +217,42 @@ public class SdkEntityGrapplingHook extends EntityBase
 
         if(entity != null)
         {
-            movingobjectposition = new MovingObjectPosition(entity);
+            movingobjectposition = new HitResult(entity);
         }
         if(movingobjectposition != null)
         {
-            if(movingobjectposition.entityHit != null)
+            if(movingobjectposition.field_1989 != null)
             {
-                if(movingobjectposition.entityHit.attackEntityFrom(owner, 0))
+                if(movingobjectposition.field_1989.damage(owner, 0))
                 {
-                    bobber = movingobjectposition.entityHit;
+                    bobber = movingobjectposition.field_1989;
                 }
             } else
             {
-                double d5 = motionX;
-                double d6 = motionZ;
-                xTile = movingobjectposition.blockX;
-                yTile = movingobjectposition.blockY;
-                zTile = movingobjectposition.blockZ;
-                inTile = worldObj.getBlockId(xTile, yTile, zTile);
-                motionX = (float)(movingobjectposition.hitVec.xCoord - posX);
-                motionY = (float)(movingobjectposition.hitVec.yCoord - posY);
-                motionZ = (float)(movingobjectposition.hitVec.zCoord - posZ);
-                float f3 = MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);
-                posX -= (motionX / (double)f3) * 0.05000000074505806D;
-                posY -= (motionY / (double)f3) * 0.05000000074505806D;
-                posZ -= (motionZ / (double)f3) * 0.05000000074505806D;
-                if(movingobjectposition.hitVec.yCoord - (double)yTile == 1.0D && (worldObj.getBlockId(xTile, yTile + 1, zTile) == 0 || worldObj.getBlockId(xTile, yTile + 1, zTile) == Block.snow.blockID) && yTile + 1 < 128)
+                double d5 = velocityX;
+                double d6 = velocityZ;
+                xTile = movingobjectposition.x;
+                yTile = movingobjectposition.y;
+                zTile = movingobjectposition.z;
+                inTile = level.getTileId(xTile, yTile, zTile);
+                velocityX = (float)(movingobjectposition.field_1988.x - x);
+                velocityY = (float)(movingobjectposition.field_1988.y - y);
+                velocityZ = (float)(movingobjectposition.field_1988.z - z);
+                float f3 = MathHelper.sqrt(velocityX * velocityX + velocityY * velocityY + velocityZ * velocityZ);
+                x -= (velocityX / (double)f3) * 0.05000000074505806D;
+                y -= (velocityY / (double)f3) * 0.05000000074505806D;
+                z -= (velocityZ / (double)f3) * 0.05000000074505806D;
+                if(movingobjectposition.field_1988.y - (double)yTile == 1.0D && (level.getTileId(xTile, yTile + 1, zTile) == 0 || level.getTileId(xTile, yTile + 1, zTile) == BlockBase.SNOW.id) && yTile + 1 < 128)
                 {
                     if(d5 == 0.0D || d6 == 0.0D)
                     {
-                        d5 = posX - startPosX;
-                        d6 = posZ - startPosZ;
+                        d5 = x - startPosX;
+                        d6 = z - startPosZ;
                     }
                     byte byte0 = (byte)(d5 > 0.0D ? 1 : -1);
                     byte byte1 = (byte)(d6 > 0.0D ? 1 : -1);
-                    boolean flag = (worldObj.getBlockId(xTile - byte0, yTile, zTile) == 0 || worldObj.getBlockId(xTile - byte0, yTile, zTile) == Block.snow.blockID) && worldObj.getBlockId(xTile - byte0, yTile + 1, zTile) == 0;
-                    boolean flag1 = (worldObj.getBlockId(xTile, yTile, zTile - byte1) == 0 || worldObj.getBlockId(xTile, yTile, zTile - byte1) == Block.snow.blockID) && worldObj.getBlockId(xTile, yTile + 1, zTile - byte1) == 0;
+                    boolean flag = (level.getTileId(xTile - byte0, yTile, zTile) == 0 || level.getTileId(xTile - byte0, yTile, zTile) == BlockBase.SNOW.id) && level.getTileId(xTile - byte0, yTile + 1, zTile) == 0;
+                    boolean flag1 = (level.getTileId(xTile, yTile, zTile - byte1) == 0 || level.getTileId(xTile, yTile, zTile - byte1) == BlockBase.SNOW.id) && level.getTileId(xTile, yTile + 1, zTile - byte1) == 0;
                     int k1 = xTile;
                     int l1 = yTile;
                     int i2 = zTile;
@@ -270,15 +284,15 @@ public class SdkEntityGrapplingHook extends EntityBase
                     }
                     if(flag2)
                     {
-                        worldObj.setBlockWithNotify(xTile, yTile + 1, zTile, mod_SdkGrapplingHook.blockGrapplingHook.blockID);
-                        worldObj.setBlockMetadataWithNotify(xTile, yTile + 1, zTile, byte2);
-                        worldObj.setBlockWithNotify(k1, l1, i2, mod_SdkGrapplingHook.blockRope.blockID);
-                        worldObj.setBlockMetadataWithNotify(k1, l1, i2, byte2);
+                        level.setTile(xTile, yTile + 1, zTile, BlockListener.blockGrapplingHook.id);
+                        level.setTileMeta(xTile, yTile + 1, zTile, byte2);
+                        level.setTile(k1, l1, i2, BlockListener.blockRope.id);
+                        level.setTileMeta(k1, l1, i2, byte2);
                         if(owner != null)
                         {
-                            owner.destroyCurrentEquippedItem();
+                            owner.breakHeldItem();
                         }
-                        setEntityDead();
+                        remove();
                     } else
                     {
                         inGround = true;
@@ -290,17 +304,17 @@ public class SdkEntityGrapplingHook extends EntityBase
         {
             return;
         }
-        moveEntity(motionX, motionY, motionZ);
-        float f = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
-        rotationYaw = (float)((Math.atan2(motionX, motionZ) * 180D) / 3.1415927410125732D);
-        for(rotationPitch = (float)((Math.atan2(motionY, f) * 180D) / 3.1415927410125732D); rotationPitch - prevRotationPitch < -180F; prevRotationPitch -= 360F) { }
-        for(; rotationPitch - prevRotationPitch >= 180F; prevRotationPitch += 360F) { }
-        for(; rotationYaw - prevRotationYaw < -180F; prevRotationYaw -= 360F) { }
-        for(; rotationYaw - prevRotationYaw >= 180F; prevRotationYaw += 360F) { }
-        rotationPitch = prevRotationPitch + (rotationPitch - prevRotationPitch) * 0.2F;
-        rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
+        move(velocityX, velocityY, velocityZ);
+        float f = MathHelper.sqrt(velocityX * velocityX + velocityZ * velocityZ);
+        yaw = (float)((Math.atan2(velocityX, velocityZ) * 180D) / 3.1415927410125732D);
+        for(pitch = (float)((Math.atan2(velocityY, f) * 180D) / 3.1415927410125732D); pitch - prevPitch < -180F; prevPitch -= 360F) { }
+        for(; pitch - prevPitch >= 180F; prevPitch += 360F) { }
+        for(; yaw - prevYaw < -180F; prevYaw -= 360F) { }
+        for(; yaw - prevYaw >= 180F; prevYaw += 360F) { }
+        pitch = prevPitch + (pitch - prevPitch) * 0.2F;
+        yaw = prevYaw + (yaw - prevYaw) * 0.2F;
         float f1 = 0.92F;
-        if(onGround || isCollidedHorizontally)
+        if(onGround || field_1624)
         {
             f1 = 0.5F;
         }
@@ -310,7 +324,7 @@ public class SdkEntityGrapplingHook extends EntityBase
         {
             double d10 = ((boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (double)(l + 0)) / (double)k) - 0.125D) + 0.125D;
             double d11 = ((boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (double)(l + 1)) / (double)k) - 0.125D) + 0.125D;
-            AxisAlignedBB axisalignedbb1 = AxisAlignedBB.getBoundingBoxFromPool(boundingBox.minX, d10, boundingBox.minZ, boundingBox.maxX, d11, boundingBox.maxZ);
+            Box axisalignedbb1 = Box.createButWasteMemory(boundingBox.minX, d10, boundingBox.minZ, boundingBox.maxX, d11, boundingBox.maxZ);
         }
 
         if(d7 > 0.0D)
@@ -322,52 +336,52 @@ public class SdkEntityGrapplingHook extends EntityBase
             if(rand.nextInt(500) == 0)
             {
                 ticksCatchable = rand.nextInt(30) + 10;
-                motionY -= 0.20000000298023224D;
-                worldObj.playSoundAtEntity(this, "random.splash", 0.25F, 1.0F + (rand.nextFloat() - rand.nextFloat()) * 0.4F);
-                float f4 = MathHelper.floor_double(boundingBox.minY);
+                velocityY -= 0.20000000298023224D;
+                level.playSound(this, "random.splash", 0.25F, 1.0F + (rand.nextFloat() - rand.nextFloat()) * 0.4F);
+                float f4 = MathHelper.floor(boundingBox.minY);
                 for(int i1 = 0; (float)i1 < 1.0F + width * 20F; i1++)
                 {
                     float f5 = (rand.nextFloat() * 2.0F - 1.0F) * width;
                     float f7 = (rand.nextFloat() * 2.0F - 1.0F) * width;
-                    worldObj.spawnParticle("bubble", posX + (double)f5, f4 + 1.0F, posZ + (double)f7, motionX, motionY - (double)(rand.nextFloat() * 0.2F), motionZ);
+                    level.addParticle("bubble", x + (double)f5, f4 + 1.0F, z + (double)f7, velocityX, velocityY - (double)(rand.nextFloat() * 0.2F), velocityZ);
                 }
 
                 for(int j1 = 0; (float)j1 < 1.0F + width * 20F; j1++)
                 {
                     float f6 = (rand.nextFloat() * 2.0F - 1.0F) * width;
                     float f8 = (rand.nextFloat() * 2.0F - 1.0F) * width;
-                    worldObj.spawnParticle("splash", posX + (double)f6, f4 + 1.0F, posZ + (double)f8, motionX, motionY, motionZ);
+                    level.addParticle("splash", x + (double)f6, f4 + 1.0F, z + (double)f8, velocityX, velocityY, velocityZ);
                 }
 
             }
         }
         if(ticksCatchable > 0)
         {
-            motionY -= (double)(rand.nextFloat() * rand.nextFloat() * rand.nextFloat()) * 0.20000000000000001D;
+            velocityY -= (double)(rand.nextFloat() * rand.nextFloat() * rand.nextFloat()) * 0.20000000000000001D;
         }
         double d9 = d7 * 2D - 1.0D;
-        motionY += 0.039999999105930328D * d9;
+        velocityY += 0.039999999105930328D * d9;
         if(d7 > 0.0D)
         {
             f1 = (float)((double)f1 * 0.90000000000000002D);
-            motionY *= 0.80000000000000004D;
+            velocityY *= 0.80000000000000004D;
         }
-        motionX *= f1;
-        motionY *= f1;
-        motionZ *= f1;
-        setPosition(posX, posY, posZ);
+        velocityX *= f1;
+        velocityY *= f1;
+        velocityZ *= f1;
+        setPosition(x, y, z);
     }
 
-    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
+    public void writeCustomDataToTag(CompoundTag nbttagcompound)
     {
-        nbttagcompound.setShort("xTile", (short)xTile);
-        nbttagcompound.setShort("yTile", (short)yTile);
-        nbttagcompound.setShort("zTile", (short)zTile);
-        nbttagcompound.setByte("inTile", (byte)inTile);
-        nbttagcompound.setByte("inGround", (byte)(inGround ? 1 : 0));
+        nbttagcompound.put("xTile", (short)xTile);
+        nbttagcompound.put("yTile", (short)yTile);
+        nbttagcompound.put("zTile", (short)zTile);
+        nbttagcompound.put("inTile", (byte)inTile);
+        nbttagcompound.put("inGround", (byte)(inGround ? 1 : 0));
     }
 
-    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
+    public void readCustomDataFromTag(CompoundTag nbttagcompound)
     {
         xTile = nbttagcompound.getShort("xTile");
         yTile = nbttagcompound.getShort("yTile");
@@ -376,7 +390,7 @@ public class SdkEntityGrapplingHook extends EntityBase
         inGround = nbttagcompound.getByte("inGround") == 1;
     }
 
-    public float getShadowSize()
+    public float getEyeHeight()
     {
         return 0.0F;
     }
@@ -386,28 +400,28 @@ public class SdkEntityGrapplingHook extends EntityBase
         byte byte0 = 0;
         if(bobber != null)
         {
-            double d = owner.posX - posX;
-            double d1 = owner.posY - posY;
-            double d2 = owner.posZ - posZ;
-            double d3 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
+            double d = owner.x - x;
+            double d1 = owner.y - y;
+            double d2 = owner.z - z;
+            double d3 = MathHelper.sqrt(d * d + d1 * d1 + d2 * d2);
             double d4 = 0.10000000000000001D;
-            bobber.motionX += d * d4;
-            bobber.motionY += d1 * d4 + (double)MathHelper.sqrt_double(d3) * 0.080000000000000002D;
-            bobber.motionZ += d2 * d4;
+            bobber.velocityX += d * d4;
+            bobber.velocityY += d1 * d4 + (double)MathHelper.sqrt(d3) * 0.080000000000000002D;
+            bobber.velocityZ += d2 * d4;
             byte0 = 3;
         }
         if(inGround)
         {
             byte0 = 2;
         }
-        setEntityDead();
+        remove();
         return byte0;
     }
 
-    public void setEntityDead()
+    public void remove()
     {
-        super.setEntityDead();
-        mod_SdkGrapplingHook.grapplingHooks.remove(owner);
+        super.remove();
+        HookListener.grapplingHooks.remove(owner);
         owner = null;
     }
 
@@ -416,20 +430,20 @@ public class SdkEntityGrapplingHook extends EntityBase
     private int zTile;
     private int inTile;
     private boolean inGround;
-    public EntityPlayer owner;
+    public PlayerBase owner;
     private int ticksInGround;
     private int ticksInAir;
     private int ticksCatchable;
-    public Entity bobber;
+    public EntityBase bobber;
     private int field_6388_l;
     private double field_6387_m;
     private double field_6386_n;
     private double field_6385_o;
     private double field_6384_p;
     private double field_6383_q;
-    private double velocityX;
-    private double velocityY;
-    private double velocityZ;
+    private double veloocityX;
+    private double veloocityY;
+    private double veloocityZ;
     private double startPosX;
     private double startPosZ;
 }

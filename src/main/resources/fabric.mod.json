@@ -20,7 +20,9 @@
   "entrypoints": {
     "stationapi:event_bus": [
       "net.kozibrodka.sdk.events.ItemListener",
-      "net.kozibrodka.sdk.events.EntityListener"
+      "net.kozibrodka.sdk.events.EntityListener",
+      "net.kozibrodka.sdk.events.BlockListener",
+      "net.kozibrodka.sdk.events.TileEntityListener"
     ],
     "stationapi:event_bus_client": [
       "net.kozibrodka.sdk.events.TextureListener"

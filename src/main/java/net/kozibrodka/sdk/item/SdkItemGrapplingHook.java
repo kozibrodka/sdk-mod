@@ -32,15 +32,15 @@ public class SdkItemGrapplingHook extends TemplateItemBase {
         if(HookListener.grapplingHooks.get(entityplayer) != null)
         {
             int i = ((SdkEntityGrapplingHook) HookListener.grapplingHooks.get(entityplayer)).catchFish();
-            entityplayer.swingItem();
+            entityplayer.swingHand();
         } else
         {
-            world.playSoundAtEntity(entityplayer, "sdk.grunt", 1.0F, 1.0F / (itemRand.nextFloat() * 0.1F + 0.95F));
-            if(!world.multiplayerWorld)
+            world.playSound(entityplayer, "sdk:grunt", 1.0F, 1.0F / (rand.nextFloat() * 0.1F + 0.95F));
+            if(!world.isServerSide)
             {
-                world.entityJoinedWorld(new SdkEntityGrapplingHook(world, entityplayer));
+                world.spawnEntity(new SdkEntityGrapplingHook(world, entityplayer));
             }
-            entityplayer.swingItem();
+            entityplayer.swingHand();
         }
         return itemstack;
     }
