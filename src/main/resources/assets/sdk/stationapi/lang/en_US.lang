@@ -1,15 +1,13 @@
-achievement.boned=You've been boned!
-achievement.boned.desc=Pick up a bone.
-achievement.apple=AppleStuff
-achievement.apple.desc=Pick up an apple.
+tile.nuke.name=Nuke
+tile.blockLighter.name=Lighter
+tile.blockOil.name=Oil
+tile.blockCannon.name=Cannon
+tile.blockGrinder.name=Grinder
+tile.blockPlaque.name=Plaque
+tile.blockRope.name=Rope
+tile.blockGrapplingHook.name=Grappling Hook
 
-achievement.page.examplemod=Example
+item.itemBulletLight.name=Light Bullet
 
-item.coolitem.name=Cool Item
-
-tile.test.name=Example Block
-tile.test2.name=Example Block With Model
-
-key.test=Give Boned Achievement
-key.test2=Give Apple Achievement
-key.hurtme=Hurt Self
+item.itemSentry.name=AK47 Sentry
+item.itemSentry.1.name=MP5 Sentry

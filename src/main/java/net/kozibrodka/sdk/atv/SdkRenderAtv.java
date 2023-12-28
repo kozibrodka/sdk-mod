@@ -1,6 +1,5 @@
 package net.kozibrodka.sdk.atv;
 
-import net.kozibrodka.sdk.events.TextureListener;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.entity.EntityBase;
@@ -27,7 +26,7 @@ public class SdkRenderAtv extends EntityRenderer
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
         GL11.glRotatef(180F - f, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(-f2, 0.0F, 0.0F, 1.0F);
-        bindTexture("/assets/sdk/stationapi/textures/item/mobAtv.png");
+        bindTexture("/assets/sdk/stationapi/textures/mob/mobAtv.png");
         GL11.glScalef(-1F, -1F, 1.0F);
         GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
         GL11.glScalef(1.5F, 1.5F, 1.5F);

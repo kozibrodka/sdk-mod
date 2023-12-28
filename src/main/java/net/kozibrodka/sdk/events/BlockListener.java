@@ -38,6 +38,9 @@ public class BlockListener {
         blockCannon = (TemplateBlockBase) new SdkBlockCannon(Identifier.of(MOD_ID, "blockCannon")).setTranslationKey(MOD_ID, "blockCannon").setHardness(3.5F).setSounds(BlockBase.STONE_SOUNDS);
         blockRope = (TemplateBlockWithEntity) new SdkBlockRope(Identifier.of(MOD_ID, "blockRope")).setTranslationKey(MOD_ID, "blockRope").setHardness(-1F).setSounds(BlockBase.WOOD_SOUNDS).setBlastResistance(6000000F);
         blockGrapplingHook = (TemplateBlockBase) new SdkBlockGrapplingHook(Identifier.of(MOD_ID, "blockGrapplingHook")).setTranslationKey(MOD_ID, "blockGrapplingHook").setHardness(0.0F).setSounds(BlockBase.METAL_SOUNDS);
+
+        //TODO: render blockGrappling, blockPlaque, part of BlockOil, Inventory icons
+
     }
 
     @Environment(EnvType.CLIENT)

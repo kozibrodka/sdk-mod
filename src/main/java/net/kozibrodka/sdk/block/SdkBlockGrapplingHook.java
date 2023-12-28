@@ -18,13 +18,24 @@ import net.modificationstation.stationapi.api.template.block.TemplateBlockBase;
 
 import java.util.Random;
 
-public class SdkBlockGrapplingHook extends TemplateBlockBase implements BlockWithWorldRenderer
+public class SdkBlockGrapplingHook extends TemplateBlockBase
 {
 
     public SdkBlockGrapplingHook(Identifier iid)
     {
         super(iid, Material.WOOD);
         setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
+    }
+
+    public int getTextureForSide(int i)
+    {
+        if(i == 1 || i == 0)
+        {
+            return TextureListener.grappling;
+        } else
+        {
+            return TextureListener.empty;
+        }
     }
 
     public Box getCollisionShape(Level world, int i, int j, int k)
@@ -137,7 +148,7 @@ public class SdkBlockGrapplingHook extends TemplateBlockBase implements BlockWit
 
     }
 
-    @Override
+
     public boolean renderWorld(BlockRenderer renderblocks, BlockView iblockaccess, int i, int j, int k) {
         int l = this.getColourMultiplier(iblockaccess, i, j, k);
         float f = (float)(l >> 16 & 0xff) / 255F;
