@@ -8,8 +8,7 @@ import net.kozibrodka.sdk_api.events.utils.SdkEntityBulletCasing;
 import net.kozibrodka.sdk_api.events.utils.SdkItemGun;
 import net.minecraft.entity.EntityBase;
 import net.minecraft.level.Level;
-import net.modificationstation.stationapi.api.registry.Identifier;
-
+import net.modificationstation.stationapi.api.util.Identifier;
 
 public class SdkItemGunRocketLauncher extends SdkItemGun
 {

@@ -6,10 +6,10 @@ import net.minecraft.block.BlockBase;
 import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.level.Level;
-import net.modificationstation.stationapi.api.registry.Identifier;
-import net.modificationstation.stationapi.api.template.block.TemplateBlockBase;
+import net.modificationstation.stationapi.api.template.block.TemplateBlock;
+import net.modificationstation.stationapi.api.util.Identifier;
 
-public class SdkBlockNuke extends TemplateBlockBase
+public class SdkBlockNuke extends TemplateBlock
 {
 
     public SdkBlockNuke(Identifier iid)

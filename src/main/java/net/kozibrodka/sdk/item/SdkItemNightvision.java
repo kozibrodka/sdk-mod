@@ -2,11 +2,13 @@ package net.kozibrodka.sdk.item;
 
 import net.kozibrodka.sdk.events.ItemListener;
 import net.minecraft.item.armour.Armour;
-import net.modificationstation.stationapi.api.client.item.ArmourTextureProvider;
-import net.modificationstation.stationapi.api.registry.Identifier;
-import net.modificationstation.stationapi.api.template.item.armour.TemplateArmour;
+import net.modificationstation.stationapi.api.client.item.ArmorTextureProvider;
+import net.modificationstation.stationapi.api.template.item.TemplateArmorItem;
+import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.template.item.TemplateItem;
 
-public class SdkItemNightvision extends TemplateArmour implements ArmourTextureProvider {
+
+public class SdkItemNightvision extends TemplateArmorItem implements ArmorTextureProvider {
     public SdkItemNightvision(Identifier i, int j)
     {
         super(i, 1, j, 0);

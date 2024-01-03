@@ -4,10 +4,10 @@ import net.kozibrodka.sdk.events.TextureListener;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockBase;
 import net.minecraft.level.Level;
-import net.modificationstation.stationapi.api.registry.Identifier;
-import net.modificationstation.stationapi.api.template.block.TemplateBlockBase;
+import net.modificationstation.stationapi.api.template.block.TemplateBlock;
+import net.modificationstation.stationapi.api.util.Identifier;
 
-public class SdkBlockLighter extends TemplateBlockBase
+public class SdkBlockLighter extends TemplateBlock
 {
 
     public SdkBlockLighter(Identifier iid)

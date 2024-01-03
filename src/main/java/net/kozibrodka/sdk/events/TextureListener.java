@@ -11,20 +11,20 @@ import net.kozibrodka.sdk_api.events.utils.SdkEntityBulletCasing;
 import net.kozibrodka.sdk_api.events.utils.SdkEntityBulletCasingShell;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.client.render.ClockTextureBinder;
+import net.modificationstation.stationapi.api.client.event.block.entity.BlockEntityRendererRegisterEvent;
 import net.modificationstation.stationapi.api.client.event.render.entity.EntityRendererRegisterEvent;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
-import net.modificationstation.stationapi.api.client.event.tileentity.TileEntityRendererRegisterEvent;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
-import net.modificationstation.stationapi.api.registry.Identifier;
-import net.modificationstation.stationapi.api.registry.ModID;
+import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.Null;
 import net.kozibrodka.sdk.entityBullet.*;
 
 public class TextureListener {
 
-    @Entrypoint.ModID
-    public static final ModID MOD_ID = Null.get();
+    @Entrypoint.Namespace
+    public static final Namespace MOD_ID = Null.get();
 
     @EventListener
     public void registerTextures(TextureRegisterEvent event) {
@@ -164,7 +164,7 @@ public class TextureListener {
     }
 
     @EventListener
-    private static void registerTileEntityRenderers(TileEntityRendererRegisterEvent event){
+    private static void registerTileEntityRenderers(BlockEntityRendererRegisterEvent event){
         event.renderers.put(SdkTileEntityPlaque.class, new SdkTileEntityRendererPlaque());
     }
 }

@@ -7,7 +7,7 @@ import net.kozibrodka.sdk.entityBullet.SdkEntityBulletAk47;
 import net.kozibrodka.sdk.events.ItemListener;
 import net.minecraft.entity.EntityBase;
 import net.minecraft.level.Level;
-import net.modificationstation.stationapi.api.registry.Identifier;
+import net.modificationstation.stationapi.api.util.Identifier;
 
 public class SdkItemGunAk47 extends SdkItemGun
 {

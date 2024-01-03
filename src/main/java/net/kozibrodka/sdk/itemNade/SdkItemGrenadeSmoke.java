@@ -5,10 +5,10 @@ import net.kozibrodka.sdk.entityNade.SdkEntityGrenadeSmoke;
 import net.minecraft.entity.player.PlayerBase;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
-import net.modificationstation.stationapi.api.registry.Identifier;
-import net.modificationstation.stationapi.api.template.item.TemplateItemBase;
+import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.template.item.TemplateItem;
 
-public class SdkItemGrenadeSmoke extends TemplateItemBase
+public class SdkItemGrenadeSmoke extends TemplateItem
 {
 
     public SdkItemGrenadeSmoke(Identifier i)
