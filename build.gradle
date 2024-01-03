@@ -84,9 +84,9 @@ dependencies {
 	modImplementation("net.glasslauncher:HowManyItems-Fabric-Unofficial:${project.howmanyitems_version}") {
 		transitive false
 	}
-//	modImplementation("com.github.matthewperiut:spc-babric:${project.spc_version}") {
-//		transitive false
-//	}
+	modImplementation("com.github.matthewperiut:spc-babric:${project.spc_version}") {
+		transitive false
+	}
 	modImplementation("com.github.kozibrodka:sdk-api:${project.sdkapi_version}") {
 		transitive false
 	}
