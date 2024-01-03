@@ -9,7 +9,7 @@ import net.modificationstation.stationapi.api.template.item.armour.TemplateArmou
 public class SdkItemParachute extends TemplateArmour implements ArmourTextureProvider {
     public SdkItemParachute(Identifier i, int j)
     {
-        super(i, -1, j, 1);
+        super(i, 1, j, 1);
         setDurability(7);
     }
 

@@ -26,6 +26,7 @@ public class SdkItemGunLaser extends SdkItemGun
         useDelay = 10;
         recoil = 0.0F;
         soundRangeFactor = 2.0F;
+        penetration = 3;
     }
 
     public SdkEntityBullet getBulletEntity(Level world, EntityBase entity, float f, float f1, float f2, float f3, float f4)

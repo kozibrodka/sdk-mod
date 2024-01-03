@@ -9,7 +9,7 @@ import net.modificationstation.stationapi.api.template.item.armour.TemplateArmou
 public class SdkItemJetPack extends TemplateArmour implements ArmourTextureProvider {
     public SdkItemJetPack(Identifier i, int j)
     {
-        super(i, -1, j, 1);
+        super(i, 1, j, 1);
     }
 
     @Override

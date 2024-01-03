@@ -6,11 +6,14 @@ import net.kozibrodka.sdk.entity.SdkEntityGrapplingHook;
 import net.kozibrodka.sdk.entity.SdkEntityNukePrimed;
 import net.kozibrodka.sdk.entitySentry.SdkEntitySentry;
 import net.kozibrodka.sdk.render.*;
+import net.kozibrodka.sdk.tileEntity.SdkTileEntityPlaque;
 import net.kozibrodka.sdk_api.events.utils.SdkEntityBulletCasing;
 import net.kozibrodka.sdk_api.events.utils.SdkEntityBulletCasingShell;
 import net.mine_diver.unsafeevents.listener.EventListener;
+import net.minecraft.client.render.ClockTextureBinder;
 import net.modificationstation.stationapi.api.client.event.render.entity.EntityRendererRegisterEvent;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
+import net.modificationstation.stationapi.api.client.event.tileentity.TileEntityRendererRegisterEvent;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.registry.Identifier;
@@ -97,6 +100,14 @@ public class TextureListener {
         oil_juction = registerBlockTexture("block/blockOilJunction");
         oil_line = registerBlockTexture("block/blockOilLine");
         empty = registerBlockTexture("block/fcBlockEmpty");
+        plaque = registerBlockTexture("block/blockPlaque");
+
+        BlockListener.blockRope.asItem().setTexturePosition(rope);
+        BlockListener.blockOil.asItem().setTexturePosition(oil_juction);
+        BlockListener.blockPlaque.asItem().setTexturePosition(plaque);
+        BlockListener.blockRope.asItem().setTexturePosition(registerBlockTexture("block/blockRope"));
+        BlockListener.blockOil.asItem().setTexturePosition(oil_juction);
+        BlockListener.blockPlaque.asItem().setTexturePosition(plaque);
     }
 
     private int registerBlockTexture(String s) {
@@ -123,8 +134,12 @@ public class TextureListener {
     public static int oil_juction;
     public static int oil_line;
     public static int empty;
+    public static int plaque;
 
-
+//    @EventListener
+//    public void registerAnimation(TextureRegisterEvent event) {
+//        Atlases.getGuiItems().addTextureBinder(Identifier.of(MOD_ID, "blockOil"), "as", SdkTextureLightometerFX::new);
+//    }
 
     @EventListener
     private static void registerEntityRenderers(EntityRendererRegisterEvent event) {
@@ -146,5 +161,10 @@ public class TextureListener {
         event.renderers.put(SdkEntityGrapplingHook.class, new SdkRenderGrapplingHook());
         event.renderers.put(SdkEntityNukePrimed.class, new SdkRenderNukePrimed());
         event.renderers.put(SdkEntitySentry.class, new SdkRenderSentry());
+    }
+
+    @EventListener
+    private static void registerTileEntityRenderers(TileEntityRendererRegisterEvent event){
+        event.renderers.put(SdkTileEntityPlaque.class, new SdkTileEntityRendererPlaque());
     }
 }

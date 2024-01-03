@@ -25,6 +25,7 @@ public class SdkItemGunSg552 extends SdkItemGun
         spread = 0.25F;
         useDelay = 5;
         recoil = 3F;
+        penetration = 0;
     }
 
     public SdkEntityBullet getBulletEntity(Level world, EntityBase entity, float f, float f1, float f2, float f3, float f4)

@@ -21,13 +21,14 @@ public class SdkItemGunFlamethrower extends SdkItemGun
         firingSound = "sdk:flamethrower";
         requiredBullet = ItemListener.itemOil;
         numBullets = 1;
-        damage = 1;
+        damage = 1; //mało?
         muzzleVelocity = 0.75F;
         spread = 0.0F;
         useDelay = 1;
         recoil = 0.0F;
         soundDelay = 12;
         soundRangeFactor = 2.0F;
+        penetration = 3;
     }
 
     public SdkEntityBullet getBulletEntity(Level world, EntityBase entity, float f, float f1, float f2, float f3, float f4)

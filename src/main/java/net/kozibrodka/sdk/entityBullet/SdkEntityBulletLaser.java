@@ -5,9 +5,7 @@ import net.kozibrodka.sdk.entityNade.SdkEntitySmokeFX;
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk.events.SdkConfig;
 import net.kozibrodka.sdk_api.events.ingame.mod_SdkGuns;
-import net.kozibrodka.sdk_api.events.utils.SdkEntityBullet;
-import net.kozibrodka.sdk_api.events.utils.SdkItemGun;
-import net.kozibrodka.sdk_api.events.utils.SdkTools;
+import net.kozibrodka.sdk_api.events.utils.*;
 import net.minecraft.block.BlockBase;
 import net.minecraft.entity.EntityBase;
 import net.minecraft.entity.Living;
@@ -249,8 +247,26 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
             SdkTools.attackEntityIgnoreDelay((Living) entity, owner, i);
         } else
         {
-//            entity.damage(owner, i);
-            entity.damage(this, i); //TESTTTT
+////            entity.damage(owner, i);
+//            entity.damage(this, i); //TESTTTT
+
+            if(entity instanceof WW2Plane || entity instanceof WW2Tank || entity instanceof WW2Truck || entity instanceof WW2Cannon)
+            {
+                if(entity instanceof WW2Truck && penetration >= 1)
+                {
+                    entity.damage(this, i);
+                }
+                if(entity instanceof WW2Plane && penetration >= 2)
+                {
+                    entity.damage(this, i);
+                }
+                if((entity instanceof WW2Tank && penetration >= 3) || (entity instanceof WW2Cannon && penetration >= 3))
+                {
+                    entity.damage(this, i);
+                }
+            }else {
+                entity.damage(owner, i);
+            }
         }
     }
 

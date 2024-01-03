@@ -23,6 +23,7 @@ public class SdkItemGunAk47 extends SdkItemGun
         spread = 0.5F;
         useDelay = 2;
         recoil = 2.0F;
+        penetration = 0;
     }
 
 

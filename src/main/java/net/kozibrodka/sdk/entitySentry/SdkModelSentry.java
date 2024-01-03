@@ -57,19 +57,19 @@ public class SdkModelSentry extends EntityModelBase
         });
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, SdkEntitySentry sentry)
     {
         for(int i = 0; i < headModels.length; i++)
         {
-            headModels[i].yaw = f3 / 57.29578F;
-            headModels[i].pitch = f4 / 57.29578F;
+            headModels[i].yaw = sentry.yaw / 57.29578F; //TODO:
+            headModels[i].pitch = sentry.pitch / 57.29578F;
         }
 
     }
 
-    public void render(float f, float f1, float f2, float f3, float f4, float f5)
+    public void render(float f, float f1, float f2, float f3, float f4, float f5, SdkEntitySentry sentry)
     {
-        setRotationAngles(f, f1, f2, f3, f4, f5);
+        setRotationAngles(f, f1, f2, f3, f4, f5, sentry);
         for(int i = 0; i < headModels.length; i++)
         {
             headModels[i].method_1815(f5);

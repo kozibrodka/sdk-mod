@@ -3,10 +3,10 @@
   "id": "sdk",
   "version": "${version}",
 
-  "name": "Example Mod",
+  "name": "SDK Mod",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
-    "Me!"
+    "kozibrodka"
   ],
   "contact": {
     "homepage": "https://glass-launcher.net/",
@@ -14,7 +14,7 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/sdk/icon.png",
+  "icon": "assets/sdk/iconSDK.png",
 
   "environment": "*",
   "entrypoints": {

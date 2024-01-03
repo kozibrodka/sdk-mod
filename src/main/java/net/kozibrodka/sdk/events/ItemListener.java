@@ -69,7 +69,7 @@ public class ItemListener {
         itemAtvWheel = (TemplateItemBase) new TemplateItemBase(Identifier.of(MOD_ID, "itemAtvWheel")).setTranslationKey(MOD_ID, "itemAtvWheel");
 
         itemWrench = (TemplateItemBase) new TemplateItemBase(Identifier.of(MOD_ID, "itemWrench")).setTranslationKey(MOD_ID, "itemWrench").setMaxStackSize(1).setDurability(15);
-        itemSentry = (TemplateItemBase) new SdkItemSentry(Identifier.of(MOD_ID, "itemSentry")).setTranslationKey(MOD_ID, "itemSentry").setMaxStackSize(1).setDurability(0).setHasSubItems(true);
+        itemSentry = (TemplateItemBase) new SdkItemSentry(Identifier.of(MOD_ID, "itemSentry")).setTranslationKey(MOD_ID, "itemSentry").setMaxStackSize(1).setDurability(0);
         itemOilDrop = (TemplateItemBase) new TemplateItemBase(Identifier.of(MOD_ID, "itemOilDrop")).setTranslationKey(MOD_ID, "itemOilDrop");
         itemJetPack = (TemplateArmour) new SdkItemJetPack(Identifier.of(MOD_ID, "itemJetPack"), 1).setTranslationKey(MOD_ID, "itemJetPack");
 

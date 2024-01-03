@@ -39,7 +39,7 @@ public class BlockListener {
         blockRope = (TemplateBlockWithEntity) new SdkBlockRope(Identifier.of(MOD_ID, "blockRope")).setTranslationKey(MOD_ID, "blockRope").setHardness(-1F).setSounds(BlockBase.WOOD_SOUNDS).setBlastResistance(6000000F);
         blockGrapplingHook = (TemplateBlockBase) new SdkBlockGrapplingHook(Identifier.of(MOD_ID, "blockGrapplingHook")).setTranslationKey(MOD_ID, "blockGrapplingHook").setHardness(0.0F).setSounds(BlockBase.METAL_SOUNDS);
 
-        //TODO: render blockGrappling, blockPlaque, part of BlockOil, Inventory icons
+        //TODO: blockPlaque render item(look at mod dc - emerald), part of BlockOil, Inventory icons, Render Item Lightometer?, Entity Sentry Model Yaw
 
     }
 

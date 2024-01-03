@@ -9,7 +9,7 @@ import net.modificationstation.stationapi.api.template.item.armour.TemplateArmou
 public class SdkItemNightvision extends TemplateArmour implements ArmourTextureProvider {
     public SdkItemNightvision(Identifier i, int j)
     {
-        super(i, -1, j, 0);
+        super(i, 1, j, 0);
     }
 
     @Override

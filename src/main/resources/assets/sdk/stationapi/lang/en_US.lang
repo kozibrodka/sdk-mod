@@ -8,6 +8,76 @@ tile.blockRope.name=Rope
 tile.blockGrapplingHook.name=Grappling Hook
 
 item.itemBulletLight.name=Light Bullet
+item.itemBulletMedium.name=Medium Bullet
+item.itemBulletHeavy.name=Heavy Bullet
+item.itemBulletRocket.name=Rocket
+item.itemBulletRocketLaser.name=Laser-Guided Rocket
+item.itemBulletShell.name=Shotgun Shell
+item.itemOil.name=Oil
 
-item.itemSentry.name=AK47 Sentry
+item.itemGunAk47.name=AK47
+item.itemGunMp5.name=MP5
+item.itemGunShotgun.name=Shotgun
+item.itemGunDeagle.name=Desert Eagle
+item.itemGunSniper.name=Sniper Rifle
+item.itemGunM4.name=M4
+item.itemGunSg552.name=SG552
+item.itemGunMinigun.name=Minigun
+item.itemGunLaser.name=Laser
+item.itemGunFlamethrower.name=Flamethrower
+item.itemGunRocketLauncherLaser.name=Laser-Guided Rocket Launcher
+item.itemGunRocketLauncher.name=Rocket Launcher
+
+item.itemGrenade.name=Grenade
+item.itemGrenadeHe.name=Grenade
+item.itemGrenadeStun.name=Stun Grenade
+item.itemGrenadeSmoke.name=Smoke Grenade
+item.itemGrenadeSticky.name=Sticky Grenade
+item.itemGrenadeIncendiary.name=Molotov Cocktail
+item.itemGrenadeIncendiaryLit.name=Molotov Cocktail
+
+item.itemGoldCoin.name=Gold Coin
+item.itemLightometer.name=Lightometer
+item.itemNightvisionGoggles.name=Nightvision Goggles
+item.itemScubaTank.name=Scuba Tank
+item.itemParachute.name=Parachute
+item.itemTelescope.name=Telescope
+
+item.itemAtv.name=ATV
+item.itemAtvBody.name=ATV Body
+item.itemAtvWheel.name=Wrench
+
+item.itemWrench.name=Wrench
+item.itemOilDrop.name=Oil Drop
+item.itemJetPack.name=Jet Pack
+item.itemRope.name=Rope
+item.itemGrapplingHook.name=Grappling Hook
+
+item.itemMetalParts.name=Metal Parts
+item.itemBarrelLong.name=Long Barrel
+item.itemBarrelShort.name=Short Barrel
+item.itemBarrelFat.name=Fat Barrel
+item.itemBarrelShotgun.name=Shotgun Barrel
+item.itemBarrelMinigun.name=Minigun Barrel
+item.itemGripWood.name=Wooden Grip
+item.itemGripMetal.name=Metal Grip
+item.itemHandleMinigun.name=Minigun Handle
+item.itemStockWood.name=Wooden Stock
+item.itemStockMetal.name=Metal Stock
+item.itemReceiverMetal.name=Receiver
+item.itemReceiverDiamond.name=Redstone -> Laser Converter
+item.itemMagazine.name=Magazine
+item.itemScope.name=Scope
+
+item.itemSentry.0.name=AK47 Sentry
 item.itemSentry.1.name=MP5 Sentry
+item.itemSentry.2.name=Shotgun Sentry
+item.itemSentry.3.name=Desert Deagle Sentry
+item.itemSentry.4.name=Rocket Launcher Sentry
+item.itemSentry.5.name=Laser-Guided Rocket Launcher Sentry
+item.itemSentry.6.name=Sniper Rifle Sentry
+item.itemSentry.7.name=Flamethrower Sentry
+item.itemSentry.8.name=SG552 Sentry
+item.itemSentry.9.name=Minigun Sentry
+item.itemSentry.10.name=Laser Sentry
+item.itemSentry.11.name=M4 Sentry

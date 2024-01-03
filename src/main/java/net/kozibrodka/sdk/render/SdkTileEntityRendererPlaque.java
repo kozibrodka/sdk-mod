@@ -7,6 +7,8 @@ import net.minecraft.client.render.block.BlockRenderer;
 import net.minecraft.client.render.tileentity.TileEntityRenderer;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.tileentity.TileEntityBase;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import org.lwjgl.opengl.GL11;
 
 public class SdkTileEntityRendererPlaque extends TileEntityRenderer
@@ -57,6 +59,7 @@ public class SdkTileEntityRendererPlaque extends TileEntityRenderer
             {
                 GL11.glScalef(0.5F, 0.5F, 0.5F);
                 GL11.glTranslatef(0.0F, -0.625F, 0.375F);
+//                method_1064("/terrain.png");
                 method_1064("/terrain.png");
                 GL11.glPushMatrix();
                 blockrender.method_48(BlockBase.BY_ID[itemstack.itemId], itemstack.getDamage(), 1.0F);
@@ -67,17 +70,27 @@ public class SdkTileEntityRendererPlaque extends TileEntityRenderer
                 GL11.glTranslatef(0.0F, -0.5625F, 0.5F);
                 GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
                 int j = itemstack.getTexturePosition();
-                if(itemstack.itemId < 256)
-                {
-                    method_1064("/terrain.png");
-                } else
-                {
-                    method_1064("/gui/items.png");
-                }
-                float f2 = (float)((j % 16) * 16 + 0) / 256F;
-                float f3 = (float)((j % 16) * 16 + 16) / 256F;
-                float f4 = (float)((j / 16) * 16 + 0) / 256F;
-                float f5 = (float)((j / 16) * 16 + 16) / 256F;
+
+
+//                if(itemstack.itemId < 256)
+//                {
+//                    method_1064("/terrain.png");
+//                } else
+//                {
+//                    method_1064("/gui/items.png");
+//                }
+
+//                float f2 = (float)((j % 16) * 16 + 0) / 256F;
+//                float f3 = (float)((j % 16) * 16 + 16) / 256F;
+//                float f4 = (float)((j / 16) * 16 + 0) / 256F;
+//                float f5 = (float)((j / 16) * 16 + 16) / 256F;
+                Atlas.Sprite atlasTX =  Atlases.getGuiItems().getTexture(j);
+                float f2 = (float) atlasTX.getStartU();
+                float f3 = (float) atlasTX.getEndU();
+                float f4 = (float) atlasTX.getStartV();
+                float f5 = (float) atlasTX.getEndV();
+
+
                 float f6 = 1.0F;
                 float f7 = 0.5F;
                 float f8 = 0.25F;

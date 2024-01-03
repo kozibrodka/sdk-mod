@@ -13,6 +13,7 @@ import net.minecraft.level.BlockView;
 import net.minecraft.level.Level;
 import net.minecraft.tileentity.TileEntityBase;
 import net.minecraft.util.maths.Box;
+import net.modificationstation.stationapi.api.client.model.block.BlockWithInventoryRenderer;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithWorldRenderer;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
@@ -21,7 +22,7 @@ import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEn
 
 import java.util.Random;
 
-public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWorldRenderer
+public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWorldRenderer, BlockWithInventoryRenderer
 {
 
     public SdkBlockRope(Identifier iid)
@@ -190,5 +191,20 @@ public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWo
             tessellator.vertex((float)(i + 0) - f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d1, d2);
         }
         return true;
+    }
+
+    @Override
+    public void renderInventory(BlockRenderer tileRenderer, int meta) {
+//        Tessellator tessellator = Tessellator.INSTANCE;
+//        int l = TextureListener.rope;
+//        Atlas.Sprite atlasTX =  Atlases.getTerrain().getTexture(l);
+//        double d = atlasTX.getStartU();
+//        double d1 = atlasTX.getEndU();
+//        double d2 = atlasTX.getStartV();
+//        double d3 = atlasTX.getEndV();
+//        float f1 = 0.0F;
+//        float f2 = 0.05F;
+//        tessellator.draw();
+
     }
 }

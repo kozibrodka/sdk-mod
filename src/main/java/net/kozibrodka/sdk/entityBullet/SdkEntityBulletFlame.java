@@ -1,9 +1,7 @@
 package net.kozibrodka.sdk.entityBullet;
 
 import net.kozibrodka.sdk.events.ItemListener;
-import net.kozibrodka.sdk_api.events.utils.SdkEntityBullet;
-import net.kozibrodka.sdk_api.events.utils.SdkItemGun;
-import net.kozibrodka.sdk_api.events.utils.SdkTools;
+import net.kozibrodka.sdk_api.events.utils.*;
 import net.minecraft.block.BlockBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityBase;
@@ -131,7 +129,23 @@ public class SdkEntityBulletFlame extends SdkEntityBullet
                     SdkTools.attackEntityIgnoreDelay((Living)movingobjectposition.field_1989, owner, k);
                 } else
                 {
-                    movingobjectposition.field_1989.damage(owner, k);
+                    if(movingobjectposition.field_1989 instanceof WW2Plane || movingobjectposition.field_1989 instanceof WW2Tank || movingobjectposition.field_1989 instanceof WW2Truck || movingobjectposition.field_1989 instanceof WW2Cannon)
+                    {
+                        if(movingobjectposition.field_1989 instanceof WW2Truck && penetration >= 1)
+                        {
+                            movingobjectposition.field_1989.damage(this, k);
+                        }
+                        if(movingobjectposition.field_1989 instanceof WW2Plane && penetration >= 2)
+                        {
+                            movingobjectposition.field_1989.damage(this, k);
+                        }
+                        if((movingobjectposition.field_1989 instanceof WW2Tank && penetration >= 3) || (movingobjectposition.field_1989 instanceof WW2Cannon && penetration >= 3))
+                        {
+                            movingobjectposition.field_1989.damage(this, k);
+                        }
+                    }else {
+                        movingobjectposition.field_1989.damage(owner, k);
+                    }
                 }
                 movingobjectposition.field_1989.fire = 300;
             } else

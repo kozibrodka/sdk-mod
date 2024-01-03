@@ -27,6 +27,7 @@ public class SdkItemSentry extends TemplateItemBase
     public SdkItemSentry(Identifier i)
     {
         super(i);
+        setHasSubItems(true);
     }
 
     public int getMetaData(int i)
@@ -101,5 +102,10 @@ public class SdkItemSentry extends TemplateItemBase
             }
         }
         return itemstack;
+    }
+
+    public String getTranslationKey(ItemInstance itemstack)
+    {
+        return (new StringBuilder()).append(super.getTranslationKey()).append(".").append(itemstack.getDamage()).toString();
     }
 }
