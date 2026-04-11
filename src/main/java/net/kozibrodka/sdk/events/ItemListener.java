@@ -1,13 +1,11 @@
 package net.kozibrodka.sdk.events;
 
-import net.glasslauncher.mods.api.gcapi.api.GConfig;
 import net.kozibrodka.sdk.atv.SdkItemAtv;
 import net.kozibrodka.sdk.item.*;
 import net.kozibrodka.sdk.itemGun.*;
 import net.kozibrodka.sdk.itemNade.*;
 import net.kozibrodka.sdk_api.events.utils.SdkMap;
 import net.mine_diver.unsafeevents.listener.EventListener;
-import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.template.item.TemplateArmorItem;
@@ -15,7 +13,7 @@ import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.Null;
-import net.modificationstation.stationapi.api.template.item.TemplateItem;
+
 
 public class ItemListener {
 
