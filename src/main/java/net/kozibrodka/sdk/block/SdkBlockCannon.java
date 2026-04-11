@@ -1,11 +1,11 @@
 package net.kozibrodka.sdk.block;
 
 import net.kozibrodka.sdk.events.TextureListener;
-import net.minecraft.block.BlockBase;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.level.Level;
-import net.minecraft.sortme.Explosion;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.World;
+import net.minecraft.world.explosion.Explosion;
 import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
 
@@ -17,35 +17,35 @@ public class SdkBlockCannon extends TemplateBlock
         super(iid, Material.STONE);
     }
 
-    public int getTextureForSide(int i)
+    public int getTexture(int i)
     {
         return TextureListener.cannon;
     }
 
-    public void onBlockPlaced(Level world, int i, int j, int k)
+    public void onPlaced(World world, int i, int j, int k)
     {
-        onAdjacentBlockUpdate(world, i, j, k, 0);
+        neighborUpdate(world, i, j, k, 0);
     }
 
-    public boolean canUse(Level world, int i, int j, int k, PlayerBase entityplayer)
+    public boolean onUse(World world, int i, int j, int k, PlayerEntity entityplayer)
     {
-        if(world.isServerSide)
+        if(world.isRemote)
         {
             return true;
         }
-        if(entityplayer.inventory.getHeldItem() != null && entityplayer.inventory.getHeldItem().itemId == BlockBase.TNT.id)
+        if(entityplayer.inventory.getSelectedItem() != null && entityplayer.inventory.getSelectedItem().itemId == Block.TNT.id)
         {
-            int l = world.getTileMeta(i, j, k);
+            int l = world.getBlockMeta(i, j, k);
             if(l < 15)
             {
-                entityplayer.inventory.getHeldItem().count--;
-                if(entityplayer.inventory.getHeldItem().count == 0)
+                entityplayer.inventory.getSelectedItem().count--;
+                if(entityplayer.inventory.getSelectedItem().count == 0)
                 {
-                    entityplayer.inventory.main[entityplayer.inventory.selectedHotbarSlot] = null;
+                    entityplayer.inventory.main[entityplayer.inventory.selectedSlot] = null;
                 }
-                world.setTileMeta(i, j, k, l + 1);
+                world.setBlockMeta(i, j, k, l + 1);
             }
-            onAdjacentBlockUpdate(world, i, j, k, 0);
+            neighborUpdate(world, i, j, k, 0);
             return true;
         } else
         {
@@ -53,23 +53,23 @@ public class SdkBlockCannon extends TemplateBlock
         }
     }
 
-    public void onAdjacentBlockUpdate(Level world, int i, int j, int k, int l)
+    public void neighborUpdate(World world, int i, int j, int k, int l)
     {
-        if(!world.isServerSide && world.hasRedstonePower(i, j, k))
+        if(!world.isRemote && world.isEmittingRedstonePower(i, j, k))
         {
-            int i1 = world.getTileMeta(i, j, k);
+            int i1 = world.getBlockMeta(i, j, k);
             if(i1 > 0)
             {
-                world.setTile(i, j, k, 0);
+                world.setBlock(i, j, k, 0);
                 Explosion explosion = new Explosion(world, null, (float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, 4F);
-                world.playSound(i, j, k, "random.explode", 4F, (1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F);
+                world.playSound(i, j, k, "random.explode", 4F, (1.0F + (world.random.nextFloat() - world.random.nextFloat()) * 0.2F) * 0.7F);
                 for(int j1 = 0; j1 < i1; j1++)
                 {
-                    explosion.kaboomPhase1();
+                    explosion.explode();
                 }
 
-                world.setTile(i, j, k, id);
-                world.setTileMeta(i, j, k, 0);
+                world.setBlock(i, j, k, id);
+                world.setBlockMeta(i, j, k, 0);
             }
         }
     }

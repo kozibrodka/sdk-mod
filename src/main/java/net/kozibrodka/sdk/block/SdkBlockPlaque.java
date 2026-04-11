@@ -2,16 +2,16 @@ package net.kozibrodka.sdk.block;
 
 import net.kozibrodka.sdk.events.TextureListener;
 import net.kozibrodka.sdk.tileEntity.SdkTileEntityPlaque;
-import net.minecraft.block.BlockBase;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.block.BlockRenderer;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.level.BlockView;
-import net.minecraft.level.Level;
-import net.minecraft.tileentity.TileEntityBase;
-import net.minecraft.util.maths.Box;
+import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.Box;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithWorldRenderer;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
@@ -29,14 +29,14 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
 //        renderType = k;
     }
 
-    protected TileEntityBase createTileEntity()
+    protected BlockEntity createBlockEntity()
     {
         return new SdkTileEntityPlaque();
     }
 
-    public Box getCollisionShape(Level world, int i, int j, int k)
+    public Box getCollisionShape(World world, int i, int j, int k)
     {
-        int l = world.getTileMeta(i, j, k);
+        int l = world.getBlockMeta(i, j, k);
         float f = 0.125F;
         if(l == 2)
         {
@@ -57,9 +57,9 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
         return super.getCollisionShape(world, i, j, k);
     }
 
-    public Box getOutlineShape(Level world, int i, int j, int k)
+    public Box getBoundingBox(World world, int i, int j, int k)
     {
-        int l = world.getTileMeta(i, j, k);
+        int l = world.getBlockMeta(i, j, k);
         float f = 0.125F;
         if(l == 2)
         {
@@ -77,10 +77,10 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
         {
             setBoundingBox(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
         }
-        return super.getOutlineShape(world, i, j, k);
+        return super.getBoundingBox(world, i, j, k);
     }
 
-    public boolean isFullOpaque()
+    public boolean isOpaque()
     {
         return false;
     }
@@ -95,101 +95,101 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
         return renderType;
     }
 
-    public boolean canUse(Level world, int i, int j, int k, PlayerBase entityplayer)
+    public boolean onUse(World world, int i, int j, int k, PlayerEntity entityplayer)
     {
-        if(world.isServerSide)
+        if(world.isRemote)
         {
             return true;
         } else
         {
-            SdkTileEntityPlaque sdktileentityplaque = (SdkTileEntityPlaque)world.getTileEntity(i, j, k);
+            SdkTileEntityPlaque sdktileentityplaque = (SdkTileEntityPlaque)world.getBlockEntity(i, j, k);
             return sdktileentityplaque.activated(world, entityplayer);
         }
     }
 
-    public void onBlockRemoved(Level world, int i, int j, int k)
+    public void onBreak(World world, int i, int j, int k)
     {
-        if(world.isServerSide)
+        if(world.isRemote)
         {
             return;
         } else
         {
-            SdkTileEntityPlaque sdktileentityplaque = (SdkTileEntityPlaque)world.getTileEntity(i, j, k);
+            SdkTileEntityPlaque sdktileentityplaque = (SdkTileEntityPlaque)world.getBlockEntity(i, j, k);
             sdktileentityplaque.removed(world);
             return;
         }
     }
 
-    public boolean canPlaceAt(Level world, int i, int j, int k)
+    public boolean canPlaceAt(World world, int i, int j, int k)
     {
-        if(world.isFullOpaque(i - 1, j, k))
+        if(world.method_1783(i - 1, j, k))
         {
             return true;
         }
-        if(world.isFullOpaque(i + 1, j, k))
+        if(world.method_1783(i + 1, j, k))
         {
             return true;
         }
-        if(world.isFullOpaque(i, j, k - 1))
+        if(world.method_1783(i, j, k - 1))
         {
             return true;
         } else
         {
-            return world.isFullOpaque(i, j, k + 1);
+            return world.method_1783(i, j, k + 1);
         }
     }
 
-    public void onBlockPlaced(Level world, int i, int j, int k, int l)
+    public void onPlaced(World world, int i, int j, int k, int l)
     {
-        int i1 = world.getTileMeta(i, j, k);
-        if((i1 == 0 || l == 2) && world.isFullOpaque(i, j, k + 1))
+        int i1 = world.getBlockMeta(i, j, k);
+        if((i1 == 0 || l == 2) && world.method_1783(i, j, k + 1))
         {
             i1 = 2;
         }
-        if((i1 == 0 || l == 3) && world.isFullOpaque(i, j, k - 1))
+        if((i1 == 0 || l == 3) && world.method_1783(i, j, k - 1))
         {
             i1 = 3;
         }
-        if((i1 == 0 || l == 4) && world.isFullOpaque(i + 1, j, k))
+        if((i1 == 0 || l == 4) && world.method_1783(i + 1, j, k))
         {
             i1 = 4;
         }
-        if((i1 == 0 || l == 5) && world.isFullOpaque(i - 1, j, k))
+        if((i1 == 0 || l == 5) && world.method_1783(i - 1, j, k))
         {
             i1 = 5;
         }
-        world.setTileMeta(i, j, k, i1);
+        world.setBlockMeta(i, j, k, i1);
     }
 
-    public void onAdjacentBlockUpdate(Level world, int i, int j, int k, int l)
+    public void neighborUpdate(World world, int i, int j, int k, int l)
     {
-        int i1 = world.getTileMeta(i, j, k);
+        int i1 = world.getBlockMeta(i, j, k);
         boolean flag = false;
-        if(i1 == 2 && world.isFullOpaque(i, j, k + 1))
+        if(i1 == 2 && world.method_1783(i, j, k + 1))
         {
             flag = true;
         }
-        if(i1 == 3 && world.isFullOpaque(i, j, k - 1))
+        if(i1 == 3 && world.method_1783(i, j, k - 1))
         {
             flag = true;
         }
-        if(i1 == 4 && world.isFullOpaque(i + 1, j, k))
+        if(i1 == 4 && world.method_1783(i + 1, j, k))
         {
             flag = true;
         }
-        if(i1 == 5 && world.isFullOpaque(i - 1, j, k))
+        if(i1 == 5 && world.method_1783(i - 1, j, k))
         {
             flag = true;
         }
         if(!flag)
         {
-            drop(world, i, j, k, i1);
-            world.setTile(i, j, k, 0);
+            dropStacks(world, i, j, k, i1);
+            world.setBlock(i, j, k, 0);
         }
-        super.onAdjacentBlockUpdate(world, i, j, k, l);
+        super.neighborUpdate(world, i, j, k, l);
     }
 
-    public int getDropCount(Random random)
+    public int getDroppedItemCount(Random random)
     {
         return 1;
     }
@@ -197,16 +197,16 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
     private int renderType;
 
     @Override
-    public boolean renderWorld(BlockRenderer renderblocks, BlockView iblockaccess, int i, int j, int k) {
-        BlockBase block = this;
+    public boolean renderWorld(BlockRenderManager renderblocks, BlockView iblockaccess, int i, int j, int k) {
+        Block block = this;
         Tessellator tessellator = Tessellator.INSTANCE;
         int l = TextureListener.plaque;
 //        if(renderblocks.overrideBlockTexture >= 0)
 //        {
 //            l = renderblocks.overrideBlockTexture;
 //        }
-        float f = block.getBrightness(iblockaccess, i, j, k);
-        tessellator.colour(f, f, f);
+        float f = block.getLuminance(iblockaccess, i, j, k);
+        tessellator.color(f, f, f);
         
 //        int i1 = (l & 0xf) << 4;
 //        int j1 = l & 0xf0;
@@ -221,7 +221,7 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
         double d2 = atlasTX.getStartV();
         double d3 = atlasTX.getEndV();
         
-        int k1 = iblockaccess.getTileMeta(i, j, k);
+        int k1 = iblockaccess.getBlockMeta(i, j, k);
         float f1 = 0.0F;
         float f2 = 0.05F;
         if(k1 == 5)

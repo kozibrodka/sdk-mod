@@ -2,22 +2,21 @@ package net.kozibrodka.sdk.entitySentry;
 
 import net.kozibrodka.sdk.events.EntityListener;
 import net.kozibrodka.sdk.events.SdkConfig;
-import net.minecraft.entity.EntityBase;
-import net.minecraft.entity.Living;
-import net.minecraft.entity.WalkingBase;
-import net.minecraft.entity.animal.Wolf;
-import net.minecraft.entity.monster.MonsterEntityType;
-import net.minecraft.entity.monster.ZombiePigman;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.level.Level;
-import net.minecraft.util.io.CompoundTag;
-
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.Monster;
+import net.minecraft.entity.mob.PigZombieEntity;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.World;
 import java.lang.reflect.Method;
 
-public class SdkEntityGuardians extends WalkingBase
+public class SdkEntityGuardians extends MobEntity
 {
 
-    public SdkEntityGuardians(Level world)
+    public SdkEntityGuardians(World world)
     {
         super(world);
         range = 32F;
@@ -39,10 +38,10 @@ public class SdkEntityGuardians extends WalkingBase
 
     public void setOwner(String s)
     {
-        dataTracker.setInt(17, s);
+        dataTracker.set(17, s);
     }
 
-    public boolean damage(EntityBase entity1, int i)
+    public boolean damage(Entity entity1, int i)
     {
         if(super.damage(entity1, i))
         {
@@ -52,7 +51,7 @@ public class SdkEntityGuardians extends WalkingBase
             }
             if(entity1 != this)
             {
-                entity = entity1;
+                target = entity1;
             }
             return true;
         } else
@@ -61,51 +60,51 @@ public class SdkEntityGuardians extends WalkingBase
         }
     }
 
-    protected EntityBase getAttackTarget()
+    protected Entity getTargetInRange()
     {
         return getNearestEntityLivingInRange(this, range);
     }
 
-    public Living getNearestEntityLivingInRange(EntityBase entity, double d)
+    public LivingEntity getNearestEntityLivingInRange(Entity entity, double d)
     {
         return getNearestEntityLivingInRange(entity.x, entity.y, entity.z, d);
     }
 
-    public Living getNearestEntityLivingInRange(double d, double d1, double d2, double d3)
+    public LivingEntity getNearestEntityLivingInRange(double d, double d1, double d2, double d3)
     {
         double d4 = -1D;
-        Living entityliving = null;
-        for(int i = 0; i < level.entities.size(); i++)
+        LivingEntity entityliving = null;
+        for(int i = 0; i < world.entities.size(); i++)
         {
-            EntityBase entity = (EntityBase)level.entities.get(i);
-            if(!(entity instanceof Living) || !SdkConfig.sentriesKillAnimals && (!(entity instanceof MonsterEntityType) || (entity instanceof ZombiePigman)) || (entity instanceof PlayerBase) || (entity instanceof Wolf) && ((Wolf)entity).isTamed() || !entity.isAlive())
+            Entity entity = (Entity)world.entities.get(i);
+            if(!(entity instanceof LivingEntity) || !SdkConfig.sentriesKillAnimals && (!(entity instanceof Monster) || (entity instanceof PigZombieEntity)) || (entity instanceof PlayerEntity) || (entity instanceof WolfEntity) && ((WolfEntity)entity).isTamed() || !entity.isAlive())
             {
                 continue;
             }
-            double d5 = entity.squaredDistanceTo(d, d1, d2);
-            if((d3 < 0.0D || d5 < d3 * d3) && (d4 == -1D || d5 < d4) && method_928(entity) && okToAttack(entity))
+            double d5 = entity.getSquaredDistance(d, d1, d2);
+            if((d3 < 0.0D || d5 < d3 * d3) && (d4 == -1D || d5 < d4) && canSee(entity) && okToAttack(entity))
             {
                 d4 = d5;
-                entityliving = (Living)entity;
+                entityliving = (LivingEntity)entity;
             }
         }
 
         return entityliving;
     }
 
-    protected void tryAttack(EntityBase entity, float f)
+    protected void attack(Entity entity, float f)
     {
         if(okToAttack(entity) && (double)f < 2.5D && entity.boundingBox.maxY > boundingBox.minY && entity.boundingBox.minY < boundingBox.maxY)
         {
             entity.damage(this, attackStrength);
-            attackTime = 1;
+            attackCooldown = 1;
         }
     }
 
-    protected boolean okToAttack(EntityBase entity)
+    protected boolean okToAttack(Entity entity)
     {
         boolean flag = false;
-        if(!aiManagerIsPetNotFound && (entity instanceof Living))
+        if(!aiManagerIsPetNotFound && (entity instanceof LivingEntity))
         {
             try
             {
@@ -121,11 +120,11 @@ public class SdkEntityGuardians extends WalkingBase
                         class1 = Class.forName("net.minecraft.src.mod_AIManager");
                     }
                     aiManagerIsPet = class1.getDeclaredMethod("isPet", new Class[] {
-                            Living.class
+                            LivingEntity.class
                     });
                 }
                 flag = ((Boolean)aiManagerIsPet.invoke(null, new Object[] {
-                    (Living)entity
+                    (LivingEntity)entity
                 })).booleanValue();
             }
             catch(Exception exception)
@@ -134,32 +133,32 @@ public class SdkEntityGuardians extends WalkingBase
                 aiManagerIsPetNotFound = true;
             }
         }
-        return !flag && !(entity instanceof SdkEntityGuardians) && (!(entity instanceof PlayerBase) || !((PlayerBase)entity).name.equals(getOwner())) && (!(entity instanceof Wolf) || !((Wolf)entity).isTamed() || !((Wolf)entity).getOwner().equals(getOwner()));
+        return !flag && !(entity instanceof SdkEntityGuardians) && (!(entity instanceof PlayerEntity) || !((PlayerEntity)entity).name.equals(getOwner())) && (!(entity instanceof WolfEntity) || !((WolfEntity)entity).isTamed() || !((WolfEntity)entity).getOwnerName().equals(getOwner()));
     }
 
-    protected float getPathfindingFavour(int i, int j, int k)
+    protected float getPathfindingFavor(int i, int j, int k)
     {
         return 1.0F;
     }
 
-    public void writeCustomDataToTag(CompoundTag nbttagcompound)
+    public void writeNbt(NbtCompound nbttagcompound)
     {
-        super.writeCustomDataToTag(nbttagcompound);
-        nbttagcompound.put("Owner", getOwner() == null ? "" : getOwner());
+        super.writeNbt(nbttagcompound);
+        nbttagcompound.putString("Owner", getOwner() == null ? "" : getOwner());
     }
 
-    public void readCustomDataFromTag(CompoundTag nbttagcompound)
+    public void readNbt(NbtCompound nbttagcompound)
     {
-        super.readCustomDataFromTag(nbttagcompound);
+        super.readNbt(nbttagcompound);
         setOwner(nbttagcompound.getString("Owner"));
     }
 
-    protected void tickHandSwing()
+    protected void tickLiving()
     {
-        super.tickHandSwing();
-        if(!level.isServerSide)
+        super.tickLiving();
+        if(!world.isRemote)
         {
-            dataTracker.setInt(18, Integer.valueOf(health));
+            dataTracker.set(18, Integer.valueOf(health));
         }
     }
 

@@ -1,7 +1,7 @@
 package net.kozibrodka.sdk.item;
 
 import net.kozibrodka.sdk.events.ItemListener;
-import net.minecraft.item.armour.Armour;
+import net.minecraft.item.ArmorItem;
 import net.modificationstation.stationapi.api.client.item.ArmorTextureProvider;
 import net.modificationstation.stationapi.api.template.item.TemplateArmorItem;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -15,7 +15,7 @@ public class SdkItemScuba extends TemplateArmorItem implements ArmorTextureProvi
     }
 
     @Override
-    public Identifier getTexture(Armour armour) {
+    public Identifier getTexture(ArmorItem armour) {
         return ItemListener.MOD_ID.id("scubaTank");
     }
 }

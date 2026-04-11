@@ -3,15 +3,15 @@ package net.kozibrodka.sdk.atv;
 
 import net.kozibrodka.sdk.atv.SdkEntityAtv;
 import net.kozibrodka.sdk.atv.SdkSlotGun;
-import net.minecraft.container.ContainerBase;
-import net.minecraft.container.slot.Slot;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.inventory.InventoryBase;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.slot.Slot;
 
-public class SdkContainerAtv extends ContainerBase
+public class SdkContainerAtv extends ScreenHandler
 {
 
-    public SdkContainerAtv(InventoryBase iinventory, SdkEntityAtv sdkentityatv)
+    public SdkContainerAtv(Inventory iinventory, SdkEntityAtv sdkentityatv)
     {
         atv = sdkentityatv;
         addSlot(new SdkSlotGun(sdkentityatv, 0, 56, 17));
@@ -32,7 +32,7 @@ public class SdkContainerAtv extends ContainerBase
 
     }
 
-    public boolean canUse(PlayerBase entityplayer)
+    public boolean canUse(PlayerEntity entityplayer)
     {
         return atv.canPlayerUse(entityplayer);
     }

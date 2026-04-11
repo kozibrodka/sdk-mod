@@ -6,47 +6,46 @@ import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk.events.SdkConfig;
 import net.kozibrodka.sdk_api.events.ingame.mod_SdkGuns;
 import net.kozibrodka.sdk_api.events.utils.*;
-import net.minecraft.block.BlockBase;
-import net.minecraft.entity.EntityBase;
-import net.minecraft.entity.Living;
-import net.minecraft.entity.WalkingBase;
-import net.minecraft.entity.animal.Pig;
-import net.minecraft.entity.monster.MonsterEntityType;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.item.ItemBase;
-import net.minecraft.level.Level;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.Monster;
+import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.MathHelper;
-import net.minecraft.util.maths.Vec3f;
-
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import java.util.List;
 
 public class SdkEntityBulletLaser extends SdkEntityBullet
 {
 
-    public SdkEntityBulletLaser(Level world)
+    public SdkEntityBulletLaser(World world)
     {
         super(world);
-        setSize(0.5F, 0.5F);
+        setBoundingBoxSpacing(0.5F, 0.5F);
     }
 
-    public SdkEntityBulletLaser(Level world, double d, double d1, double d2)
+    public SdkEntityBulletLaser(World world, double d, double d1, double d2)
     {
         super(world, d, d1, d2);
-        setSize(0.5F, 0.5F);
+        setBoundingBoxSpacing(0.5F, 0.5F);
     }
 
-    public SdkEntityBulletLaser(Level world, EntityBase entity, SdkItemGun sdkitemgun, float f, float f1, float f2, float f3,
+    public SdkEntityBulletLaser(World world, Entity entity, SdkItemGun sdkitemgun, float f, float f1, float f2, float f3,
                                 float f4)
     {
         super(world, entity, sdkitemgun, f, f1, f2, f3, f4);
-        setSize(0.5F, 0.5F);
+        setBoundingBoxSpacing(0.5F, 0.5F);
     }
 
-    public void playServerSound(Level world)
+    public void playServerSound(World world)
     {
-        world.playSound(this, ((SdkItemGun) ItemListener.itemGunLaser).firingSound, ((SdkItemGun)ItemListener.itemGunLaser).soundRangeFactor, 1.0F / (rand.nextFloat() * 0.1F + 0.95F));
+        world.playSound(this, ((SdkItemGun) ItemListener.itemGunLaser).firingSound, ((SdkItemGun)ItemListener.itemGunLaser).soundRangeFactor, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
     }
 
     public void tick()
@@ -54,17 +53,17 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
         baseTick();
         if(timeInAir == 200)
         {
-            remove();
+            markDead();
         }
         if(inGround)
         {
-            int i = level.getTileId(xTile, yTile, zTile);
+            int i = world.getBlockId(xTile, yTile, zTile);
             if(i != inTile)
             {
                 inGround = false;
-                velocityX *= rand.nextFloat() * 0.2F;
-                velocityY *= rand.nextFloat() * 0.2F;
-                velocityZ *= rand.nextFloat() * 0.2F;
+                velocityX *= random.nextFloat() * 0.2F;
+                velocityY *= random.nextFloat() * 0.2F;
+                velocityZ *= random.nextFloat() * 0.2F;
                 timeInTile = 0;
                 timeInAir = 0;
             }
@@ -72,33 +71,33 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
         {
             timeInAir++;
         }
-        Vec3f vec3d = Vec3f.from(x, y, z);
-        Vec3f vec3d1 = Vec3f.from(x + velocityX, y + velocityY, z + velocityZ);
+        Vec3d vec3d = Vec3d.createCached(x, y, z);
+        Vec3d vec3d1 = Vec3d.createCached(x + velocityX, y + velocityY, z + velocityZ);
         HitResult movingobjectposition = rayTraceBlocks(vec3d, vec3d1);
-        vec3d = Vec3f.from(x, y, z);
-        vec3d1 = Vec3f.from(x + velocityX, y + velocityY, z + velocityZ);
+        vec3d = Vec3d.createCached(x, y, z);
+        vec3d1 = Vec3d.createCached(x + velocityX, y + velocityY, z + velocityZ);
         if(movingobjectposition != null)
         {
-            vec3d1 = Vec3f.from(movingobjectposition.field_1988.x, movingobjectposition.field_1988.y, movingobjectposition.field_1988.z);
+            vec3d1 = Vec3d.createCached(movingobjectposition.pos.x, movingobjectposition.pos.y, movingobjectposition.pos.z);
         }
-        EntityBase entity = null;
-        List list = level.getEntities(this, boundingBox.method_86(velocityX, velocityY, velocityZ).expand(1.0D, 1.0D, 1.0D));
+        Entity entity = null;
+        List list = world.getEntities(this, boundingBox.stretch(velocityX, velocityY, velocityZ).expand(1.0D, 1.0D, 1.0D));
         double d = 0.0D;
         for(int j = 0; j < list.size(); j++)
         {
-            EntityBase entity1 = (EntityBase)list.get(j);
-            if(!entity1.method_1356() || (entity1 == owner || owner != null && entity1 == owner.vehicle) && timeInAir < 5 || serverSpawned)
+            Entity entity1 = (Entity)list.get(j);
+            if(!entity1.isCollidable() || (entity1 == owner || owner != null && entity1 == owner.vehicle) && timeInAir < 5 || serverSpawned)
             {
                 continue;
             }
             float f1 = 0.3F;
             Box axisalignedbb = entity1.boundingBox.expand(f1, f1, f1);
-            HitResult movingobjectposition1 = axisalignedbb.method_89(vec3d, vec3d1);
+            HitResult movingobjectposition1 = axisalignedbb.raycast(vec3d, vec3d1);
             if(movingobjectposition1 == null)
             {
                 continue;
             }
-            double d1 = vec3d.method_1294(movingobjectposition1.field_1988);
+            double d1 = vec3d.distanceTo(movingobjectposition1.pos);
             if(d1 < d || d == 0.0D)
             {
                 entity = entity1;
@@ -112,7 +111,7 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
         }
         if(movingobjectposition != null)
         {
-            if(movingobjectposition.field_1989 != null)
+            if(movingobjectposition.entity != null)
             {
                 boolean flag = false;
 //                if(owner instanceof SdkEntityLaserWolf)       //inna czesc moda
@@ -137,41 +136,41 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
 //                }
                 if(!flag)
                 {
-                    if(movingobjectposition.field_1989 instanceof WalkingBase)
+                    if(movingobjectposition.entity instanceof MobEntity)
                     {
-                        if(entity instanceof Pig)
+                        if(entity instanceof PigEntity)
                         {
-                            int l = rand.nextInt(3);
+                            int l = random.nextInt(3);
                             for(int l1 = 0; l1 < l; l1++)
                             {
-                                entity.dropItem(ItemBase.cookedPorkchop.id, 1);
+                                entity.dropItem(Item.COOKED_PORKCHOP.id, 1);
                             }
 
                         }
-                        movingobjectposition.field_1989.remove();
-                        if(movingobjectposition.field_1989.removed)
+                        movingobjectposition.entity.markDead();
+                        if(movingobjectposition.entity.dead)
                         {
                             for(int i1 = 0; i1 < 16; i1++)
                             {
-                                doSmoke(movingobjectposition.field_1989.x, movingobjectposition.field_1989.y + (double)(movingobjectposition.field_1989.height / 2.0F), movingobjectposition.field_1989.z, movingobjectposition.field_1989.width / 2.0F, movingobjectposition.field_1989.height / 2.0F);
+                                doSmoke(movingobjectposition.entity.x, movingobjectposition.entity.y + (double)(movingobjectposition.entity.height / 2.0F), movingobjectposition.entity.z, movingobjectposition.entity.width / 2.0F, movingobjectposition.entity.height / 2.0F);
                             }
 
                         }
                     }
-                    if(!movingobjectposition.field_1989.removed)
+                    if(!movingobjectposition.entity.dead)
                     {
-                        damageEntity(movingobjectposition.field_1989);
+                        damageEntity(movingobjectposition.entity);
                     }
-                    remove();
+                    markDead();
                 }
             } else
             {
-                int k = level.getTileId(movingobjectposition.x, movingobjectposition.y, movingobjectposition.z);
-                if(k != BlockBase.GLASS.id)
+                int k = world.getBlockId(movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ);
+                if(k != Block.GLASS.id)
                 {
-                    if(k == BlockBase.DIAMOND_BLOCK.id || k == BlockBase.GOLD_BLOCK.id || k == BlockBase.IRON_BLOCK.id)
+                    if(k == Block.DIAMOND_BLOCK.id || k == Block.GOLD_BLOCK.id || k == Block.IRON_BLOCK.id)
                     {
-                        int j1 = movingobjectposition.field_1987;   //side hit
+                        int j1 = movingobjectposition.side;   //side hit
                         if(j1 == 0 || j1 == 1)
                         {
                             velocityY *= -1D;
@@ -186,26 +185,26 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
                         }
                     } else
                     {
-                        if(k != BlockBase.BEDROCK.id && k != BlockBase.OBSIDIAN.id && BlockBase.BY_ID[k].getHardness() < 1000000F)
+                        if(k != Block.BEDROCK.id && k != Block.OBSIDIAN.id && Block.BLOCKS[k].getHardness() < 1000000F)
                         {
-                            if(k == BlockBase.SAND.id)
+                            if(k == Block.SAND.id)
                             {
-                                level.setTile(movingobjectposition.x, movingobjectposition.y, movingobjectposition.z, BlockBase.GLASS.id);
+                                world.setBlock(movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ, Block.GLASS.id);
                             } else
                             if(SdkConfig.laserSetsFireToBlocks && SdkTools.isFlammable(k))
                             {
-                                level.setTile(movingobjectposition.x, movingobjectposition.y, movingobjectposition.z, BlockBase.FIRE.id);
+                                world.setBlock(movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ, Block.FIRE.id);
                             } else
                             {
-                                level.setTile(movingobjectposition.x, movingobjectposition.y, movingobjectposition.z, 0);
+                                world.setBlock(movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ, 0);
                             }
                             for(int k1 = 0; k1 < 16; k1++)
                             {
-                                doSmoke((double)movingobjectposition.x + 0.5D, (double)movingobjectposition.y + 0.5D, (double)movingobjectposition.z + 0.5D, 0.5D, 0.5D);
+                                doSmoke((double)movingobjectposition.blockX + 0.5D, (double)movingobjectposition.blockY + 0.5D, (double)movingobjectposition.blockZ + 0.5D, 0.5D, 0.5D);
                             }
 
                         }
-                        remove();
+                        markDead();
                     }
                 }
             }
@@ -224,27 +223,27 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
         setPosition(x, y, z);
     }
 
-    public void damageEntity(EntityBase entity)
+    public void damageEntity(Entity entity)
     {
         int i = damage;
-        if((owner instanceof MonsterEntityType) && (entity instanceof PlayerBase))
+        if((owner instanceof Monster) && (entity instanceof PlayerEntity))
         {
-            if(level.difficulty == 0)
+            if(world.difficulty == 0)
             {
                 i = 0;
             }
-            if(level.difficulty == 1)
+            if(world.difficulty == 1)
             {
                 i = i / 3 + 1;
             }
-            if(level.difficulty == 3)
+            if(world.difficulty == 3)
             {
                 i = (i * 3) / 2;
             }
         }
-        if(entity instanceof Living)
+        if(entity instanceof LivingEntity)
         {
-            SdkTools.attackEntityIgnoreDelay((Living) entity, owner, i);
+            SdkTools.attackEntityIgnoreDelay((LivingEntity) entity, owner, i);
         } else
         {
 ////            entity.damage(owner, i);
@@ -272,10 +271,10 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
 
     public void doSmoke(double d, double d1, double d2, double d3, double d4)
     {
-        double d5 = (d + rand.nextDouble() * d3 * 2D) - d3;
-        double d6 = (d1 + rand.nextDouble() * d4 * 2D) - d4;
-        double d7 = (d2 + rand.nextDouble() * d3 * 2D) - d3;
-        SdkTools.minecraft.particleManager.addParticle(new SdkEntitySmokeFX(level, d5, d6, d7, 0.0D, 0.0D, 0.0D, 2.5F, 1.0F, 1.0F, 1.0F));
+        double d5 = (d + random.nextDouble() * d3 * 2D) - d3;
+        double d6 = (d1 + random.nextDouble() * d4 * 2D) - d4;
+        double d7 = (d2 + random.nextDouble() * d3 * 2D) - d3;
+        SdkTools.minecraft.particleManager.addParticle(new SdkEntitySmokeFX(world, d5, d6, d7, 0.0D, 0.0D, 0.0D, 2.5F, 1.0F, 1.0F, 1.0F));
 //        ModLoader.getMinecraftInstance().particleManager.addEffect(new SdkEntitySmokeFX(level, d5, d6, d7, 0.0D, 0.0D, 0.0D, 2.5F, 1.0F, 1.0F, 1.0F));
     }
 
@@ -284,12 +283,12 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
         return 2.0F;
     }
 
-    public HitResult rayTraceBlocks(Vec3f vec3d, Vec3f vec3d1)
+    public HitResult rayTraceBlocks(Vec3d vec3d, Vec3d vec3d1)
     {
         return rayTraceBlocks_do(vec3d, vec3d1, false);
     }
 
-    public HitResult rayTraceBlocks_do(Vec3f vec3d, Vec3f vec3d1, boolean flag)
+    public HitResult rayTraceBlocks_do(Vec3d vec3d, Vec3d vec3d1, boolean flag)
     {
         if(Double.isNaN(vec3d.x) || Double.isNaN(vec3d.y) || Double.isNaN(vec3d.z))
         {
@@ -399,7 +398,7 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
                 vec3d.y += d7 * d5;
                 vec3d.z = d2;
             }
-            Vec3f vec3d2 = Vec3f.from(vec3d.x, vec3d.y, vec3d.z);
+            Vec3d vec3d2 = Vec3d.createCached(vec3d.x, vec3d.y, vec3d.z);
             l = (int)(vec3d2.x = MathHelper.floor(vec3d.x));
             if(byte0 == 5)
             {
@@ -418,12 +417,12 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
                 j1--;
                 vec3d2.z++;
             }
-            int l1 = level.getTileId(l, i1, j1);
-            int i2 = level.getTileMeta(l, i1, j1);
-            BlockBase block = BlockBase.BY_ID[l1];
-            if(l1 > 0 && block.isCollidable(i2, flag) && l1 != BlockBase.GLASS.id)
+            int l1 = world.getBlockId(l, i1, j1);
+            int i2 = world.getBlockMeta(l, i1, j1);
+            Block block = Block.BLOCKS[l1];
+            if(l1 > 0 && block.hasCollision(i2, flag) && l1 != Block.GLASS.id)
             {
-                HitResult movingobjectposition = block.method_1564(level, l, i1, j1, vec3d, vec3d1); //collisionRayTrace
+                HitResult movingobjectposition = block.raycast(world, l, i1, j1, vec3d, vec3d1); //collisionRayTrace
                 if(movingobjectposition != null)
                 {
                     return movingobjectposition;

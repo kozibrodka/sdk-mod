@@ -23,12 +23,12 @@ public class ItemListener {
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
         //AMMO
-        itemBulletLight = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletLight")).setTranslationKey(MOD_ID, "itemBulletLight").setMaxStackSize(32);
-        itemBulletMedium = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletMedium")).setTranslationKey(MOD_ID, "itemBulletMedium").setMaxStackSize(8);
-        itemBulletHeavy = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletHeavy")).setTranslationKey(MOD_ID, "itemBulletHeavy").setMaxStackSize(4);
-        itemBulletRocket = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletRocket")).setTranslationKey(MOD_ID, "itemBulletRocket").setMaxStackSize(4);
-        itemBulletRocketLaser = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletRocketLaser")).setTranslationKey(MOD_ID, "itemBulletRocketLaser").setMaxStackSize(4);
-        itemBulletShell = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletShell")).setTranslationKey(MOD_ID, "itemBulletShell").setMaxStackSize(8);
+        itemBulletLight = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletLight")).setTranslationKey(MOD_ID, "itemBulletLight").setMaxCount(32);
+        itemBulletMedium = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletMedium")).setTranslationKey(MOD_ID, "itemBulletMedium").setMaxCount(8);
+        itemBulletHeavy = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletHeavy")).setTranslationKey(MOD_ID, "itemBulletHeavy").setMaxCount(4);
+        itemBulletRocket = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletRocket")).setTranslationKey(MOD_ID, "itemBulletRocket").setMaxCount(4);
+        itemBulletRocketLaser = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletRocketLaser")).setTranslationKey(MOD_ID, "itemBulletRocketLaser").setMaxCount(4);
+        itemBulletShell = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletShell")).setTranslationKey(MOD_ID, "itemBulletShell").setMaxCount(8);
         itemOil = (TemplateItem) new SdkItemOil(Identifier.of(MOD_ID, "itemOil")).setTranslationKey(MOD_ID, "itemOil");
 
         //GUNS
@@ -46,13 +46,13 @@ public class ItemListener {
         itemGunRocketLauncher = (TemplateItem) new SdkItemGunRocketLauncher(Identifier.of(MOD_ID, "itemGunRocketLauncher")).setTranslationKey(MOD_ID, "itemGunRocketLauncher");
 
         //NADES
-        itemGrenade = (TemplateItem) new SdkItemGrenade(Identifier.of(MOD_ID, "itemGrenade")).setTranslationKey(MOD_ID, "itemGrenade").setMaxStackSize(4);
-        itemGrenadeHe = (TemplateItem) new SdkItemGrenadeHE(Identifier.of(MOD_ID, "itemGrenadeHe")).setTranslationKey(MOD_ID, "itemGrenadeHe").setMaxStackSize(4);
-        itemGrenadeStun = (TemplateItem) new SdkItemGrenadeStun(Identifier.of(MOD_ID, "itemGrenadeStun")).setTranslationKey(MOD_ID, "itemGrenadeStun").setMaxStackSize(4);
-        itemGrenadeSmoke = (TemplateItem) new SdkItemGrenadeSmoke(Identifier.of(MOD_ID, "itemGrenadeSmoke")).setTranslationKey(MOD_ID, "itemGrenadeSmoke").setMaxStackSize(4);
-        itemGrenadeSticky = (TemplateItem) new SdkItemGrenadeSticky(Identifier.of(MOD_ID, "itemGrenadeSticky")).setTranslationKey(MOD_ID, "itemGrenadeSticky").setMaxStackSize(4);
-        itemGrenadeIncendiary = (TemplateItem) new SdkItemGrenadeIncendiary(Identifier.of(MOD_ID, "itemGrenadeIncendiary")).setTranslationKey(MOD_ID, "itemGrenadeIncendiary").setMaxStackSize(4);
-        itemGrenadeIncendiaryLit = (TemplateItem) new SdkItemGrenadeIncendiary(Identifier.of(MOD_ID, "itemGrenadeIncendiaryLit")).setTranslationKey(MOD_ID, "itemGrenadeIncendiaryLit").setMaxStackSize(4);
+        itemGrenade = (TemplateItem) new SdkItemGrenade(Identifier.of(MOD_ID, "itemGrenade")).setTranslationKey(MOD_ID, "itemGrenade").setMaxCount(4);
+        itemGrenadeHe = (TemplateItem) new SdkItemGrenadeHE(Identifier.of(MOD_ID, "itemGrenadeHe")).setTranslationKey(MOD_ID, "itemGrenadeHe").setMaxCount(4);
+        itemGrenadeStun = (TemplateItem) new SdkItemGrenadeStun(Identifier.of(MOD_ID, "itemGrenadeStun")).setTranslationKey(MOD_ID, "itemGrenadeStun").setMaxCount(4);
+        itemGrenadeSmoke = (TemplateItem) new SdkItemGrenadeSmoke(Identifier.of(MOD_ID, "itemGrenadeSmoke")).setTranslationKey(MOD_ID, "itemGrenadeSmoke").setMaxCount(4);
+        itemGrenadeSticky = (TemplateItem) new SdkItemGrenadeSticky(Identifier.of(MOD_ID, "itemGrenadeSticky")).setTranslationKey(MOD_ID, "itemGrenadeSticky").setMaxCount(4);
+        itemGrenadeIncendiary = (TemplateItem) new SdkItemGrenadeIncendiary(Identifier.of(MOD_ID, "itemGrenadeIncendiary")).setTranslationKey(MOD_ID, "itemGrenadeIncendiary").setMaxCount(4);
+        itemGrenadeIncendiaryLit = (TemplateItem) new SdkItemGrenadeIncendiary(Identifier.of(MOD_ID, "itemGrenadeIncendiaryLit")).setTranslationKey(MOD_ID, "itemGrenadeIncendiaryLit").setMaxCount(4);
 
         //UTIL
         itemGoldCoin = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemGoldCoin")).setTranslationKey(MOD_ID, "itemGoldCoin");
@@ -66,8 +66,8 @@ public class ItemListener {
         itemAtvBody = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemAtvBody")).setTranslationKey(MOD_ID, "itemAtvBody");
         itemAtvWheel = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemAtvWheel")).setTranslationKey(MOD_ID, "itemAtvWheel");
 
-        itemWrench = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemWrench")).setTranslationKey(MOD_ID, "itemWrench").setMaxStackSize(1).setDurability(15);
-        itemSentry = (TemplateItem) new SdkItemSentry(Identifier.of(MOD_ID, "itemSentry")).setTranslationKey(MOD_ID, "itemSentry").setMaxStackSize(1).setDurability(0);
+        itemWrench = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemWrench")).setTranslationKey(MOD_ID, "itemWrench").setMaxCount(1).setMaxDamage(15);
+        itemSentry = (TemplateItem) new SdkItemSentry(Identifier.of(MOD_ID, "itemSentry")).setTranslationKey(MOD_ID, "itemSentry").setMaxCount(1).setMaxDamage(0);
         itemOilDrop = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemOilDrop")).setTranslationKey(MOD_ID, "itemOilDrop");
         itemJetPack = (TemplateArmorItem) new SdkItemJetPack(Identifier.of(MOD_ID, "itemJetPack"), 1).setTranslationKey(MOD_ID, "itemJetPack");
 

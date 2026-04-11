@@ -8,20 +8,20 @@ import javax.imageio.ImageIO;
 
 import net.kozibrodka.sdk.events.ItemListener;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.TextureBinder;
-import net.minecraft.util.maths.MathHelper;
+import net.minecraft.client.render.texture.DynamicTexture;
+import net.minecraft.util.math.MathHelper;
 
 
-public class SdkTextureLightometerFX extends TextureBinder
+public class SdkTextureLightometerFX extends DynamicTexture
 {
 
     public SdkTextureLightometerFX(Minecraft minecraft)
     {
-        super(ItemListener.itemLightometer.getTexturePosition(0));
+        super(ItemListener.itemLightometer.getTextureId(0));
         watchIconImageData = new int[256];
         dialImageData = new int[256];
         mc = minecraft;
-        renderMode = 1;
+        atlas = 1;
         try
         {
             BufferedImage bufferedimage = ImageIO.read(Objects.requireNonNull((Minecraft.class).getResource("/assets/sdk/stationapi/textures/item/itemLightometer.png")));
@@ -35,15 +35,15 @@ public class SdkTextureLightometerFX extends TextureBinder
         }
     }
 
-    public void update()
+    public void tick()
     {
         double d = 0.0D;
-        if(mc.level != null && mc.player != null)
+        if(mc.world != null && mc.player != null)
         {
             int i = MathHelper.floor(mc.player.x);
             int j = MathHelper.floor(mc.player.y);
             int k = MathHelper.floor(mc.player.z);
-            int l = mc.level.placeTile(i, j - 1, k);
+            int l = mc.world.getLightLevel(i, j - 1, k);
             float f = getRotationValue(l);
             d = -f * 3.141593F * 2.0F;
         }
@@ -82,7 +82,7 @@ public class SdkTextureLightometerFX extends TextureBinder
                 l1 = ((dialImageData[l3] >> 8 & 0xff) * i3) / 255;
                 i2 = ((dialImageData[l3] >> 0 & 0xff) * i3) / 255;
             }
-            if(render3d)
+            if(anaglyph)
             {
                 int j2 = (k1 * 30 + l1 * 59 + i2 * 11) / 100;
                 int k2 = (k1 * 30 + l1 * 70) / 100;
@@ -91,10 +91,10 @@ public class SdkTextureLightometerFX extends TextureBinder
                 l1 = k2;
                 i2 = l2;
             }
-            grid[i1 * 4 + 0] = (byte)k1;
-            grid[i1 * 4 + 1] = (byte)l1;
-            grid[i1 * 4 + 2] = (byte)i2;
-            grid[i1 * 4 + 3] = (byte)j1;
+            pixels[i1 * 4 + 0] = (byte)k1;
+            pixels[i1 * 4 + 1] = (byte)l1;
+            pixels[i1 * 4 + 2] = (byte)i2;
+            pixels[i1 * 4 + 3] = (byte)j1;
         }
 
     }

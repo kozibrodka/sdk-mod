@@ -1,25 +1,25 @@
 package net.kozibrodka.sdk.render;
 
 import net.kozibrodka.sdk.tileEntity.SdkTileEntityPlaque;
-import net.minecraft.block.BlockBase;
+import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.block.BlockRenderer;
-import net.minecraft.client.render.tileentity.TileEntityRenderer;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.tileentity.TileEntityBase;
+import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.client.render.block.entity.BlockEntityRenderer;
+import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import org.lwjgl.opengl.GL11;
 
-public class SdkTileEntityRendererPlaque extends TileEntityRenderer
+public class SdkTileEntityRendererPlaque extends BlockEntityRenderer
 {
 
     public SdkTileEntityRendererPlaque()
     {
-        blockrender = new BlockRenderer();
+        blockrender = new BlockRenderManager();
     }
 
-    public void render(TileEntityBase tileentity, double d, double d1, double d2,
+    public void render(BlockEntity tileentity, double d, double d1, double d2,
                                  float f)
     {
         renderTileEntityPlaque((SdkTileEntityPlaque)tileentity, d, d1, d2, f);
@@ -31,8 +31,8 @@ public class SdkTileEntityRendererPlaque extends TileEntityRenderer
         Tessellator tessellator = Tessellator.INSTANCE;
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d + 0.5F, (float)d1 + 0.8F, (float)d2 + 0.5F);
-        int i = sdktileentityplaque.level.getTileMeta(sdktileentityplaque.x, sdktileentityplaque.y, sdktileentityplaque.z);
-        float f1 = sdktileentityplaque.getTile().getBrightness(sdktileentityplaque.level, sdktileentityplaque.x, sdktileentityplaque.y, sdktileentityplaque.z);
+        int i = sdktileentityplaque.world.getBlockMeta(sdktileentityplaque.x, sdktileentityplaque.y, sdktileentityplaque.z);
+        float f1 = sdktileentityplaque.getBlock().getLuminance(sdktileentityplaque.world, sdktileentityplaque.x, sdktileentityplaque.y, sdktileentityplaque.z);
         switch(i)
         {
         case 5: // '\005'
@@ -52,24 +52,24 @@ public class SdkTileEntityRendererPlaque extends TileEntityRenderer
             break;
         }
         GL11.glEnable(32826 /*GL_RESCALE_NORMAL_EXT*/);
-        ItemInstance itemstack = sdktileentityplaque.itemStack;
+        ItemStack itemstack = sdktileentityplaque.itemStack;
         if(itemstack != null)
         {
-            if(itemstack.itemId < 256 && BlockRenderer.method_42(BlockBase.BY_ID[itemstack.itemId].getRenderType()))
+            if(itemstack.itemId < 256 && BlockRenderManager.isSideLit(Block.BLOCKS[itemstack.itemId].getRenderType()))
             {
                 GL11.glScalef(0.5F, 0.5F, 0.5F);
                 GL11.glTranslatef(0.0F, -0.625F, 0.375F);
 //                method_1064("/terrain.png");
-                method_1064("/terrain.png");
+                bindTexture("/terrain.png");
                 GL11.glPushMatrix();
-                blockrender.method_48(BlockBase.BY_ID[itemstack.itemId], itemstack.getDamage(), 1.0F);
+                blockrender.render(Block.BLOCKS[itemstack.itemId], itemstack.getDamage(), 1.0F);
                 GL11.glPopMatrix();
             } else
             {
                 GL11.glScalef(0.875F, 0.875F, 0.875F);
                 GL11.glTranslatef(0.0F, -0.5625F, 0.5F);
                 GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
-                int j = itemstack.getTexturePosition();
+                int j = itemstack.getTextureId();
 
 
 //                if(itemstack.itemId < 256)
@@ -95,9 +95,9 @@ public class SdkTileEntityRendererPlaque extends TileEntityRenderer
                 float f7 = 0.5F;
                 float f8 = 0.25F;
                 GL11.glPushMatrix();
-                tessellator.start();
-                tessellator.colour(f1, f1, f1);
-                tessellator.setNormal(0.0F, 1.0F, 0.0F);
+                tessellator.startQuads();
+                tessellator.color(f1, f1, f1);
+                tessellator.normal(0.0F, 1.0F, 0.0F);
                 tessellator.vertex(0.0F - f7, 0.0F - f8, 0.0D, f2, f5);
                 tessellator.vertex(f6 - f7, 0.0F - f8, 0.0D, f3, f5);
                 tessellator.vertex(f6 - f7, 1.0F - f8, 0.0D, f3, f4);
@@ -114,5 +114,5 @@ public class SdkTileEntityRendererPlaque extends TileEntityRenderer
         GL11.glPopMatrix();
     }
 
-    private BlockRenderer blockrender;
+    private BlockRenderManager blockrender;
 }

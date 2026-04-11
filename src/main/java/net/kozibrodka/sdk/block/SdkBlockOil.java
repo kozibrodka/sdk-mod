@@ -3,16 +3,16 @@ package net.kozibrodka.sdk.block;
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk.events.TextureListener;
 import net.kozibrodka.sdk_api.events.ingame.mod_SdkGuns;
-import net.minecraft.block.BlockBase;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.block.BlockRenderer;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.item.ItemBase;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.BlockView;
-import net.minecraft.level.Level;
-import net.minecraft.util.maths.Box;
+import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Box;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithWorldRenderer;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
@@ -26,19 +26,19 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
 
     public SdkBlockOil(Identifier iid)
     {
-        super(iid, Material.DOODADS);
+        super(iid, Material.PISTON_BREAKABLE);
 //        renderType = k;
         setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
-        setTicksRandomly(true);
-        NO_NOTIFY_ON_META_CHANGE[id] = true; //?
+        setTickRandomly(true);
+        BLOCKS_IGNORE_META_UPDATE[id] = true; //?
     }
 
-    public Box getCollisionShape(Level world, int i, int j, int k)
+    public Box getCollisionShape(World world, int i, int j, int k)
     {
         return null;
     }
 
-    public boolean isFullOpaque()
+    public boolean isOpaque()
     {
         return false;
     }
@@ -48,111 +48,111 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         return false;
     }
 
-    public int getTickrate()
+    public int getTickRate()
     {
         return 100;
     }
 
-    public void onScheduledTick(Level world, int i, int j, int k, Random random)
+    public void onTick(World world, int i, int j, int k, Random random)
     {
-        int l = world.getTileMeta(i, j, k);
-        int i1 = world.getTileId(i, j + 1, k);
+        int l = world.getBlockMeta(i, j, k);
+        int i1 = world.getBlockId(i, j + 1, k);
         if(!setFireAbove(world, i, j, k, l) && l > 0)
         {
             if(--l == 0)
             {
-                if(i1 == BlockBase.FIRE.id)
+                if(i1 == Block.FIRE.id)
                 {
-                    world.setTileInChunk(i, j + 1, k, 0);
+                    world.setBlockWithoutNotifyingNeighbors(i, j + 1, k, 0);
                 }
-                world.setTile(i, j, k, 0);
+                world.setBlock(i, j, k, 0);
             } else
             {
-                world.setTileMeta(i, j, k, l);
+                world.setBlockMeta(i, j, k, l);
             }
         }
         if(l >= 13)
         {
-            world.method_216(i, j, k, id, 1);
+            world.scheduleBlockUpdate(i, j, k, id, 1);
         } else
         {
-            world.method_216(i, j, k, id, getTickrate());
+            world.scheduleBlockUpdate(i, j, k, id, getTickRate());
         }
     }
 
-    private boolean setFireAbove(Level world, int i, int j, int k, int l)
+    private boolean setFireAbove(World world, int i, int j, int k, int l)
     {
-        int i1 = world.getTileId(i, j + 1, k);
+        int i1 = world.getBlockId(i, j + 1, k);
         if(l > 0 && i1 == 0)
         {
-            world.setTile(i, j + 1, k, BlockBase.FIRE.id);
+            world.setBlock(i, j + 1, k, Block.FIRE.id);
             return true;
         }
-        if(i1 == BlockBase.FIRE.id)
+        if(i1 == Block.FIRE.id)
         {
-            world.setTileMeta(i, j + 1, k, 15);
+            world.setBlockMeta(i, j + 1, k, 15);
         }
         return false;
     }
 
-    public boolean canPlaceAt(Level world, int i, int j, int k)
+    public boolean canPlaceAt(World world, int i, int j, int k)
     {
-        return world.isFullOpaque(i, j - 1, k);
+        return world.method_1783(i, j - 1, k);
     }
 
-    private void notifyOilNeighborsOfNeighborChange(Level world, int i, int j, int k)
+    private void notifyOilNeighborsOfNeighborChange(World world, int i, int j, int k)
     {
-        if(world.getTileId(i, j, k) != id)
+        if(world.getBlockId(i, j, k) != id)
         {
             return;
         } else
         {
-            world.updateAdjacentBlocks(i, j, k, id);
-            world.updateAdjacentBlocks(i - 1, j, k, id);
-            world.updateAdjacentBlocks(i + 1, j, k, id);
-            world.updateAdjacentBlocks(i, j, k - 1, id);
-            world.updateAdjacentBlocks(i, j, k + 1, id);
-            world.updateAdjacentBlocks(i, j - 1, k, id);
-            world.updateAdjacentBlocks(i, j + 1, k, id);
+            world.notifyNeighbors(i, j, k, id);
+            world.notifyNeighbors(i - 1, j, k, id);
+            world.notifyNeighbors(i + 1, j, k, id);
+            world.notifyNeighbors(i, j, k - 1, id);
+            world.notifyNeighbors(i, j, k + 1, id);
+            world.notifyNeighbors(i, j - 1, k, id);
+            world.notifyNeighbors(i, j + 1, k, id);
             return;
         }
     }
 
-    public void onBlockPlaced(Level world, int i, int j, int k)
+    public void onPlaced(World world, int i, int j, int k)
     {
-        super.onBlockPlaced(world, i, j, k);
-        if(world.isServerSide)
+        super.onPlaced(world, i, j, k);
+        if(world.isRemote)
         {
             return;
         }
-        world.updateAdjacentBlocks(i, j + 1, k, id);
-        world.updateAdjacentBlocks(i, j - 1, k, id);
+        world.notifyNeighbors(i, j + 1, k, id);
+        world.notifyNeighbors(i, j - 1, k, id);
         notifyOilNeighborsOfNeighborChange(world, i - 1, j, k);
         notifyOilNeighborsOfNeighborChange(world, i + 1, j, k);
         notifyOilNeighborsOfNeighborChange(world, i, j, k - 1);
         notifyOilNeighborsOfNeighborChange(world, i, j, k + 1);
-        if(world.isFullOpaque(i - 1, j, k))
+        if(world.method_1783(i - 1, j, k))
         {
             notifyOilNeighborsOfNeighborChange(world, i - 1, j + 1, k);
         } else
         {
             notifyOilNeighborsOfNeighborChange(world, i - 1, j - 1, k);
         }
-        if(world.isFullOpaque(i + 1, j, k))
+        if(world.method_1783(i + 1, j, k))
         {
             notifyOilNeighborsOfNeighborChange(world, i + 1, j + 1, k);
         } else
         {
             notifyOilNeighborsOfNeighborChange(world, i + 1, j - 1, k);
         }
-        if(world.isFullOpaque(i, j, k - 1))
+        if(world.method_1783(i, j, k - 1))
         {
             notifyOilNeighborsOfNeighborChange(world, i, j + 1, k - 1);
         } else
         {
             notifyOilNeighborsOfNeighborChange(world, i, j - 1, k - 1);
         }
-        if(world.isFullOpaque(i, j, k + 1))
+        if(world.method_1783(i, j, k + 1))
         {
             notifyOilNeighborsOfNeighborChange(world, i, j + 1, k + 1);
         } else
@@ -162,41 +162,41 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         checkForFire(world, i, j, k);
     }
 
-    public void onBlockRemoved(Level world, int i, int j, int k)
+    public void onBreak(World world, int i, int j, int k)
     {
-        super.onBlockRemoved(world, i, j, k);
-        if(world.isServerSide)
+        super.onBreak(world, i, j, k);
+        if(world.isRemote)
         {
             return;
         }
-        world.updateAdjacentBlocks(i, j + 1, k, id);
-        world.updateAdjacentBlocks(i, j - 1, k, id);
+        world.notifyNeighbors(i, j + 1, k, id);
+        world.notifyNeighbors(i, j - 1, k, id);
         notifyOilNeighborsOfNeighborChange(world, i - 1, j, k);
         notifyOilNeighborsOfNeighborChange(world, i + 1, j, k);
         notifyOilNeighborsOfNeighborChange(world, i, j, k - 1);
         notifyOilNeighborsOfNeighborChange(world, i, j, k + 1);
-        if(world.isFullOpaque(i - 1, j, k))
+        if(world.method_1783(i - 1, j, k))
         {
             notifyOilNeighborsOfNeighborChange(world, i - 1, j + 1, k);
         } else
         {
             notifyOilNeighborsOfNeighborChange(world, i - 1, j - 1, k);
         }
-        if(world.isFullOpaque(i + 1, j, k))
+        if(world.method_1783(i + 1, j, k))
         {
             notifyOilNeighborsOfNeighborChange(world, i + 1, j + 1, k);
         } else
         {
             notifyOilNeighborsOfNeighborChange(world, i + 1, j - 1, k);
         }
-        if(world.isFullOpaque(i, j, k - 1))
+        if(world.method_1783(i, j, k - 1))
         {
             notifyOilNeighborsOfNeighborChange(world, i, j + 1, k - 1);
         } else
         {
             notifyOilNeighborsOfNeighborChange(world, i, j - 1, k - 1);
         }
-        if(world.isFullOpaque(i, j, k + 1))
+        if(world.method_1783(i, j, k + 1))
         {
             notifyOilNeighborsOfNeighborChange(world, i, j + 1, k + 1);
         } else
@@ -205,33 +205,33 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         }
     }
 
-    public void activate(Level world, int i, int j, int k, PlayerBase entityplayer)
+    public void onBlockBreakStart(World world, int i, int j, int k, PlayerEntity entityplayer)
     {
-        setFireAbove(world, i, j, k, world.getTileMeta(i, j, k));
+        setFireAbove(world, i, j, k, world.getBlockMeta(i, j, k));
     }
 
-    public void onNeighborBlockChange(Level world, int i, int j, int k, int l)
+    public void onNeighborBlockChange(World world, int i, int j, int k, int l)
     {
-        if(world.isServerSide)
+        if(world.isRemote)
         {
             return;
         }
-        int i1 = world.getTileMeta(i, j, k);
+        int i1 = world.getBlockMeta(i, j, k);
         boolean flag = canPlaceAt(world, i, j, k);
         if(!flag)
         {
-            drop(world, i, j, k, i1);
-            world.setTile(i, j, k, 0);
+            dropStacks(world, i, j, k, i1);
+            world.setBlock(i, j, k, 0);
         } else
         {
             checkForFire(world, i, j, k);
         }
-        super.onAdjacentBlockUpdate(world, i, j, k, l);
+        super.neighborUpdate(world, i, j, k, l);
     }
 
-    public boolean checkForFire(Level world, int i, int j, int k)
+    public boolean checkForFire(World world, int i, int j, int k)
     {
-        if(world.getTileMeta(i, j, k) == 0)
+        if(world.getBlockMeta(i, j, k) == 0)
         {
             for(int l = i - 1; l <= i + 1; l++)
             {
@@ -244,20 +244,20 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
                         {
                             continue;
                         }
-                        int l1 = world.getTileId(l, i1, j1);
-                        if(l1 != BlockBase.FIRE.id && (l1 != id || world.getTileMeta(l, i1, j1) <= 0))
+                        int l1 = world.getBlockId(l, i1, j1);
+                        if(l1 != Block.FIRE.id && (l1 != id || world.getBlockMeta(l, i1, j1) <= 0))
                         {
                             continue;
                         }
-                        world.setTileMeta(i, j, k, 15);
+                        world.setBlockMeta(i, j, k, 15);
                         setFireAbove(world, i, j, k, 15);
-                        world.method_216(i, j, k, id, 1);
+                        world.scheduleBlockUpdate(i, j, k, id, 1);
                         for(int i2 = i - 1; i2 <= i + 1; i2++)
                         {
                             for(int j2 = k - 1; j2 <= k + 1; j2++)
                             {
                                 int k2 = Math.abs(i - l) + Math.abs(k - j1);
-                                if(k2 == 1 && world.getTileId(i2, i1 - 1, j2) == id)
+                                if(k2 == 1 && world.getBlockId(i2, i1 - 1, j2) == id)
                                 {
                                     onNeighborBlockChange(world, i2, i1 - 1, j2, id);
                                 }
@@ -276,18 +276,18 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         return false;
     }
 
-    public int getDropId(int i, Random random)
+    public int getDroppedItemId(int i, Random random)
     {
         return 0;
     }
 
-    public boolean canUse(Level world, int i, int j, int k, PlayerBase entityplayer)
+    public boolean onUse(World world, int i, int j, int k, PlayerEntity entityplayer)
     {
-        if(entityplayer.inventory.getHeldItem() != null && entityplayer.inventory.getHeldItem().itemId == ItemBase.bucket.id)
+        if(entityplayer.inventory.getSelectedItem() != null && entityplayer.inventory.getSelectedItem().itemId == Item.BUCKET.id)
         {
-            entityplayer.inventory.main[entityplayer.inventory.selectedHotbarSlot] = new ItemInstance(ItemListener.itemOil);
-            mod_SdkGuns.setItemDamage(entityplayer.inventory.getHeldItem(), ItemListener.itemOil.getDurability() - 1);
-            world.setTile(i, j, k, 0);
+            entityplayer.inventory.main[entityplayer.inventory.selectedSlot] = new ItemStack(ItemListener.itemOil);
+            mod_SdkGuns.setItemDamage(entityplayer.inventory.getSelectedItem(), ItemListener.itemOil.getMaxDamage() - 1);
+            world.setBlock(i, j, k, 0);
             return true;
         } else
         {
@@ -296,15 +296,15 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
     }
 
     @Override
-    public boolean renderWorld(BlockRenderer renderblocks, BlockView iblockaccess, int i, int j, int k) {
+    public boolean renderWorld(BlockRenderManager renderblocks, BlockView iblockaccess, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int l = TextureListener.oil_juction;
 //        if(renderblocks.overrideBlockTexture >= 0)
 //        {
 //            l = renderblocks.overrideBlockTexture;
 //        }
-        float f = getBrightness(iblockaccess, i, j, k);
-        tessellator.colour(f, f, f);
+        float f = getLuminance(iblockaccess, i, j, k);
+        tessellator.color(f, f, f);
 
 
 //        int i1 = (l & 0xf) << 4;
@@ -322,25 +322,25 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
 
         float f1 = 0.0F;
         float f2 = 0.03125F/16;
-        boolean flag = iblockaccess.getTileId(i - 1, j, k) == id || !iblockaccess.canSuffocate(i - 1, j, k) && iblockaccess.getTileId(i - 1, j - 1, k) == id;
-        boolean flag1 = iblockaccess.getTileId(i + 1, j, k) == id || !iblockaccess.canSuffocate(i + 1, j, k) && iblockaccess.getTileId(i + 1, j - 1, k) == id;
-        boolean flag2 = iblockaccess.getTileId(i, j, k - 1) == id || !iblockaccess.canSuffocate(i, j, k - 1) && iblockaccess.getTileId(i, j - 1, k - 1) == id;
-        boolean flag3 = iblockaccess.getTileId(i, j, k + 1) == id || !iblockaccess.canSuffocate(i, j, k + 1) && iblockaccess.getTileId(i, j - 1, k + 1) == id;
-        if(!iblockaccess.canSuffocate(i, j + 1, k))
+        boolean flag = iblockaccess.getBlockId(i - 1, j, k) == id || !iblockaccess.shouldSuffocate(i - 1, j, k) && iblockaccess.getBlockId(i - 1, j - 1, k) == id;
+        boolean flag1 = iblockaccess.getBlockId(i + 1, j, k) == id || !iblockaccess.shouldSuffocate(i + 1, j, k) && iblockaccess.getBlockId(i + 1, j - 1, k) == id;
+        boolean flag2 = iblockaccess.getBlockId(i, j, k - 1) == id || !iblockaccess.shouldSuffocate(i, j, k - 1) && iblockaccess.getBlockId(i, j - 1, k - 1) == id;
+        boolean flag3 = iblockaccess.getBlockId(i, j, k + 1) == id || !iblockaccess.shouldSuffocate(i, j, k + 1) && iblockaccess.getBlockId(i, j - 1, k + 1) == id;
+        if(!iblockaccess.shouldSuffocate(i, j + 1, k))
         {
-            if(iblockaccess.canSuffocate(i - 1, j, k) && iblockaccess.getTileId(i - 1, j + 1, k) == id)
+            if(iblockaccess.shouldSuffocate(i - 1, j, k) && iblockaccess.getBlockId(i - 1, j + 1, k) == id)
             {
                 flag = true;
             }
-            if(iblockaccess.canSuffocate(i + 1, j, k) && iblockaccess.getTileId(i + 1, j + 1, k) == id)
+            if(iblockaccess.shouldSuffocate(i + 1, j, k) && iblockaccess.getBlockId(i + 1, j + 1, k) == id)
             {
                 flag1 = true;
             }
-            if(iblockaccess.canSuffocate(i, j, k - 1) && iblockaccess.getTileId(i, j + 1, k - 1) == id)
+            if(iblockaccess.shouldSuffocate(i, j, k - 1) && iblockaccess.getBlockId(i, j + 1, k - 1) == id)
             {
                 flag2 = true;
             }
-            if(iblockaccess.canSuffocate(i, j, k + 1) && iblockaccess.getTileId(i, j + 1, k + 1) == id)
+            if(iblockaccess.shouldSuffocate(i, j, k + 1) && iblockaccess.getBlockId(i, j + 1, k + 1) == id)
             {
                 flag3 = true;
             }
@@ -433,7 +433,7 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
             tessellator.vertex(f4 - f1, (float)j + f2, f6 - f1, d, d2);
             tessellator.vertex(f4 - f1, (float)j + f2, f7 + f1, d1, d2);
         }
-        if(!iblockaccess.canSuffocate(i, j + 1, k))
+        if(!iblockaccess.shouldSuffocate(i, j + 1, k))
         {
             if(byte0 == 0)
             {
@@ -447,28 +447,28 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
                 d2 = atlasTX.getStartV();
                 d3 = atlasTX.getEndV();
             }
-            if(iblockaccess.canSuffocate(i - 1, j, k) && iblockaccess.getTileId(i - 1, j + 1, k) == id)
+            if(iblockaccess.shouldSuffocate(i - 1, j, k) && iblockaccess.getBlockId(i - 1, j + 1, k) == id)
             {
                 tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k + 1) + f1, d1, d2);
                 tessellator.vertex((float)i + f2, (float)(j + 0) - f1, (float)(k + 1) + f1, d, d2);
                 tessellator.vertex((float)i + f2, (float)(j + 0) - f1, (float)(k + 0) - f1, d, d3);
                 tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k + 0) - f1, d1, d3);
             }
-            if(iblockaccess.canSuffocate(i + 1, j, k) && iblockaccess.getTileId(i + 1, j + 1, k) == id)
+            if(iblockaccess.shouldSuffocate(i + 1, j, k) && iblockaccess.getBlockId(i + 1, j + 1, k) == id)
             {
                 tessellator.vertex((float)(i + 1) - f2, (float)(j + 0) - f1, (float)(k + 1) + f1, d, d3);
                 tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k + 1) + f1, d1, d3);
                 tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k + 0) - f1, d1, d2);
                 tessellator.vertex((float)(i + 1) - f2, (float)(j + 0) - f1, (float)(k + 0) - f1, d, d2);
             }
-            if(iblockaccess.canSuffocate(i, j, k - 1) && iblockaccess.getTileId(i, j + 1, k - 1) == id)
+            if(iblockaccess.shouldSuffocate(i, j, k - 1) && iblockaccess.getBlockId(i, j + 1, k - 1) == id)
             {
                 tessellator.vertex((float)(i + 1) + f1, (float)(j + 0) - f1, (float)k + f2, d, d3);
                 tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)k + f2, d1, d3);
                 tessellator.vertex((float)(i + 0) - f1, (float)(j + 1) + f1, (float)k + f2, d1, d2);
                 tessellator.vertex((float)(i + 0) - f1, (float)(j + 0) - f1, (float)k + f2, d, d2);
             }
-            if(iblockaccess.canSuffocate(i, j, k + 1) && iblockaccess.getTileId(i, j + 1, k + 1) == id)
+            if(iblockaccess.shouldSuffocate(i, j, k + 1) && iblockaccess.getBlockId(i, j + 1, k + 1) == id)
             {
                 tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d1, d2);
                 tessellator.vertex((float)(i + 1) + f1, (float)(j + 0) - f1, (float)(k + 1) - f2, d, d2);
@@ -476,10 +476,10 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
                 tessellator.vertex((float)(i + 0) - f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d1, d3);
             }
         }
-        int l1 = iblockaccess.getTileMeta(i, j, k);
+        int l1 = iblockaccess.getBlockMeta(i, j, k);
         if(l1 != 0)
         {
-            renderblocks.renderFire(BlockBase.FIRE, i, j, k);
+            renderblocks.renderFire(Block.FIRE, i, j, k);
         }
         return true;
     }

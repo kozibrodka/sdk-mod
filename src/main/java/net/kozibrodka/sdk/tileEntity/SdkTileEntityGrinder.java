@@ -1,51 +1,50 @@
 package net.kozibrodka.sdk.tileEntity;
 
-import net.minecraft.block.BlockBase;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.inventory.InventoryBase;
-import net.minecraft.item.ItemBase;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.tileentity.TileEntityBase;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.io.ListTag;
-
 import java.util.Random;
+import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 
-public class SdkTileEntityGrinder extends TileEntityBase
-    implements InventoryBase
+public class SdkTileEntityGrinder extends BlockEntity
+    implements Inventory
 {
 
     public SdkTileEntityGrinder()
     {
         isActive = false;
         random = new Random();
-        itemStacks = new ItemInstance[3];
+        itemStacks = new ItemStack[3];
         burnTime = 0;
         currentItemBurnTime = 0;
         cookTime = 0;
     }
 
-    public int getInventorySize()
+    public int size()
     {
         return itemStacks.length;
     }
 
-    public ItemInstance getInventoryItem(int i)
+    public ItemStack getStack(int i)
     {
         return itemStacks[i];
     }
 
-    public ItemInstance takeInventoryItem(int i, int j)
+    public ItemStack removeStack(int i, int j)
     {
         if(itemStacks[i] != null)
         {
             if(itemStacks[i].count <= j)
             {
-                ItemInstance itemstack = itemStacks[i];
+                ItemStack itemstack = itemStacks[i];
                 itemStacks[i] = null;
                 return itemstack;
             }
-            ItemInstance itemstack1 = itemStacks[i].split(j);
+            ItemStack itemstack1 = itemStacks[i].split(j);
             if(itemStacks[i].count == 0)
             {
                 itemStacks[i] = null;
@@ -57,32 +56,32 @@ public class SdkTileEntityGrinder extends TileEntityBase
         }
     }
 
-    public void setInventoryItem(int i, ItemInstance itemstack)
+    public void setStack(int i, ItemStack itemstack)
     {
         itemStacks[i] = itemstack;
-        if(itemstack != null && itemstack.count > getMaxItemCount())
+        if(itemstack != null && itemstack.count > getMaxCountPerStack())
         {
-            itemstack.count = getMaxItemCount();
+            itemstack.count = getMaxCountPerStack();
         }
     }
 
-    public String getContainerName()
+    public String getName()
     {
         return "Grinder";
     }
 
-    public void readIdentifyingData(CompoundTag nbttagcompound)
+    public void readNbt(NbtCompound nbttagcompound)
     {
-        super.readIdentifyingData(nbttagcompound);
-        ListTag nbttaglist = nbttagcompound.getListTag("Items");
-        itemStacks = new ItemInstance[getInventorySize()];
+        super.readNbt(nbttagcompound);
+        NbtList nbttaglist = nbttagcompound.getList("Items");
+        itemStacks = new ItemStack[size()];
         for(int i = 0; i < nbttaglist.size(); i++)
         {
-            CompoundTag nbttagcompound1 = (CompoundTag)nbttaglist.get(i);
+            NbtCompound nbttagcompound1 = (NbtCompound)nbttaglist.get(i);
             byte byte0 = nbttagcompound1.getByte("Slot");
             if(byte0 >= 0 && byte0 < itemStacks.length)
             {
-                itemStacks[byte0] = new ItemInstance(nbttagcompound1);
+                itemStacks[byte0] = new ItemStack(nbttagcompound1);
             }
         }
 
@@ -91,20 +90,20 @@ public class SdkTileEntityGrinder extends TileEntityBase
         currentItemBurnTime = nbttagcompound.getShort("CurrentItemBurnTime");
     }
 
-    public void writeIdentifyingData(CompoundTag nbttagcompound)
+    public void writeNbt(NbtCompound nbttagcompound)
     {
-        super.writeIdentifyingData(nbttagcompound);
-        nbttagcompound.put("BurnTime", (short)burnTime);
-        nbttagcompound.put("CookTime", (short)cookTime);
-        nbttagcompound.put("CurrentItemBurnTime", (short)currentItemBurnTime);
-        ListTag nbttaglist = new ListTag();
+        super.writeNbt(nbttagcompound);
+        nbttagcompound.putShort("BurnTime", (short)burnTime);
+        nbttagcompound.putShort("CookTime", (short)cookTime);
+        nbttagcompound.putShort("CurrentItemBurnTime", (short)currentItemBurnTime);
+        NbtList nbttaglist = new NbtList();
         for(int i = 0; i < itemStacks.length; i++)
         {
             if(itemStacks[i] != null)
             {
-                CompoundTag nbttagcompound1 = new CompoundTag();
-                nbttagcompound1.put("Slot", (byte)i);
-                itemStacks[i].toTag(nbttagcompound1);
+                NbtCompound nbttagcompound1 = new NbtCompound();
+                nbttagcompound1.putByte("Slot", (byte)i);
+                itemStacks[i].writeNbt(nbttagcompound1);
                 nbttaglist.add(nbttagcompound1);
             }
         }
@@ -112,7 +111,7 @@ public class SdkTileEntityGrinder extends TileEntityBase
         nbttagcompound.put("Items", nbttaglist);
     }
 
-    public int getMaxItemCount()
+    public int getMaxCountPerStack()
     {
         return 64;
     }
@@ -146,7 +145,7 @@ public class SdkTileEntityGrinder extends TileEntityBase
         {
             burnTime--;
         }
-        if(!level.isServerSide)
+        if(!world.isRemote)
         {
             if(burnTime == 0 && canSmelt())
             {
@@ -156,9 +155,9 @@ public class SdkTileEntityGrinder extends TileEntityBase
                     flag = true;
                     if(itemStacks[1] != null)
                     {
-                        if(itemStacks[1].getType().hasContainerItemType())
+                        if(itemStacks[1].getItem().hasCraftingReturnItem())
                         {
-                            itemStacks[1] = new ItemInstance(itemStacks[1].getType().getContainerItemType());
+                            itemStacks[1] = new ItemStack(itemStacks[1].getItem().getCraftingReturnItem());
                         } else
                         {
                             itemStacks[1].count--;
@@ -200,10 +199,10 @@ public class SdkTileEntityGrinder extends TileEntityBase
         {
             return false;
         }
-        ItemInstance itemstack = null;
-        if(itemStacks[0].itemId == BlockBase.GRASS.id || itemStacks[0].itemId == ItemBase.flint.id)
+        ItemStack itemstack = null;
+        if(itemStacks[0].itemId == Block.GRASS_BLOCK.id || itemStacks[0].itemId == Item.FLINT.id)
         {
-            itemstack = new ItemInstance(ItemBase.gunpowder);
+            itemstack = new ItemStack(Item.GUNPOWDER);
         }
         if(itemstack == null)
         {
@@ -213,16 +212,16 @@ public class SdkTileEntityGrinder extends TileEntityBase
         {
             return true;
         }
-        if(!itemStacks[2].isDamageAndIDIdentical(itemstack))
+        if(!itemStacks[2].isItemEqual(itemstack))
         {
             return false;
         }
-        if(itemStacks[2].count < getMaxItemCount() && itemStacks[2].count < itemStacks[2].getMaxStackSize())
+        if(itemStacks[2].count < getMaxCountPerStack() && itemStacks[2].count < itemStacks[2].getMaxCount())
         {
             return true;
         } else
         {
-            return itemStacks[2].count < itemstack.getMaxStackSize();
+            return itemStacks[2].count < itemstack.getMaxCount();
         }
     }
 
@@ -232,14 +231,14 @@ public class SdkTileEntityGrinder extends TileEntityBase
         {
             return;
         }
-        ItemInstance itemstack = null;
-        if(itemStacks[0].itemId == ItemBase.flint.id)
+        ItemStack itemstack = null;
+        if(itemStacks[0].itemId == Item.FLINT.id)
         {
-            itemstack = new ItemInstance(ItemBase.gunpowder);
+            itemstack = new ItemStack(Item.GUNPOWDER);
         } else
-        if(itemStacks[0].itemId == BlockBase.GRAVEL.id && random.nextInt(4) == 0)
+        if(itemStacks[0].itemId == Block.GRAVEL.id && random.nextInt(4) == 0)
         {
-            itemstack = new ItemInstance(ItemBase.gunpowder);
+            itemstack = new ItemStack(Item.GUNPOWDER);
         } else
         {
             itemStacks[0].count--;
@@ -257,9 +256,9 @@ public class SdkTileEntityGrinder extends TileEntityBase
         {
             itemStacks[2].count += itemstack.count;
         }
-        if(itemStacks[0].getType().hasContainerItemType())
+        if(itemStacks[0].getItem().hasCraftingReturnItem())
         {
-            itemStacks[0] = new ItemInstance(itemStacks[0].getType().getContainerItemType());
+            itemStacks[0] = new ItemStack(itemStacks[0].getItem().getCraftingReturnItem());
         } else
         {
             itemStacks[0].count--;
@@ -270,15 +269,15 @@ public class SdkTileEntityGrinder extends TileEntityBase
         }
     }
 
-    private int getItemBurnTime(ItemInstance itemstack)
+    private int getItemBurnTime(ItemStack itemstack)
     {
         if(itemstack != null)
         {
-            if(itemstack.getType().id == ItemBase.diamond.id)
+            if(itemstack.getItem().id == Item.DIAMOND.id)
             {
                 return 12800;
             }
-            if(itemstack.getType().id == ItemBase.ironIngot.id)
+            if(itemstack.getItem().id == Item.IRON_INGOT.id)
             {
                 return 1600;
             }
@@ -286,18 +285,18 @@ public class SdkTileEntityGrinder extends TileEntityBase
         return 0;
     }
 
-    public boolean canPlayerUse(PlayerBase entityplayer)
+    public boolean canPlayerUse(PlayerEntity entityplayer)
     {
-        if(level.getTileEntity(x, y, z) != this)
+        if(world.getBlockEntity(x, y, z) != this)
         {
             return false;
         } else
         {
-            return entityplayer.squaredDistanceTo((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D) <= 64D;
+            return entityplayer.getSquaredDistance((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D) <= 64D;
         }
     }
 
-    private ItemInstance itemStacks[];
+    private ItemStack itemStacks[];
     public int burnTime;
     public int currentItemBurnTime;
     public int cookTime;

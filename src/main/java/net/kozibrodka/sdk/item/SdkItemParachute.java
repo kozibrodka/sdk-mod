@@ -1,7 +1,7 @@
 package net.kozibrodka.sdk.item;
 
 import net.kozibrodka.sdk.events.ItemListener;
-import net.minecraft.item.armour.Armour;
+import net.minecraft.item.ArmorItem;
 import net.modificationstation.stationapi.api.client.item.ArmorTextureProvider;
 
 import net.modificationstation.stationapi.api.template.item.TemplateArmorItem;
@@ -13,11 +13,11 @@ public class SdkItemParachute extends TemplateArmorItem implements ArmorTextureP
     public SdkItemParachute(Identifier i, int j)
     {
         super(i, 1, j, 1);
-        setDurability(7);
+        setMaxDamage(7);
     }
 
     @Override
-    public Identifier getTexture(Armour armour) {
+    public Identifier getTexture(ArmorItem armour) {
         return ItemListener.MOD_ID.id("parachute");
     }
 }

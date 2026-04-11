@@ -2,46 +2,45 @@ package net.kozibrodka.sdk.entityNade;
 
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk_api.events.utils.SdkPoint3d;
-import net.minecraft.entity.EntityBase;
-import net.minecraft.entity.Living;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
-
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import java.util.List;
 
 public class SdkEntityGrenadeSticky extends SdkEntityGrenade
 {
 
-    public SdkEntityGrenadeSticky(Level world)
+    public SdkEntityGrenadeSticky(World world)
     {
         super(world);
         stuckToBlock = false;
         stuckToEntity = null;
         stuckToEntityOffset = null;
-        item = new ItemInstance(ItemListener.itemGrenadeSticky, 1, 0);
+        stack = new ItemStack(ItemListener.itemGrenadeSticky, 1, 0);
     }
 
-    public SdkEntityGrenadeSticky(Level world, double d, double d1, double d2)
+    public SdkEntityGrenadeSticky(World world, double d, double d1, double d2)
     {
         super(world, d, d1, d2);
         stuckToBlock = false;
         stuckToEntity = null;
         stuckToEntityOffset = null;
-        item = new ItemInstance(ItemListener.itemGrenadeSticky, 1, 0);
+        stack = new ItemStack(ItemListener.itemGrenadeSticky, 1, 0);
     }
 
-    public SdkEntityGrenadeSticky(Level world, Living entityliving)
+    public SdkEntityGrenadeSticky(World world, LivingEntity entityliving)
     {
         super(world, entityliving);
         stuckToBlock = false;
         stuckToEntity = null;
         stuckToEntityOffset = null;
-        item = new ItemInstance(ItemListener.itemGrenadeSticky, 1, 0);
+        stack = new ItemStack(ItemListener.itemGrenadeSticky, 1, 0);
     }
 
     public void tick()
     {
-        if(stuckToEntity != null && stuckToEntity.removed)
+        if(stuckToEntity != null && stuckToEntity.dead)
         {
             stuckToEntity = null;
         }
@@ -54,11 +53,11 @@ public class SdkEntityGrenadeSticky extends SdkEntityGrenade
         }
         if(stuckToEntity == null)
         {
-            List list = level.getEntities(this, boundingBox);
+            List list = world.getEntities(this, boundingBox);
             if(list.size() > 0)
             {
-                EntityBase entity = (EntityBase)list.get(0);
-                if(entity instanceof Living)
+                Entity entity = (Entity)list.get(0);
+                if(entity instanceof LivingEntity)
                 {
                     stuckToBlock = false;
                     stuckToEntity = entity;
@@ -86,6 +85,6 @@ public class SdkEntityGrenadeSticky extends SdkEntityGrenade
     }
 
     protected boolean stuckToBlock;
-    protected EntityBase stuckToEntity;
+    protected Entity stuckToEntity;
     protected SdkPoint3d stuckToEntityOffset;
 }

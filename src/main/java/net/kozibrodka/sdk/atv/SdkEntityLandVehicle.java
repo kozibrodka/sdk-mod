@@ -2,18 +2,18 @@ package net.kozibrodka.sdk.atv;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityBase;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.level.Level;
-import net.minecraft.util.maths.Box;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.Box;
+import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
-public abstract class SdkEntityLandVehicle extends EntityBase
+public abstract class SdkEntityLandVehicle extends Entity
 {
 
-    public SdkEntityLandVehicle(Level world)
+    public SdkEntityLandVehicle(World world)
     {
         super(world);
         lastTurnSpeed = 0.0D;
@@ -44,12 +44,12 @@ public abstract class SdkEntityLandVehicle extends EntityBase
         COLLISION_DAMAGE = true;
         COLLISION_FLIGHT_PLAYER = true;
         COLLISION_FLIGHT_ENTITY = true;
-        field_1593 = true;  //preventEntitySpawning
+        blocksSameBlockSpawning = true;  //preventEntitySpawning
         standingEyeHeight = height / 2.0F;
         health = MAX_HEALTH;
     }
 
-    public SdkEntityLandVehicle(Level world, double d, double d1, double d2)
+    public SdkEntityLandVehicle(World world, double d, double d1, double d2)
     {
         this(world);
         setPosition(d, d1 + (double)standingEyeHeight, d2);
@@ -65,17 +65,17 @@ public abstract class SdkEntityLandVehicle extends EntityBase
     {
     }
 
-    public Box getBoundingBox(EntityBase entity)
+    public Box getCollisionAgainstShape(Entity entity)
     {
         return entity.boundingBox;
     }
 
-    public Box method_1381()
+    public Box getBoundingBox()
     {
         return boundingBox;
     }
 
-    public boolean damage(EntityBase entity, int i)
+    public boolean damage(Entity entity, int i)
     {
         if(MAX_HEALTH != -1)
         {
@@ -95,28 +95,28 @@ public abstract class SdkEntityLandVehicle extends EntityBase
 
     public void onDeath()
     {
-        remove();
+        markDead();
     }
 
-    public boolean method_1356() //canBeCollidedWith
+    public boolean isCollidable() //canBeCollidedWith
     {
-        return !removed;
+        return !dead;
     }
 
-    public float getEyeHeight()
+    public float getShadowRadius()
     {
         return 0.0F;
     }
 
-    public boolean interact(PlayerBase entityplayer)
+    public boolean interact(PlayerEntity entityplayer)
     {
-        if(passenger != null && (passenger instanceof PlayerBase) && passenger != entityplayer)
+        if(passenger != null && (passenger instanceof PlayerEntity) && passenger != entityplayer)
         {
             return true;
         }
-        if(!level.isServerSide)
+        if(!world.isRemote)
         {
-            entityplayer.startRiding(this);
+            entityplayer.setVehicle(this);
         }
         return true;
     }
@@ -149,11 +149,11 @@ public abstract class SdkEntityLandVehicle extends EntityBase
                 if(getSpeed() != 0.0D)
                 {
                     double d4 = 0.0D;
-                    if(minecraft.currentScreen == null && Keyboard.isKeyDown(minecraft.options.leftKey.key))
+                    if(minecraft.currentScreen == null && Keyboard.isKeyDown(minecraft.options.leftKey.code))
                     {
                         d4 = -getTurnSpeed() * (double)(flag1 ? 1 : -1);
                     } else
-                    if(minecraft.currentScreen == null && Keyboard.isKeyDown(minecraft.options.rightKey.key))
+                    if(minecraft.currentScreen == null && Keyboard.isKeyDown(minecraft.options.rightKey.code))
                     {
                         d4 = getTurnSpeed() * (double)(flag1 ? 1 : -1);
                     }
@@ -167,12 +167,12 @@ public abstract class SdkEntityLandVehicle extends EntityBase
                 double d5 = 0.0D;
                 if(passenger != null)
                 {
-                    if(minecraft.currentScreen == null && Keyboard.isKeyDown(minecraft.options.forwardKey.key))
+                    if(minecraft.currentScreen == null && Keyboard.isKeyDown(minecraft.options.forwardKey.code))
                     {
                         d5 = -(flag1 ? getAccelForward() : ACCEL_BRAKE);
                         flag = true;
                     } else
-                    if(minecraft.currentScreen == null && Keyboard.isKeyDown(minecraft.options.backKey.key))
+                    if(minecraft.currentScreen == null && Keyboard.isKeyDown(minecraft.options.backKey.code))
                     {
                         d5 = flag1 ? ACCEL_BRAKE : getAccelBackward();
                         flag = true;
@@ -201,7 +201,7 @@ public abstract class SdkEntityLandVehicle extends EntityBase
                 multiplySpeed(MAX_SPEED / d3);
             }
         }
-        if(method_1393()) //handle water mv
+        if(checkWaterCollisions()) //handle water mv
         {
             multiplySpeed(SPEED_MULT_WATER);
         }
@@ -231,13 +231,13 @@ public abstract class SdkEntityLandVehicle extends EntityBase
             velocityY = y - prevY - FALL_SPEED;
         }
         lastOnGround = onGround;
-        List list = level.getEntities(this, boundingBox.expand(0.20000000000000001D, 0.0D, 0.20000000000000001D));
+        List list = world.getEntities(this, boundingBox.expand(0.20000000000000001D, 0.0D, 0.20000000000000001D));
         if(list != null && list.size() > 0)
         {
             for(int j = 0; j < list.size(); j++)
             {
-                EntityBase entity = (EntityBase)list.get(j);
-                if(entity != passenger && entity.method_1380()) //canbepushed
+                Entity entity = (Entity)list.get(j);
+                if(entity != passenger && entity.isPushable()) //canbepushed
                 {
                     handleCollision(entity);
                 }
@@ -250,7 +250,7 @@ public abstract class SdkEntityLandVehicle extends EntityBase
             {
                 if(COLLISION_FLIGHT_ENTITY)
                 {
-                    lastCollidedEntity.accelerate(prevMotionX, prevMotionY + 1.0D, prevMotionZ);
+                    lastCollidedEntity.addVelocity(prevMotionX, prevMotionY + 1.0D, prevMotionZ);
                 }
                 if(COLLISION_DAMAGE)
                 {
@@ -263,15 +263,15 @@ public abstract class SdkEntityLandVehicle extends EntityBase
             }
             if(COLLISION_FLIGHT_PLAYER)
             {
-                passenger.accelerate(prevMotionX, prevMotionY + 1.0D, prevMotionZ);
-                passenger.startRiding(null);
+                passenger.addVelocity(prevMotionX, prevMotionY + 1.0D, prevMotionZ);
+                passenger.setVehicle(null);
             }
         }
         lastCollidedEntity = null;
         prevMotionX = velocityX;
         prevMotionY = velocityY;
         prevMotionZ = velocityZ;
-        if(passenger != null && passenger.removed)
+        if(passenger != null && passenger.dead)
         {
             passenger = null;
         }
@@ -342,9 +342,9 @@ public abstract class SdkEntityLandVehicle extends EntityBase
         return d - (d - d1) * (getSpeed() / MAX_SPEED);
     }
 
-    public void handleCollision(EntityBase entity)
+    public void handleCollision(Entity entity)
     {
-        entity.method_1353(this);  //apply entity collision
+        entity.onCollision(this);  //apply entity collision
         if(entity.passenger != this && entity.vehicle != this)
         {
             lastCollidedEntity = entity;
@@ -382,7 +382,7 @@ public abstract class SdkEntityLandVehicle extends EntityBase
     public double prevMotionX;
     public double prevMotionY;
     public double prevMotionZ;
-    public EntityBase lastCollidedEntity;
+    public Entity lastCollidedEntity;
     public double ACCEL_FORWARD_STOPPED;
     public double ACCEL_FORWARD_FULL;
     public double ACCEL_BACKWARD_STOPPED;

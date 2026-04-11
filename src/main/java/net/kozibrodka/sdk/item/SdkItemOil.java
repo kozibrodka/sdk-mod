@@ -2,10 +2,10 @@ package net.kozibrodka.sdk.item;
 
 import net.kozibrodka.sdk.events.BlockListener;
 import net.kozibrodka.sdk_api.events.utils.SdkTools;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.item.ItemBase;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 
@@ -15,11 +15,11 @@ public class SdkItemOil extends TemplateItem
     public SdkItemOil(Identifier i)
     {
         super(i);
-        setDurability(63);
-        maxStackSize = 1;
+        setMaxDamage(63);
+        maxCount = 1;
     }
 
-    public boolean useOnTile(ItemInstance itemstack, PlayerBase entityplayer, Level world, int i, int j, int k, int l)
+    public boolean useOnBlock(ItemStack itemstack, PlayerEntity entityplayer, World world, int i, int j, int k, int l)
     {
         if(l == 0)
         {
@@ -45,22 +45,22 @@ public class SdkItemOil extends TemplateItem
         {
             i++;
         }
-        if(world.getTileId(i, j - 1, k) == BlockListener.blockOil.id && itemstack.getDamage() >= 4)
+        if(world.getBlockId(i, j - 1, k) == BlockListener.blockOil.id && itemstack.getDamage() >= 4)
         {
-            itemstack.applyDamage(-4, SdkTools.minecraft.player);
-            world.setTile(i, j - 1, k, 0);
+            itemstack.damage(-4, SdkTools.minecraft.player);
+            world.setBlock(i, j - 1, k, 0);
         }
         if(!world.isAir(i, j, k))
         {
             return false;
         }
-        if(BlockListener.blockOil.canPlaceAt(world, i, j, k) && itemstack.getDamage() < itemstack.getType().getDurability())
+        if(BlockListener.blockOil.canPlaceAt(world, i, j, k) && itemstack.getDamage() < itemstack.getItem().getMaxDamage())
         {
-            itemstack.applyDamage(4, SdkTools.minecraft.player);
-            world.setTile(i, j, k, BlockListener.blockOil.id);
+            itemstack.damage(4, SdkTools.minecraft.player);
+            world.setBlock(i, j, k, BlockListener.blockOil.id);
             if(itemstack.count == 0)
             {
-                entityplayer.inventory.main[entityplayer.inventory.selectedHotbarSlot] = new ItemInstance(ItemBase.bucket);
+                entityplayer.inventory.main[entityplayer.inventory.selectedSlot] = new ItemStack(Item.BUCKET);
                 itemstack.count = 1;
             }
         }

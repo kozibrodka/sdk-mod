@@ -2,44 +2,43 @@ package net.kozibrodka.sdk.entityBullet;
 
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk_api.events.utils.*;
-import net.minecraft.block.BlockBase;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityBase;
-import net.minecraft.entity.Living;
-import net.minecraft.entity.monster.MonsterEntityType;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.level.Level;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Monster;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.Vec3f;
-
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import java.util.List;
 
 public class SdkEntityBulletFlame extends SdkEntityBullet
 {
 
-    public SdkEntityBulletFlame(Level world)
+    public SdkEntityBulletFlame(World world)
     {
         super(world);
-        setSize(0.5F, 0.5F);
+        setBoundingBoxSpacing(0.5F, 0.5F);
     }
 
-    public SdkEntityBulletFlame(Level world, double d, double d1, double d2)
+    public SdkEntityBulletFlame(World world, double d, double d1, double d2)
     {
         super(world, d, d1, d2);
-        setSize(0.5F, 0.5F);
+        setBoundingBoxSpacing(0.5F, 0.5F);
     }
 
-    public SdkEntityBulletFlame(Level world, EntityBase entity, SdkItemGun sdkitemgun, float f, float f1, float f2, float f3,
+    public SdkEntityBulletFlame(World world, Entity entity, SdkItemGun sdkitemgun, float f, float f1, float f2, float f3,
                                 float f4)
     {
         super(world, entity, sdkitemgun, f, f1, f2, f3, f4);
-        setSize(0.5F, 0.5F);
+        setBoundingBoxSpacing(0.5F, 0.5F);
     }
 
-    public void playServerSound(Level world)
+    public void playServerSound(World world)
     {
-        world.playSound(this, ((SdkItemGun) ItemListener.itemGunFlamethrower).firingSound, ((SdkItemGun)ItemListener.itemGunFlamethrower).soundRangeFactor, 1.0F / (rand.nextFloat() * 0.1F + 0.95F));
+        world.playSound(this, ((SdkItemGun) ItemListener.itemGunFlamethrower).firingSound, ((SdkItemGun)ItemListener.itemGunFlamethrower).soundRangeFactor, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
     }
 
     public void tick()
@@ -47,18 +46,18 @@ public class SdkEntityBulletFlame extends SdkEntityBullet
         baseTick();
         if(timeInAir == 30)
         {
-            remove();
+            markDead();
         }
-        level.addParticle("smoke", x, y, z, 0.0D, 0.0D, 0.0D);
+        world.addParticle("smoke", x, y, z, 0.0D, 0.0D, 0.0D);
         if(inGround)
         {
-            int i = level.getTileId(xTile, yTile, zTile);
+            int i = world.getBlockId(xTile, yTile, zTile);
             if(i != inTile)
             {
                 inGround = false;
-                velocityX *= rand.nextFloat() * 0.2F;
-                velocityY *= rand.nextFloat() * 0.2F;
-                velocityZ *= rand.nextFloat() * 0.2F;
+                velocityX *= random.nextFloat() * 0.2F;
+                velocityY *= random.nextFloat() * 0.2F;
+                velocityZ *= random.nextFloat() * 0.2F;
                 timeInTile = 0;
                 timeInAir = 0;
             }
@@ -66,33 +65,33 @@ public class SdkEntityBulletFlame extends SdkEntityBullet
         {
             timeInAir++;
         }
-        Vec3f vec3d = Vec3f.from(x, y, z);
-        Vec3f vec3d1 = Vec3f.from(x + velocityX, y + velocityY, z + velocityZ);
-        HitResult movingobjectposition = level.method_160(vec3d, vec3d1);
-        vec3d = Vec3f.from(x, y, z);
-        vec3d1 = Vec3f.from(x + velocityX, y + velocityY, z + velocityZ);
+        Vec3d vec3d = Vec3d.createCached(x, y, z);
+        Vec3d vec3d1 = Vec3d.createCached(x + velocityX, y + velocityY, z + velocityZ);
+        HitResult movingobjectposition = world.raycast(vec3d, vec3d1);
+        vec3d = Vec3d.createCached(x, y, z);
+        vec3d1 = Vec3d.createCached(x + velocityX, y + velocityY, z + velocityZ);
         if(movingobjectposition != null)
         {
-            vec3d1 = Vec3f.from(movingobjectposition.field_1988.x, movingobjectposition.field_1988.y, movingobjectposition.field_1988.z);
+            vec3d1 = Vec3d.createCached(movingobjectposition.pos.x, movingobjectposition.pos.y, movingobjectposition.pos.z);
         }
-        EntityBase entity = null;
-        List list = level.getEntities(this, boundingBox.method_86(velocityX, velocityY, velocityZ).expand(1.0D, 1.0D, 1.0D));
+        Entity entity = null;
+        List list = world.getEntities(this, boundingBox.stretch(velocityX, velocityY, velocityZ).expand(1.0D, 1.0D, 1.0D));
         double d = 0.0D;
         for(int j = 0; j < list.size(); j++)
         {
-            EntityBase entity1 = (EntityBase)list.get(j);
-            if(!entity1.method_1356() || (entity1 == owner || owner != null && entity1 == owner.vehicle) && timeInAir < 5 || serverSpawned)
+            Entity entity1 = (Entity)list.get(j);
+            if(!entity1.isCollidable() || (entity1 == owner || owner != null && entity1 == owner.vehicle) && timeInAir < 5 || serverSpawned)
             {
                 continue;
             }
             float f = 0.3F;
             Box axisalignedbb = entity1.boundingBox.expand(f, f, f);
-            HitResult movingobjectposition1 = axisalignedbb.method_89(vec3d, vec3d1);
+            HitResult movingobjectposition1 = axisalignedbb.raycast(vec3d, vec3d1);
             if(movingobjectposition1 == null)
             {
                 continue;
             }
-            double d1 = vec3d.method_1294(movingobjectposition1.field_1988);
+            double d1 = vec3d.distanceTo(movingobjectposition1.pos);
             if(d1 < d || d == 0.0D)
             {
                 entity = entity1;
@@ -106,88 +105,88 @@ public class SdkEntityBulletFlame extends SdkEntityBullet
         }
         if(movingobjectposition != null)
         {
-            if(movingobjectposition.field_1989 != null)
+            if(movingobjectposition.entity != null)
             {
                 int k = damage;
-                if((owner instanceof MonsterEntityType) && (movingobjectposition.field_1989 instanceof PlayerBase))
+                if((owner instanceof Monster) && (movingobjectposition.entity instanceof PlayerEntity))
                 {
-                    if(level.difficulty == 0)
+                    if(world.difficulty == 0)
                     {
                         k = 0;
                     }
-                    if(level.difficulty == 1)
+                    if(world.difficulty == 1)
                     {
                         k = k / 3 + 1;
                     }
-                    if(level.difficulty == 3)
+                    if(world.difficulty == 3)
                     {
                         k = (k * 3) / 2;
                     }
                 }
-                if(movingobjectposition.field_1989 instanceof Living)
+                if(movingobjectposition.entity instanceof LivingEntity)
                 {
-                    SdkTools.attackEntityIgnoreDelay((Living)movingobjectposition.field_1989, owner, k);
+                    SdkTools.attackEntityIgnoreDelay((LivingEntity)movingobjectposition.entity, owner, k);
                 } else
                 {
-                    if(movingobjectposition.field_1989 instanceof WW2Plane || movingobjectposition.field_1989 instanceof WW2Tank || movingobjectposition.field_1989 instanceof WW2Truck || movingobjectposition.field_1989 instanceof WW2Cannon)
+                    if(movingobjectposition.entity instanceof WW2Plane || movingobjectposition.entity instanceof WW2Tank || movingobjectposition.entity instanceof WW2Truck || movingobjectposition.entity instanceof WW2Cannon)
                     {
-                        if(movingobjectposition.field_1989 instanceof WW2Truck && penetration >= 1)
+                        if(movingobjectposition.entity instanceof WW2Truck && penetration >= 1)
                         {
-                            movingobjectposition.field_1989.damage(this, k);
+                            movingobjectposition.entity.damage(this, k);
                         }
-                        if(movingobjectposition.field_1989 instanceof WW2Plane && penetration >= 2)
+                        if(movingobjectposition.entity instanceof WW2Plane && penetration >= 2)
                         {
-                            movingobjectposition.field_1989.damage(this, k);
+                            movingobjectposition.entity.damage(this, k);
                         }
-                        if((movingobjectposition.field_1989 instanceof WW2Tank && penetration >= 3) || (movingobjectposition.field_1989 instanceof WW2Cannon && penetration >= 3))
+                        if((movingobjectposition.entity instanceof WW2Tank && penetration >= 3) || (movingobjectposition.entity instanceof WW2Cannon && penetration >= 3))
                         {
-                            movingobjectposition.field_1989.damage(this, k);
+                            movingobjectposition.entity.damage(this, k);
                         }
                     }else {
-                        movingobjectposition.field_1989.damage(owner, k);
+                        movingobjectposition.entity.damage(owner, k);
                     }
                 }
-                movingobjectposition.field_1989.fire = 300;
+                movingobjectposition.entity.fireTicks = 300;
             } else
             {
-                xTile = movingobjectposition.x;
-                yTile = movingobjectposition.y;
-                zTile = movingobjectposition.z;
-                if(level.getTileId(xTile, yTile, zTile) == BlockBase.ICE.id && BlockBase.ICE.getHardness() < 1000000F)
+                xTile = movingobjectposition.blockX;
+                yTile = movingobjectposition.blockY;
+                zTile = movingobjectposition.blockZ;
+                if(world.getBlockId(xTile, yTile, zTile) == Block.ICE.id && Block.ICE.getHardness() < 1000000F)
                 {
-                    BlockBase.ICE.onBlockRemoved(level, xTile, yTile, zTile); //nie dziala
+                    Block.ICE.onBreak(world, xTile, yTile, zTile); //nie dziala
                 } else
                 {
                     byte byte0 = (byte)(velocityX > 0.0D ? 1 : -1);
                     byte byte1 = (byte)(velocityY > 0.0D ? 1 : -1);
                     byte byte2 = (byte)(velocityZ > 0.0D ? 1 : -1);
-                    boolean flag = level.getTileId(xTile - byte0, yTile, zTile) == 0 || level.getTileId(xTile - byte0, yTile, zTile) == BlockBase.SNOW.id;
-                    boolean flag1 = level.getTileId(xTile, yTile - byte1, zTile) == 0 || level.getTileId(xTile, yTile - byte1, zTile) == BlockBase.SNOW.id;
-                    boolean flag2 = level.getTileId(xTile, yTile, zTile - byte2) == 0 || level.getTileId(xTile, yTile, zTile - byte2) == BlockBase.SNOW.id;
+                    boolean flag = world.getBlockId(xTile - byte0, yTile, zTile) == 0 || world.getBlockId(xTile - byte0, yTile, zTile) == Block.SNOW.id;
+                    boolean flag1 = world.getBlockId(xTile, yTile - byte1, zTile) == 0 || world.getBlockId(xTile, yTile - byte1, zTile) == Block.SNOW.id;
+                    boolean flag2 = world.getBlockId(xTile, yTile, zTile - byte2) == 0 || world.getBlockId(xTile, yTile, zTile - byte2) == Block.SNOW.id;
                     if(flag)
                     {
-                        level.setTile(xTile - byte0, yTile, zTile, BlockBase.FIRE.id);
+                        world.setBlock(xTile - byte0, yTile, zTile, Block.FIRE.id);
                     }
                     if(flag1)
                     {
-                        level.setTile(xTile, yTile - byte1, zTile, BlockBase.FIRE.id);
+                        world.setBlock(xTile, yTile - byte1, zTile, Block.FIRE.id);
                     }
                     if(flag2)
                     {
-                        level.setTile(xTile, yTile, zTile - byte2, BlockBase.FIRE.id);
+                        world.setBlock(xTile, yTile, zTile - byte2, Block.FIRE.id);
                     }
                 }
             }
-            remove();
+            markDead();
         }
         x += velocityX;
         y += velocityY;
         z += velocityZ;
         setRotationToVelocity();
-        if(level.method_170(boundingBox, Material.WATER, this)) //handlematerialacceleration
+        if(world.updateMovementInFluid(boundingBox, Material.WATER, this)) //handlematerialacceleration
         {
-            level.playSound(this, "random.fizz", 0.8F, 1.0F / (rand.nextFloat() * 0.1F + 0.95F));
-            remove();
+            world.playSound(this, "random.fizz", 0.8F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+            markDead();
         }
         setPosition(x, y, z);
     }
@@ -202,9 +201,9 @@ public class SdkEntityBulletFlame extends SdkEntityBullet
 //        for(; yaw - prevYaw >= 180F; prevYaw += 360F) { }
     }
 
-    public void setVelocity(double d, double d1, double d2)
+    public void setVelocityClient(double d, double d1, double d2)
     {
-        super.setVelocity(d, d1, d2);
+        super.setVelocityClient(d, d1, d2);
         setRotationToVelocity();
     }
 

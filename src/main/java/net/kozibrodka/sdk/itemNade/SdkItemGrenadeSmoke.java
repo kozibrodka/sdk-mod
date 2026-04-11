@@ -2,9 +2,9 @@ package net.kozibrodka.sdk.itemNade;
 
 
 import net.kozibrodka.sdk.entityNade.SdkEntityGrenadeSmoke;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 
@@ -16,11 +16,11 @@ public class SdkItemGrenadeSmoke extends TemplateItem
         super(i);
     }
 
-    public ItemInstance use(ItemInstance itemstack, Level world, PlayerBase entityplayer)
+    public ItemStack use(ItemStack itemstack, World world, PlayerEntity entityplayer)
     {
         itemstack.count--;
-        world.playSound(entityplayer, "sdk:grunt", 1.0F, 1.0F / (rand.nextFloat() * 0.1F + 0.95F));
-        if(!world.isServerSide)
+        world.playSound(entityplayer, "sdk:grunt", 1.0F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+        if(!world.isRemote)
         {
             world.spawnEntity(new SdkEntityGrenadeSmoke(world, entityplayer));
         }

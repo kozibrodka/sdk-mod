@@ -1,11 +1,11 @@
 package net.kozibrodka.sdk.tileEntity;
 
 import net.kozibrodka.sdk.events.BlockListener;
-import net.minecraft.block.BlockBase;
-import net.minecraft.tileentity.TileEntityBase;
-import net.minecraft.util.io.CompoundTag;
+import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.nbt.NbtCompound;
 
-public class SdkTileEntityRope extends TileEntityBase
+public class SdkTileEntityRope extends BlockEntity
 {
 
     public SdkTileEntityRope()
@@ -17,10 +17,10 @@ public class SdkTileEntityRope extends TileEntityBase
     {
         if(delay == 0)
         {
-            if(level.getTileId(x, y - 1, z) == 0 || level.getTileId(x, y - 1, z) == BlockBase.SNOW.id)
+            if(world.getBlockId(x, y - 1, z) == 0 || world.getBlockId(x, y - 1, z) == Block.SNOW.id)
             {
-                level.setTile(x, y - 1, z, BlockListener.blockRope.id);
-                level.setTileMeta(x, y - 1, z, level.getTileMeta(x, y, z));
+                world.setBlock(x, y - 1, z, BlockListener.blockRope.id);
+                world.setBlockMeta(x, y - 1, z, world.getBlockMeta(x, y, z));
                 delay--;
             }
         } else
@@ -31,16 +31,16 @@ public class SdkTileEntityRope extends TileEntityBase
         super.tick();
     }
 
-    public void readIdentifyingData(CompoundTag nbttagcompound)
+    public void readNbt(NbtCompound nbttagcompound)
     {
-        super.readIdentifyingData(nbttagcompound);
+        super.readNbt(nbttagcompound);
         delay = nbttagcompound.getShort("Delay");
     }
 
-    public void writeIdentifyingData(CompoundTag nbttagcompound)
+    public void writeNbt(NbtCompound nbttagcompound)
     {
-        super.writeIdentifyingData(nbttagcompound);
-        nbttagcompound.put("Delay", (short)delay);
+        super.writeNbt(nbttagcompound);
+        nbttagcompound.putShort("Delay", (short)delay);
     }
 
     public int delay;

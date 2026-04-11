@@ -5,36 +5,35 @@ import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk_api.events.ingame.mod_SdkFlasher;
 import net.kozibrodka.sdk_api.events.ingame.mod_SdkGuns;
 import net.kozibrodka.sdk_api.mixin.LivingAccessor;
-import net.minecraft.entity.EntityBase;
-import net.minecraft.entity.Living;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
-
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import java.util.ArrayList;
 
 public class SdkEntityGrenadeStun extends SdkEntityGrenade
 {
 
-    public SdkEntityGrenadeStun(Level world)
+    public SdkEntityGrenadeStun(World world)
     {
         super(world);
         BOUNCE_SOUND = "sdk:stungrenadebounce";
-        item = new ItemInstance(ItemListener.itemGrenadeStun, 1, 0);
+        stack = new ItemStack(ItemListener.itemGrenadeStun, 1, 0);
     }
 
-    public SdkEntityGrenadeStun(Level world, double d, double d1, double d2)
+    public SdkEntityGrenadeStun(World world, double d, double d1, double d2)
     {
         super(world, d, d1, d2);
         BOUNCE_SOUND = "sdk:stungrenadebounce";
-        item = new ItemInstance(ItemListener.itemGrenadeStun, 1, 0);
+        stack = new ItemStack(ItemListener.itemGrenadeStun, 1, 0);
     }
 
-    public SdkEntityGrenadeStun(Level world, Living entityliving)
+    public SdkEntityGrenadeStun(World world, LivingEntity entityliving)
     {
         super(world, entityliving);
         BOUNCE_SOUND = "sdk:stungrenadebounce";
-        item = new ItemInstance(ItemListener.itemGrenadeStun, 1, 0);
+        stack = new ItemStack(ItemListener.itemGrenadeStun, 1, 0);
     }
 
     protected void explode()
@@ -42,13 +41,13 @@ public class SdkEntityGrenadeStun extends SdkEntityGrenade
         if(!exploded)
         {
             exploded = true;
-            level.playSound(this, "sdk:stungrenade", 4F, 1.0F / (rand.nextFloat() * 0.1F + 0.95F));
-            mod_SdkFlasher.LightEntity(level, this, 15, 2);
+            world.playSound(this, "sdk:stungrenade", 4F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+            mod_SdkFlasher.LightEntity(world, this, 15, 2);
             ArrayList arraylist = getEntityLivingsInRange(32D);
             for(int i = 0; i < arraylist.size(); i++)
             {
-                Living entityliving = (Living)arraylist.get(i);
-                if(!entityliving.method_928(this))
+                LivingEntity entityliving = (LivingEntity)arraylist.get(i);
+                if(!entityliving.canSee(this))
                 {
                     continue;
                 }
@@ -133,7 +132,7 @@ public class SdkEntityGrenadeStun extends SdkEntityGrenade
                     f7 = 1.0F - (f5 - 15F) / 165F;
                 }
                 float f8 = Math.min(f6, f7);
-                float f9 = distanceTo(entityliving);
+                float f9 = getDistance(entityliving);
                 float f10;
                 if((double)f9 < 8D)
                 {
@@ -143,7 +142,7 @@ public class SdkEntityGrenadeStun extends SdkEntityGrenade
                     f10 = 1.0F - (float)(((double)f9 - 8D) / 24D);
                 }
                 int j;
-                if(entityliving instanceof PlayerBase)
+                if(entityliving instanceof PlayerEntity)
                 {
                     j = Math.round(1000F * f10 * f8);
                 } else
@@ -154,26 +153,26 @@ public class SdkEntityGrenadeStun extends SdkEntityGrenade
                 {
                     mod_SdkGuns.flashTimes.put(entityliving, new Pair(j, ((LivingAccessor)entityliving).getMovementSpeed()));
                 }
-                if(!(entityliving instanceof PlayerBase))
+                if(!(entityliving instanceof PlayerEntity))
                 {
                     ((LivingAccessor)entityliving).setMovementSpeed(0.0F);
-                    entityliving.attackTime = j;
+                    entityliving.attackCooldown = j;
                 }
             }
 
-            removed = true;
+            dead = true;
         }
     }
 
     public ArrayList getEntityLivingsInRange(double d)
     {
         ArrayList arraylist = new ArrayList();
-        for(int i = 0; i < level.entities.size(); i++)
+        for(int i = 0; i < world.entities.size(); i++)
         {
-            EntityBase entity = (EntityBase)level.entities.get(i);
-            if((entity instanceof Living) && entity.isAlive() && method_1352(entity) < d * d)
+            Entity entity = (Entity)world.entities.get(i);
+            if((entity instanceof LivingEntity) && entity.isAlive() && getSquaredDistance(entity) < d * d)
             {
-                arraylist.add((Living)entity);
+                arraylist.add((LivingEntity)entity);
             }
         }
 
@@ -183,12 +182,12 @@ public class SdkEntityGrenadeStun extends SdkEntityGrenade
     public ArrayList getPlayersInRange(double d)
     {
         ArrayList arraylist = new ArrayList();
-        for(int i = 0; i < level.entities.size(); i++)
+        for(int i = 0; i < world.entities.size(); i++)
         {
-            EntityBase entity = (EntityBase)level.entities.get(i);
-            if((entity instanceof PlayerBase) && entity.isAlive() && method_1352(entity) < d * d)
+            Entity entity = (Entity)world.entities.get(i);
+            if((entity instanceof PlayerEntity) && entity.isAlive() && getSquaredDistance(entity) < d * d)
             {
-                arraylist.add((PlayerBase)entity);
+                arraylist.add((PlayerEntity)entity);
             }
         }
 

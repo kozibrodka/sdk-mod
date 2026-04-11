@@ -3,8 +3,8 @@ package net.kozibrodka.sdk.render;
 import net.kozibrodka.sdk.entity.SdkEntityGrapplingHook;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.entity.EntityBase;
-import net.minecraft.util.maths.MathHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 public class SdkRenderGrapplingHook extends EntityRenderer
@@ -30,10 +30,10 @@ public class SdkRenderGrapplingHook extends EntityRenderer
         float f6 = 1.0F;
         float f7 = 0.5F;
         float f8 = 0.5F;
-        GL11.glRotatef(180F - dispatcher.field_2497, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(-dispatcher.field_2498, 1.0F, 0.0F, 0.0F);
-        tessellator.start();
-        tessellator.setNormal(0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(180F - dispatcher.yaw, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(-dispatcher.pitch, 1.0F, 0.0F, 0.0F);
+        tessellator.startQuads();
+        tessellator.normal(0.0F, 1.0F, 0.0F);
         tessellator.vertex(0.0F - f7, 0.0F - f8, 0.0D, f2, f5);
         tessellator.vertex(f6 - f7, 0.0F - f8, 0.0D, f3, f5);
         tessellator.vertex(f6 - f7, 1.0F - f8, 0.0D, f3, f4);
@@ -54,7 +54,7 @@ public class SdkRenderGrapplingHook extends EntityRenderer
             double d9 = ((sdkentitygrapplinghook.owner.prevZ + (sdkentitygrapplinghook.owner.z - sdkentitygrapplinghook.owner.prevZ) * (double)f1) - d3 * 0.69999999999999996D) + d4 * 0.5D * d6;
             if(dispatcher.options.thirdPerson)
             {
-                float f11 = ((sdkentitygrapplinghook.owner.field_1013 + (sdkentitygrapplinghook.owner.field_1012 - sdkentitygrapplinghook.owner.field_1013) * f1) * 3.141593F) / 180F;
+                float f11 = ((sdkentitygrapplinghook.owner.lastBodyYaw + (sdkentitygrapplinghook.owner.bodyYaw - sdkentitygrapplinghook.owner.lastBodyYaw) * f1) * 3.141593F) / 180F;
                 double d11 = MathHelper.sin(f11);
                 double d13 = MathHelper.cos(f11);
                 d7 = (sdkentitygrapplinghook.owner.prevX + (sdkentitygrapplinghook.owner.x - sdkentitygrapplinghook.owner.prevX) * (double)f1) - d13 * 0.34999999999999998D - d11 * 0.84999999999999998D;
@@ -70,12 +70,12 @@ public class SdkRenderGrapplingHook extends EntityRenderer
             GL11.glDisable(3553 /*GL_TEXTURE_2D*/);
             GL11.glDisable(2896 /*GL_LIGHTING*/);
             tessellator.start(3);
-            tessellator.colour(0);
+            tessellator.color(0);
             int i = 16;
             for(int j = 0; j <= i; j++)
             {
                 float f12 = (float)j / (float)i;
-                tessellator.addVertex(d + d15 * (double)f12, d1 + d16 * (double)(f12 * f12 + f12) * 0.5D + 0.25D, d2 + d17 * (double)f12);
+                tessellator.vertex(d + d15 * (double)f12, d1 + d16 * (double)(f12 * f12 + f12) * 0.5D + 0.25D, d2 + d17 * (double)f12);
             }
 
             tessellator.draw();
@@ -84,7 +84,7 @@ public class SdkRenderGrapplingHook extends EntityRenderer
         }
     }
 
-    public void render(EntityBase entity, double d, double d1, double d2,
+    public void render(Entity entity, double d, double d1, double d2,
                        float f, float f1)
     {
         func_4011_a((SdkEntityGrapplingHook)entity, d, d1, d2, f, f1);

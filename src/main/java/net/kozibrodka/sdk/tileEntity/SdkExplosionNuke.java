@@ -1,20 +1,19 @@
 
 package net.kozibrodka.sdk.tileEntity;
 
-import net.minecraft.block.BlockBase;
-import net.minecraft.entity.EntityBase;
-import net.minecraft.level.Level;
-import net.minecraft.util.maths.Box;
-import net.minecraft.util.maths.MathHelper;
-import net.minecraft.util.maths.TilePos;
-import net.minecraft.util.maths.Vec3f;
-
 import java.util.*;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 public class SdkExplosionNuke
 {
 
-    public SdkExplosionNuke(Level world, EntityBase entity, double d, double d1, double d2, float f, float f1, boolean flag)
+    public SdkExplosionNuke(World world, Entity entity, double d, double d1, double d2, float f, float f1, boolean flag)
     {
         isFlaming = flag;
         ExplosionRNG = new Random();
@@ -50,7 +49,7 @@ label0:
                     d /= d3;
                     d1 /= d3;
                     d2 /= d3;
-                    float f1 = explosionSize * (0.7F + worldObj.rand.nextFloat() * 0.6F);
+                    float f1 = explosionSize * (0.7F + worldObj.random.nextFloat() * 0.6F);
                     double d5 = explosionX;
                     double d7 = explosionY;
                     double d9 = explosionZ;
@@ -64,14 +63,14 @@ label0:
                         int j4 = MathHelper.floor(d5);
                         int k4 = MathHelper.floor(d7);
                         int l4 = MathHelper.floor(d9);
-                        int i5 = worldObj.getTileId(j4, k4, l4);
+                        int i5 = worldObj.getBlockId(j4, k4, l4);
                         if(i5 > 0)
                         {
-                            f1 -= (BlockBase.BY_ID[i5].getBlastResistance(exploder) + 0.3F) * f2;
+                            f1 -= (Block.BLOCKS[i5].getBlastResistance(exploder) + 0.3F) * f2;
                         }
                         if(f1 > 0.0F)
                         {
-                            destroyedBlockPositions.add(new TilePos(j4, k4, l4));
+                            destroyedBlockPositions.add(new BlockPos(j4, k4, l4));
                         }
                         d5 += d * (double)f2;
                         d7 += d1 * (double)f2;
@@ -91,12 +90,12 @@ label0:
         int l1 = MathHelper.floor(explosionY + (double)explosionSize + 1.0D);
         int i2 = MathHelper.floor(explosionZ - (double)explosionSize - 1.0D);
         int j2 = MathHelper.floor(explosionZ + (double)explosionSize + 1.0D);
-        List list = worldObj.getEntities(exploder, Box.createButWasteMemory(k, k1, i2, i1, l1, j2));
-        Vec3f vec3d = Vec3f.from(explosionX, explosionY, explosionZ);
+        List list = worldObj.getEntities(exploder, Box.createCached(k, k1, i2, i1, l1, j2));
+        Vec3d vec3d = Vec3d.createCached(explosionX, explosionY, explosionZ);
         for(int k2 = 0; k2 < list.size(); k2++)
         {
-            EntityBase entity = (EntityBase)list.get(k2);
-            double d4 = entity.distanceTo(explosionX, explosionY, explosionZ) / (double)explosionSize;
+            Entity entity = (Entity)list.get(k2);
+            double d4 = entity.getDistance(explosionX, explosionY, explosionZ) / (double)explosionSize;
             if(d4 <= 1.0D)
             {
                 double d6 = entity.x - explosionX;
@@ -106,7 +105,7 @@ label0:
                 d6 /= d11;
                 d8 /= d11;
                 d10 /= d11;
-                double d12 = worldObj.method_163(vec3d, entity.boundingBox);
+                double d12 = worldObj.getVisibilityRatio(vec3d, entity.boundingBox);
                 double d13 = (1.0D - d4) * d12;
                 entity.damage(exploder, (int)(((d13 * d13 + d13) / 2D) * 8D * (double)explosionSize + 1.0D));
                 double d14 = d13;
@@ -123,15 +122,15 @@ label0:
         {
             for(int l2 = arraylist.size() - 1; l2 >= 0; l2--)
             {
-                TilePos chunkposition = (TilePos)arraylist.get(l2);
+                BlockPos chunkposition = (BlockPos)arraylist.get(l2);
                 int i3 = chunkposition.x;
                 int j3 = chunkposition.y;
                 int k3 = chunkposition.z;
-                int l3 = worldObj.getTileId(i3, j3, k3);
-                int i4 = worldObj.getTileId(i3, j3 - 1, k3);
-                if(l3 == 0 && BlockBase.FULL_OPAQUE[i4])
+                int l3 = worldObj.getBlockId(i3, j3, k3);
+                int i4 = worldObj.getBlockId(i3, j3 - 1, k3);
+                if(l3 == 0 && Block.BLOCKS_OPAQUE[i4])
                 {
-                    worldObj.setTile(i3, j3, k3, BlockBase.FIRE.id);
+                    worldObj.setBlock(i3, j3, k3, Block.FIRE.id);
                 }
             }
 
@@ -140,21 +139,21 @@ label0:
 
     public void doExplosionB()
     {
-        worldObj.playSound(explosionX, explosionY, explosionZ, "random.explode", 4F, (1.0F + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
+        worldObj.playSound(explosionX, explosionY, explosionZ, "random.explode", 4F, (1.0F + (worldObj.random.nextFloat() - worldObj.random.nextFloat()) * 0.2F) * 0.7F);
         ArrayList arraylist = new ArrayList();
         arraylist.addAll(destroyedBlockPositions);
         for(int i = arraylist.size() - 1; i >= 0; i--)
         {
-            TilePos chunkposition = (TilePos)arraylist.get(i);
+            BlockPos chunkposition = (BlockPos)arraylist.get(i);
             int j = chunkposition.x;
             int k = chunkposition.y;
             int l = chunkposition.z;
-            int i1 = worldObj.getTileId(j, k, l);
+            int i1 = worldObj.getBlockId(j, k, l);
             for(int j1 = 0; j1 < 1; j1++)
             {
-                double d = (float)j + worldObj.rand.nextFloat();
-                double d1 = (float)k + worldObj.rand.nextFloat();
-                double d2 = (float)l + worldObj.rand.nextFloat();
+                double d = (float)j + worldObj.random.nextFloat();
+                double d1 = (float)k + worldObj.random.nextFloat();
+                double d2 = (float)l + worldObj.random.nextFloat();
                 double d3 = d - explosionX;
                 double d4 = d1 - explosionY;
                 double d5 = d2 - explosionZ;
@@ -163,7 +162,7 @@ label0:
                 d4 /= d6;
                 d5 /= d6;
                 double d7 = 0.5D / (d6 / (double)explosionSize + 0.10000000000000001D);
-                d7 *= worldObj.rand.nextFloat() * worldObj.rand.nextFloat() + 0.3F;
+                d7 *= worldObj.random.nextFloat() * worldObj.random.nextFloat() + 0.3F;
                 d3 *= d7;
                 d4 *= d7;
                 d5 *= d7;
@@ -173,9 +172,9 @@ label0:
 
             if(i1 > 0)
             {
-                BlockBase.BY_ID[i1].beforeDestroyedByExplosion(worldObj, j, k, l, worldObj.getTileMeta(j, k, l), dropChance);
-                worldObj.setTile(j, k, l, 0);
-                BlockBase.BY_ID[i1].onDestroyedByExplosion(worldObj, j, k, l);
+                Block.BLOCKS[i1].dropStacks(worldObj, j, k, l, worldObj.getBlockMeta(j, k, l), dropChance);
+                worldObj.setBlock(j, k, l, 0);
+                Block.BLOCKS[i1].onDestroyedByExplosion(worldObj, j, k, l);
             }
         }
 
@@ -183,11 +182,11 @@ label0:
 
     public boolean isFlaming;
     private Random ExplosionRNG;
-    private Level worldObj;
+    private World worldObj;
     public double explosionX;
     public double explosionY;
     public double explosionZ;
-    public EntityBase exploder;
+    public Entity exploder;
     public float explosionSize;
     public Set destroyedBlockPositions;
     public float dropChance;

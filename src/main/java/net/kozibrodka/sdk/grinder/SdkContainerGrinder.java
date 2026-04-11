@@ -1,16 +1,16 @@
 package net.kozibrodka.sdk.grinder;
 
 import net.kozibrodka.sdk.tileEntity.SdkTileEntityGrinder;
-import net.minecraft.container.ContainerBase;
-import net.minecraft.container.ContainerListener;
-import net.minecraft.container.slot.Slot;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.inventory.InventoryBase;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerListener;
+import net.minecraft.screen.slot.Slot;
 
-public class SdkContainerGrinder extends ContainerBase
+public class SdkContainerGrinder extends ScreenHandler
 {
 
-    public SdkContainerGrinder(InventoryBase iinventory, SdkTileEntityGrinder sdktileentitygrinder)
+    public SdkContainerGrinder(Inventory iinventory, SdkTileEntityGrinder sdktileentitygrinder)
     {
         cookTime = 0;
         burnTime = 0;
@@ -35,23 +35,23 @@ public class SdkContainerGrinder extends ContainerBase
 
     }
 
-    public void tick()
+    public void sendContentUpdates()
     {
-        super.tick();
+        super.sendContentUpdates();
         for(int i = 0; i < listeners.size(); i++)
         {
-            ContainerListener icrafting = (ContainerListener)listeners.get(i);
+            ScreenHandlerListener icrafting = (ScreenHandlerListener)listeners.get(i);
             if(cookTime != grinder.cookTime)
             {
-                icrafting.updateProperty(this, 0, grinder.cookTime);
+                icrafting.onPropertyUpdate(this, 0, grinder.cookTime);
             }
             if(burnTime != grinder.burnTime)
             {
-                icrafting.updateProperty(this, 1, grinder.burnTime);
+                icrafting.onPropertyUpdate(this, 1, grinder.burnTime);
             }
             if(currentItemBurnTime != grinder.currentItemBurnTime)
             {
-                icrafting.updateProperty(this, 2, grinder.currentItemBurnTime);
+                icrafting.onPropertyUpdate(this, 2, grinder.currentItemBurnTime);
             }
         }
 
@@ -76,7 +76,7 @@ public class SdkContainerGrinder extends ContainerBase
         }
     }
 
-    public boolean canUse(PlayerBase entityplayer)
+    public boolean canUse(PlayerEntity entityplayer)
     {
         return grinder.canPlayerUse(entityplayer);
     }

@@ -1,9 +1,9 @@
 package net.kozibrodka.sdk.block;
 
 import net.kozibrodka.sdk.events.TextureListener;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.BlockBase;
-import net.minecraft.level.Level;
+import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
 
@@ -15,27 +15,27 @@ public class SdkBlockLighter extends TemplateBlock
         super(iid, Material.STONE);
     }
 
-    public void onBlockPlaced(Level world, int i, int j, int k)
+    public void onPlaced(World world, int i, int j, int k)
     {
-        onAdjacentBlockUpdate(world, i, j, k, 0);
+        neighborUpdate(world, i, j, k, 0);
     }
 
-    public void onAdjacentBlockUpdate(Level world, int i, int j, int k, int l)
+    public void neighborUpdate(World world, int i, int j, int k, int l)
     {
-        if(world.hasRedstonePower(i, j, k))
+        if(world.isEmittingRedstonePower(i, j, k))
         {
-            if(world.getTileId(i, j + 1, k) == 0)
+            if(world.getBlockId(i, j + 1, k) == 0)
             {
-                world.setTile(i, j + 1, k, BlockBase.FIRE.id);
+                world.setBlock(i, j + 1, k, Block.FIRE.id);
             }
         } else
-        if(world.getTileId(i, j + 1, k) == BlockBase.FIRE.id)
+        if(world.getBlockId(i, j + 1, k) == Block.FIRE.id)
         {
-            world.setTile(i, j + 1, k, 0);
+            world.setBlock(i, j + 1, k, 0);
         }
     }
 
-    public int getTextureForSide(int i)
+    public int getTexture(int i)
     {
         if(i == 1)
         {

@@ -2,32 +2,32 @@ package net.kozibrodka.sdk.entityNade;
 
 
 import net.kozibrodka.sdk.events.ItemListener;
-import net.minecraft.entity.Living;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class SdkEntityGrenadeSmoke extends SdkEntityGrenade
 {
 
-    public SdkEntityGrenadeSmoke(Level world)
+    public SdkEntityGrenadeSmoke(World world)
     {
         super(world);
         BOUNCE_SOUND = "sdk:smokegrenadebounce";
-        item = new ItemInstance(ItemListener.itemGrenadeSmoke, 1, 0);
+        stack = new ItemStack(ItemListener.itemGrenadeSmoke, 1, 0);
     }
 
-    public SdkEntityGrenadeSmoke(Level world, double d, double d1, double d2)
+    public SdkEntityGrenadeSmoke(World world, double d, double d1, double d2)
     {
         super(world, d, d1, d2);
         BOUNCE_SOUND = "sdk:smokegrenadebounce";
-        item = new ItemInstance(ItemListener.itemGrenadeSmoke, 1, 0);
+        stack = new ItemStack(ItemListener.itemGrenadeSmoke, 1, 0);
     }
 
-    public SdkEntityGrenadeSmoke(Level world, Living entityliving)
+    public SdkEntityGrenadeSmoke(World world, LivingEntity entityliving)
     {
         super(world, entityliving);
         BOUNCE_SOUND = "sdk:smokegrenadebounce";
-        item = new ItemInstance(ItemListener.itemGrenadeSmoke, 1, 0);
+        stack = new ItemStack(ItemListener.itemGrenadeSmoke, 1, 0);
     }
 
     protected void explode()
@@ -35,11 +35,11 @@ public class SdkEntityGrenadeSmoke extends SdkEntityGrenade
         if(!exploded)
         {
             exploded = true;
-            level.playSound(this, "sdk:smokegrenade", 1.0F, 1.0F / (rand.nextFloat() * 0.1F + 0.95F));
+            world.playSound(this, "sdk:smokegrenade", 1.0F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
         }
         if(fuse < -500)
         {
-            removed = true;
+            dead = true;
         }
         if(exploded)
         {
@@ -47,7 +47,7 @@ public class SdkEntityGrenadeSmoke extends SdkEntityGrenade
             int i = Math.min(250, -fuse);
             for(int j = 0; j < i; j++)
             {
-                level.addParticle("largesmoke", (x + rand.nextDouble() * d) - 0.5D * d, y + rand.nextDouble() * d, (z + rand.nextDouble() * d) - 0.5D * d, 0.0D, 0.0D, 0.0D);
+                world.addParticle("largesmoke", (x + random.nextDouble() * d) - 0.5D * d, y + random.nextDouble() * d, (z + random.nextDouble() * d) - 0.5D * d, 0.0D, 0.0D, 0.0D);
             }
 
         }

@@ -1,9 +1,9 @@
 package net.kozibrodka.sdk.item;
 
 import net.kozibrodka.sdk_api.events.ingame.mod_SdkUtility;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 
@@ -16,7 +16,7 @@ public class SdkItemTelescope extends TemplateItem
         super(i);
     }
 
-    public ItemInstance use(ItemInstance itemstack, Level world, PlayerBase entityplayer)
+    public ItemStack use(ItemStack itemstack, World world, PlayerEntity entityplayer)
     {
         mod_SdkUtility.useZoom();
         return itemstack;

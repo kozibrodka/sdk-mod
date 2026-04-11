@@ -10,7 +10,6 @@ import net.kozibrodka.sdk.tileEntity.SdkTileEntityPlaque;
 import net.kozibrodka.sdk_api.events.utils.SdkEntityBulletCasing;
 import net.kozibrodka.sdk_api.events.utils.SdkEntityBulletCasingShell;
 import net.mine_diver.unsafeevents.listener.EventListener;
-import net.minecraft.client.render.ClockTextureBinder;
 import net.modificationstation.stationapi.api.client.event.block.entity.BlockEntityRendererRegisterEvent;
 import net.modificationstation.stationapi.api.client.event.render.entity.EntityRendererRegisterEvent;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
@@ -102,12 +101,12 @@ public class TextureListener {
         empty = registerBlockTexture("block/fcBlockEmpty");
         plaque = registerBlockTexture("block/blockPlaque");
 
-        BlockListener.blockRope.asItem().setTexturePosition(rope);
-        BlockListener.blockOil.asItem().setTexturePosition(oil_juction);
-        BlockListener.blockPlaque.asItem().setTexturePosition(plaque);
-        BlockListener.blockRope.asItem().setTexturePosition(registerBlockTexture("block/blockRope"));
-        BlockListener.blockOil.asItem().setTexturePosition(oil_juction);
-        BlockListener.blockPlaque.asItem().setTexturePosition(plaque);
+        BlockListener.blockRope.asItem().setTextureId(rope);
+        BlockListener.blockOil.asItem().setTextureId(oil_juction);
+        BlockListener.blockPlaque.asItem().setTextureId(plaque);
+        BlockListener.blockRope.asItem().setTextureId(registerBlockTexture("block/blockRope"));
+        BlockListener.blockOil.asItem().setTextureId(oil_juction);
+        BlockListener.blockPlaque.asItem().setTextureId(plaque);
     }
 
     private int registerBlockTexture(String s) {

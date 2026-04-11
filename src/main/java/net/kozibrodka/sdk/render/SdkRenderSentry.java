@@ -6,8 +6,7 @@ import net.kozibrodka.sdk.entitySentry.SdkEntitySentry;
 import net.kozibrodka.sdk.entitySentry.SdkModelSentry;
 import net.kozibrodka.sdk_api.events.parachute.SdkModelParachute;
 import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModelBase;
-import net.minecraft.entity.EntityBase;
+import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
 public class SdkRenderSentry extends EntityRenderer
@@ -15,7 +14,7 @@ public class SdkRenderSentry extends EntityRenderer
     public SdkRenderSentry()
     {
 //        ((EntityRendererAccessor)this).setField_2676(new SdkModelParachute());
-        field_2678 = 0.0F;
+        shadowRadius = 0.0F;
         model = new SdkModelSentry();
 //        super.field_2676 = new SdkModelParachute();
     }
@@ -34,7 +33,7 @@ public class SdkRenderSentry extends EntityRenderer
 //        model.render(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
 //    }
     @Override
-    public void render(EntityBase entity, double d, double d1, double d2,
+    public void render(Entity entity, double d, double d1, double d2,
                        float f, float f1)
     {
         method_1908((SdkEntitySentry)entity, d, d1, d2, f, f1);

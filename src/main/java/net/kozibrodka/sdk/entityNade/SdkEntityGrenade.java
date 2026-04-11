@@ -2,62 +2,62 @@ package net.kozibrodka.sdk.entityNade;
 
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk.events.SdkConfig;
-import net.minecraft.entity.EntityBase;
-import net.minecraft.entity.Item;
-import net.minecraft.entity.Living;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.level.Level;
-import net.minecraft.sortme.Explosion;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.maths.MathHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.explosion.Explosion;
 
-public class SdkEntityGrenade extends Item
+public class SdkEntityGrenade extends ItemEntity
 {
 
-    public SdkEntityGrenade(Level world)
+    public SdkEntityGrenade(World world)
     {
         super(world);
         bounceSound = "sdk:grenadebounce";
         bounceFactor = 0.14999999999999999D;
         bounceSlowFactor = 0.80000000000000004D;
         initialVelocity = 1.0D;
-        setSize(0.25F, 0.25F);
+        setBoundingBoxSpacing(0.25F, 0.25F);
         exploded = false;
         fuse = 50;
         standingEyeHeight = 0.0F;
-        item = new ItemInstance(ItemListener.itemGrenade, 1, 0);
+        stack = new ItemStack(ItemListener.itemGrenade, 1, 0);
     }
 
-    public SdkEntityGrenade(Level world, double d, double d1, double d2)
+    public SdkEntityGrenade(World world, double d, double d1, double d2)
     {
         this(world);
         setPosition(d, d1, d2);
     }
 
-    public SdkEntityGrenade(Level world, Living entityliving)
+    public SdkEntityGrenade(World world, LivingEntity entityliving)
     {
         this(world);
-        method_1362(entityliving.yaw, 0.0F);
+        changeLookDirection(entityliving.yaw, 0.0F);
         double d = -MathHelper.sin((entityliving.yaw * 3.141593F) / 180F);
         double d1 = MathHelper.cos((entityliving.yaw * 3.141593F) / 180F);
         velocityX = initialVelocity * d * (double)MathHelper.cos((entityliving.pitch / 180F) * 3.141593F);
         velocityY = -initialVelocity * (double)MathHelper.sin((entityliving.pitch / 180F) * 3.141593F);
         velocityZ = initialVelocity * d1 * (double)MathHelper.cos((entityliving.pitch / 180F) * 3.141593F);
-        if(entityliving.vehicle != null && (entityliving.vehicle instanceof Living))
+        if(entityliving.vehicle != null && (entityliving.vehicle instanceof LivingEntity))
         {
-            entityliving = (Living)entityliving.vehicle;
+            entityliving = (LivingEntity)entityliving.vehicle;
         }
         velocityX += entityliving.velocityX;
         velocityY += entityliving.onGround ? 0.0D : entityliving.velocityY;
         velocityZ += entityliving.velocityZ;
-        setPosition(entityliving.x + d * 0.80000000000000004D, entityliving.y + (double)entityliving.getStandingEyeHeight(), entityliving.z + d1 * 0.80000000000000004D);
+        setPosition(entityliving.x + d * 0.80000000000000004D, entityliving.y + (double)entityliving.getEyeHeight(), entityliving.z + d1 * 0.80000000000000004D);
         prevX = x;
         prevY = y;
         prevZ = z;
     }
 
-    public boolean shouldRenderAtDistance(double d)
+    public boolean shouldRender(double d)
     {
         return true;
     }
@@ -115,7 +115,7 @@ public class SdkEntityGrenade extends Item
 
     protected void handleBounce()
     {
-        level.playSound(this, bounceSound, 0.25F, 1.0F / (rand.nextFloat() * 0.1F + 0.95F));
+        world.playSound(this, bounceSound, 0.25F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
     }
 
     protected void handleExplode()
@@ -131,48 +131,48 @@ public class SdkEntityGrenade extends Item
         if(!exploded)
         {
             exploded = true;
-            Explosion explosion = new Explosion(level, null, x, (float)y, (float)z, 3F);
-            explosion.kaboomPhase1();
+            Explosion explosion = new Explosion(world, null, x, (float)y, (float)z, 3F);
+            explosion.explode();
             if(SdkConfig.explosionsDestroyBlocks)
             {
-                explosion.kaboomPhase2(true);
+                explosion.playExplosionSound(true);
             } else
             {
-                level.playSound(x, y, z, "random.explode", 4F, (1.0F + (level.rand.nextFloat() - level.rand.nextFloat()) * 0.2F) * 0.7F);
+                world.playSound(x, y, z, "random.explode", 4F, (1.0F + (world.random.nextFloat() - world.random.nextFloat()) * 0.2F) * 0.7F);
             }
             for(int i = 0; i < 32; i++)
             {
-                level.addParticle("explode", x, y, z, level.rand.nextDouble() - 0.5D, level.rand.nextDouble() - 0.5D, level.rand.nextDouble() - 0.5D);
-                level.addParticle("smoke", x, y, z, level.rand.nextDouble() - 0.5D, level.rand.nextDouble() - 0.5D, level.rand.nextDouble() - 0.5D);
+                world.addParticle("explode", x, y, z, world.random.nextDouble() - 0.5D, world.random.nextDouble() - 0.5D, world.random.nextDouble() - 0.5D);
+                world.addParticle("smoke", x, y, z, world.random.nextDouble() - 0.5D, world.random.nextDouble() - 0.5D, world.random.nextDouble() - 0.5D);
             }
 
-            removed = true;
+            dead = true;
         }
     }
 
-    public boolean method_1356()
+    public boolean isCollidable()
     {
         return true;
     }
 
-    public boolean damage(EntityBase entity, int i)
+    public boolean damage(Entity entity, int i)
     {
         return false;
     }
 
-    public void writeCustomDataToTag(CompoundTag nbttagcompound)
+    public void writeNbt(NbtCompound nbttagcompound)
     {
-        super.writeCustomDataToTag(nbttagcompound);
-        nbttagcompound.put("Fuse", (byte)fuse);
+        super.writeNbt(nbttagcompound);
+        nbttagcompound.putByte("Fuse", (byte)fuse);
     }
 
-    public void readCustomDataFromTag(CompoundTag nbttagcompound)
+    public void readNbt(NbtCompound nbttagcompound)
     {
-        super.readCustomDataFromTag(nbttagcompound);
+        super.readNbt(nbttagcompound);
         fuse = nbttagcompound.getByte("Fuse");
     }
 
-    public void onPlayerCollision(PlayerBase entityplayer)
+    public void onPlayerInteraction(PlayerEntity entityplayer)
     {
     }
 

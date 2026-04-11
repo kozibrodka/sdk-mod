@@ -3,24 +3,24 @@ package net.kozibrodka.sdk.entity;
 
 
 import net.kozibrodka.sdk.tileEntity.SdkExplosionNuke;
-import net.minecraft.entity.EntityBase;
-import net.minecraft.level.Level;
-import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.maths.MathHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
-public class SdkEntityNukePrimed extends EntityBase
+public class SdkEntityNukePrimed extends Entity
 {
 
-    public SdkEntityNukePrimed(Level world)
+    public SdkEntityNukePrimed(World world)
     {
         super(world);
         fuse = 0;
-        field_1593 = true;
-        setSize(0.98F, 0.98F);
+        blocksSameBlockSpawning = true;
+        setBoundingBoxSpacing(0.98F, 0.98F);
         standingEyeHeight = height / 2.0F;
     }
 
-    public SdkEntityNukePrimed(Level world, double d, double d1, double d2)
+    public SdkEntityNukePrimed(World world, double d, double d1, double d2)
     {
         this(world);
         setPosition(d, d1, d2);
@@ -38,14 +38,14 @@ public class SdkEntityNukePrimed extends EntityBase
     {
     }
 
-    public boolean shouldRenderAtDistance(double d)
+    public boolean shouldRender(double d)
     {
         return true;
     }
 
-    public boolean method_1356()
+    public boolean isCollidable()
     {
-        return !removed;
+        return !dead;
     }
 
     public void tick()
@@ -66,32 +66,32 @@ public class SdkEntityNukePrimed extends EntityBase
         }
         if(fuse-- <= 0)
         {
-            remove();
+            markDead();
             explode();
         } else
         {
-            level.addParticle("smoke", x, y + 0.5D, z, 0.0D, 0.0D, 0.0D);
+            world.addParticle("smoke", x, y + 0.5D, z, 0.0D, 0.0D, 0.0D);
         }
     }
 
     private void explode()
     {
-        SdkExplosionNuke sdkexplosionnuke = new SdkExplosionNuke(level, null, x, y, z, 8F, 0.0F, false);
+        SdkExplosionNuke sdkexplosionnuke = new SdkExplosionNuke(world, null, x, y, z, 8F, 0.0F, false);
         sdkexplosionnuke.doExplosionA();
         sdkexplosionnuke.doExplosionB();
     }
 
-    protected void writeCustomDataToTag(CompoundTag nbttagcompound)
+    protected void writeNbt(NbtCompound nbttagcompound)
     {
-        nbttagcompound.put("Fuse", (byte)fuse);
+        nbttagcompound.putByte("Fuse", (byte)fuse);
     }
 
-    protected void readCustomDataFromTag(CompoundTag nbttagcompound)
+    protected void readNbt(NbtCompound nbttagcompound)
     {
         fuse = nbttagcompound.getByte("Fuse");
     }
 
-    public float getEyeHeight()
+    public float getShadowRadius()
     {
         return 0.0F;
     }

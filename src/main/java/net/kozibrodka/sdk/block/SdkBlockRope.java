@@ -4,15 +4,15 @@ import net.kozibrodka.sdk.events.TextureListener;
 import net.kozibrodka.sdk.mixin.EntityBaseAccessor;
 import net.kozibrodka.sdk.tileEntity.SdkTileEntityRope;
 import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.block.BlockRenderer;
-import net.minecraft.entity.EntityBase;
-import net.minecraft.entity.Living;
-import net.minecraft.level.BlockView;
-import net.minecraft.level.Level;
-import net.minecraft.tileentity.TileEntityBase;
-import net.minecraft.util.maths.Box;
+import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.Box;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithInventoryRenderer;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithWorldRenderer;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
@@ -33,30 +33,30 @@ public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWo
         descensionSpeed = -0.15F;
     }
 
-    public void onEntityCollision(Level world, int i, int j, int k, EntityBase entity)
+    public void onEntityCollision(World world, int i, int j, int k, Entity entity)
     {
-        if(entity instanceof Living)
+        if(entity instanceof LivingEntity)
         {
             ((EntityBaseAccessor)entity).setFallDistance(0.0F);
             if(entity.velocityY < (double)descensionSpeed)
             {
                 entity.velocityY = descensionSpeed;
             }
-            if(entity.field_1624)
+            if(entity.horizontalCollision)
             {
                 entity.velocityY = ascensionSpeed;
             }
         }
     }
 
-    protected TileEntityBase createTileEntity()
+    protected BlockEntity createBlockEntity()
     {
         return new SdkTileEntityRope();
     }
 
-    public Box getCollisionShape(Level world, int i, int j, int k)
+    public Box getCollisionShape(World world, int i, int j, int k)
     {
-        int l = world.getTileMeta(i, j, k);
+        int l = world.getBlockMeta(i, j, k);
         float f = 0.125F;
         if(l == 2)
         {
@@ -77,9 +77,9 @@ public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWo
         return super.getCollisionShape(world, i, j, k);
     }
 
-    public Box getOutlineShape(Level world, int i, int j, int k)
+    public Box getBoundingBox(World world, int i, int j, int k)
     {
-        int l = world.getTileMeta(i, j, k);
+        int l = world.getBlockMeta(i, j, k);
         float f = 0.125F;
         if(l == 2)
         {
@@ -97,10 +97,10 @@ public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWo
         {
             setBoundingBox(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
         }
-        return super.getOutlineShape(world, i, j, k);
+        return super.getBoundingBox(world, i, j, k);
     }
 
-    public boolean isFullOpaque()
+    public boolean isOpaque()
     {
         return false;
     }
@@ -110,7 +110,7 @@ public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWo
         return false;
     }
 
-    public int getDropCount(Random random)
+    public int getDroppedItemCount(Random random)
     {
         return 0;
     }
@@ -120,7 +120,7 @@ public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWo
     private int renderType;
 
     @Override
-    public boolean renderWorld(BlockRenderer renderblocks, BlockView iblockaccess, int i, int j, int k) {
+    public boolean renderWorld(BlockRenderManager renderblocks, BlockView iblockaccess, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
 //        int l = block.getBlockTextureFromSide(0);
         int l = TextureListener.rope;
@@ -128,8 +128,8 @@ public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWo
 //        {
 //            l = renderblocks.textureOverride;
 //        }
-        float f = this.getBrightness(iblockaccess, i, j, k);
-        tessellator.colour(f, f, f);
+        float f = this.getLuminance(iblockaccess, i, j, k);
+        tessellator.color(f, f, f);
 
 //        int i1 = (l & 0xf) << 4;
 //        int j1 = l & 0xf0;
@@ -144,7 +144,7 @@ public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWo
         double d2 = atlasTX.getStartV();
         double d3 = atlasTX.getEndV();
 
-        int k1 = iblockaccess.getTileMeta(i, j, k);
+        int k1 = iblockaccess.getBlockMeta(i, j, k);
         float f1 = 0.0F;
         float f2 = 0.05F;
         if(k1 == 5)
@@ -195,7 +195,7 @@ public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWo
     }
 
     @Override
-    public void renderInventory(BlockRenderer tileRenderer, int meta) {
+    public void renderInventory(BlockRenderManager tileRenderer, int meta) {
 //        Tessellator tessellator = Tessellator.INSTANCE;
 //        int l = TextureListener.rope;
 //        Atlas.Sprite atlasTX =  Atlases.getTerrain().getTexture(l);

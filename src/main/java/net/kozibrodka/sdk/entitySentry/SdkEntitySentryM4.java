@@ -4,18 +4,18 @@ package net.kozibrodka.sdk.entitySentry;
 
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk_api.events.utils.SdkItemGun;
-import net.minecraft.level.Level;
+import net.minecraft.world.World;
 
 public class SdkEntitySentryM4 extends SdkEntitySentry
 {
 
-    public SdkEntitySentryM4(Level world)
+    public SdkEntitySentryM4(World world)
     {
         super(world);
         setParameters();
     }
 
-    public SdkEntitySentryM4(Level world, double d, double d1, double d2)
+    public SdkEntitySentryM4(World world, double d, double d1, double d2)
     {
         super(world, d, d1, d2);
         setParameters();

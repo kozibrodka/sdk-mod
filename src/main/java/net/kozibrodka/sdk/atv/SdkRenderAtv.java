@@ -2,8 +2,8 @@ package net.kozibrodka.sdk.atv;
 
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.entity.EntityBase;
-import net.minecraft.item.ItemInstance;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import org.lwjgl.opengl.GL11;
@@ -14,7 +14,7 @@ public class SdkRenderAtv extends EntityRenderer
 
     public SdkRenderAtv()
     {
-        field_2678 = 0.5F; //shadowsize
+        shadowRadius = 0.5F; //shadowsize
         model = new SdkModelAtv();
     }
 
@@ -40,7 +40,7 @@ public class SdkRenderAtv extends EntityRenderer
         Tessellator tessellator = Tessellator.INSTANCE;
         for(int i = -1; i <= 1; i += 2)
         {
-            ItemInstance itemstack = null;
+            ItemStack itemstack = null;
             if(i == -1)
             {
                 itemstack = sdkentityatv.gunA;
@@ -59,7 +59,7 @@ public class SdkRenderAtv extends EntityRenderer
 //                float f5 = (float)((j / 16) * 16 + 0) / 256F;
 //                float f6 = (float)((j / 16) * 16 + 16) / 256F;
 
-                int l = itemstack.getTexturePosition();
+                int l = itemstack.getTextureId();
                 Atlas.Sprite testTex =  Atlases.getGuiItems().getTexture(l);
                 float f3 = (float)(testTex.getStartU());
                 float f4 = (float)(testTex.getEndU());
@@ -70,9 +70,9 @@ public class SdkRenderAtv extends EntityRenderer
                 float f8 = 0.5F;
                 float f9 = 0.25F;
                 GL11.glPushMatrix();
-                tessellator.start();
-                tessellator.colour(f1, f1, f1);
-                tessellator.setNormal(0.0F, 1.0F, 0.0F);
+                tessellator.startQuads();
+                tessellator.color(f1, f1, f1);
+                tessellator.normal(0.0F, 1.0F, 0.0F);
                 tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
                 tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
                 tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
@@ -91,7 +91,7 @@ public class SdkRenderAtv extends EntityRenderer
         GL11.glPopMatrix();
     }
 
-    public void render(EntityBase entity, double d, double d1, double d2,
+    public void render(Entity entity, double d, double d1, double d2,
                        float f, float f1)
     {
         method_1908((SdkEntityAtv)entity, d, d1, d2, f, f1);

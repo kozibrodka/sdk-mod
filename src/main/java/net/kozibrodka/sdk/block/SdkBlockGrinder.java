@@ -4,13 +4,13 @@ import net.kozibrodka.sdk.events.TextureListener;
 import net.kozibrodka.sdk.grinder.SdkContainerGrinder;
 import net.kozibrodka.sdk.tileEntity.SdkTileEntityGrinder;
 import net.kozibrodka.sdk_api.events.utils.SdkTools;
-import net.minecraft.block.BlockBase;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.world.World;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockWithEntity;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.inventory.InventoryBase;
-import net.minecraft.level.Level;
-import net.minecraft.tileentity.TileEntityBase;
+import net.minecraft.block.entity.BlockEntity;
 import net.modificationstation.stationapi.api.gui.screen.container.GuiHelper;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
@@ -25,43 +25,43 @@ public class SdkBlockGrinder extends TemplateBlockWithEntity
         super(iid, Material.STONE);
     }
 
-    public int getTextureForSide(int i)
+    public int getTexture(int i)
     {
         if(i == 1)
         {
             return TextureListener.grinder;
         } else
         {
-            return BlockBase.STONE.id;
+            return Block.STONE.id;
         }
     }
 
-    public void randomDisplayTick(Level world, int i, int j, int k, Random random)
+    public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
-        SdkTileEntityGrinder sdktileentitygrinder = (SdkTileEntityGrinder)world.getTileEntity(i, j, k);
+        SdkTileEntityGrinder sdktileentitygrinder = (SdkTileEntityGrinder)world.getBlockEntity(i, j, k);
         if(sdktileentitygrinder.isActive)
         {
             world.addParticle("smoke", (float)i + (random.nextFloat() * 10F + 3F) / 16F, (float)j + 1.0F, (float)k + (random.nextFloat() * 10F + 3F) / 16F, 0.0D, 0.0D, 0.0D);
         }
     }
 
-    public boolean canUse(Level world, int i, int j, int k, PlayerBase entityplayer)
+    public boolean onUse(World world, int i, int j, int k, PlayerEntity entityplayer)
     {
-        if(world.isServerSide)
+        if(world.isRemote)
         {
             return true;
         } else
         {
-            SdkTileEntityGrinder sdktileentitygrinder = (SdkTileEntityGrinder)world.getTileEntity(i, j, k);
+            SdkTileEntityGrinder sdktileentitygrinder = (SdkTileEntityGrinder)world.getBlockEntity(i, j, k);
 //            TODO: GUI done
 //            SdkTools.minecraft.displayGuiScreen(new SdkGuiGrinder(entityplayer.inventory, sdktileentitygrinder));
-            GuiHelper.openGUI(entityplayer, Identifier.of("sdk:openGrinder"), (InventoryBase) sdktileentitygrinder, new SdkContainerGrinder(entityplayer.inventory, (SdkTileEntityGrinder) sdktileentitygrinder));
+            GuiHelper.openGUI(entityplayer, Identifier.of("sdk:openGrinder"), (Inventory) sdktileentitygrinder, new SdkContainerGrinder(entityplayer.inventory, (SdkTileEntityGrinder) sdktileentitygrinder));
 
             return true;
         }
     }
 
-    protected TileEntityBase createTileEntity()
+    protected BlockEntity createBlockEntity()
     {
         return new SdkTileEntityGrinder();
     }

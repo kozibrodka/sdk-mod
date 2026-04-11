@@ -2,25 +2,25 @@ package net.kozibrodka.sdk.atv;
 
 
 import net.kozibrodka.sdk_api.events.utils.SdkItemGun;
-import net.minecraft.container.slot.Slot;
-import net.minecraft.inventory.InventoryBase;
-import net.minecraft.item.ItemInstance;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.slot.Slot;
 
 class SdkSlotGun extends Slot
 {
 
-    SdkSlotGun(InventoryBase iinventory, int i, int j, int k)
+    SdkSlotGun(Inventory iinventory, int i, int j, int k)
     {
         super(iinventory, i, j, k);
     }
 
-    public int getMaxStackCount()
+    public int getMaxItemCount()
     {
         return 1;
     }
 
-    public boolean canInsert(ItemInstance itemstack)
+    public boolean canInsert(ItemStack itemstack)
     {
-        return itemstack.getType() instanceof SdkItemGun;
+        return itemstack.getItem() instanceof SdkItemGun;
     }
 }

@@ -3,13 +3,13 @@ package net.kozibrodka.sdk.block;
 import net.kozibrodka.sdk.events.BlockListener;
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk.events.TextureListener;
-import net.minecraft.block.BlockBase;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.block.BlockRenderer;
-import net.minecraft.level.BlockView;
-import net.minecraft.level.Level;
-import net.minecraft.util.maths.Box;
+import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.util.math.Box;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithWorldRenderer;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
@@ -27,7 +27,7 @@ public class SdkBlockGrapplingHook extends TemplateBlock
         setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
     }
 
-    public int getTextureForSide(int i)
+    public int getTexture(int i)
     {
         if(i == 1 || i == 0)
         {
@@ -38,12 +38,12 @@ public class SdkBlockGrapplingHook extends TemplateBlock
         }
     }
 
-    public Box getCollisionShape(Level world, int i, int j, int k)
+    public Box getCollisionShape(World world, int i, int j, int k)
     {
         return null;
     }
 
-    public boolean isFullOpaque()
+    public boolean isOpaque()
     {
         return false;
     }
@@ -53,10 +53,10 @@ public class SdkBlockGrapplingHook extends TemplateBlock
         return false;
     }
 
-    public boolean canPlaceAt(Level world, int i, int j, int k)
+    public boolean canPlaceAt(World world, int i, int j, int k)
     {
-        int l = world.getTileId(i, j - 1, k);
-        if(l == 0 || !BlockBase.BY_ID[l].isFullOpaque())
+        int l = world.getBlockId(i, j - 1, k);
+        if(l == 0 || !Block.BLOCKS[l].isOpaque())
         {
             return false;
         } else
@@ -65,17 +65,17 @@ public class SdkBlockGrapplingHook extends TemplateBlock
         }
     }
 
-    public void onAdjacentBlockUpdate(Level world, int i, int j, int k, int l)
+    public void neighborUpdate(World world, int i, int j, int k, int l)
     {
         func_314_h(world, i, j, k);
     }
 
-    private boolean func_314_h(Level world, int i, int j, int k)
+    private boolean func_314_h(World world, int i, int j, int k)
     {
         if(!canPlaceAt(world, i, j, k))
         {
-            drop(world, i, j, k, world.getTileMeta(i, j, k));
-            world.setTile(i, j, k, 0);
+            dropStacks(world, i, j, k, world.getBlockMeta(i, j, k));
+            world.setBlock(i, j, k, 0);
             onBlockDestroyed(world, i, j, k);
             return false;
         } else
@@ -84,17 +84,17 @@ public class SdkBlockGrapplingHook extends TemplateBlock
         }
     }
 
-    public int getDropId(int i, Random random)
+    public int getDroppedItemId(int i, Random random)
     {
         return ItemListener.itemGrapplingHook.id;
     }
 
-    public int getDropCount(Random random)
+    public int getDroppedItemCount(Random random)
     {
         return 1;
     }
 
-    public boolean isSideRendered(BlockView iblockaccess, int i, int j, int k, int l)
+    public boolean isSideVisible(BlockView iblockaccess, int i, int j, int k, int l)
     {
         Material materialM = iblockaccess.getMaterial(i, j, k);
         if(l == 1)
@@ -106,21 +106,21 @@ public class SdkBlockGrapplingHook extends TemplateBlock
             return false;
         } else
         {
-            return super.isSideRendered(iblockaccess, i, j, k, l);
+            return super.isSideVisible(iblockaccess, i, j, k, l);
         }
     }
 
-    public void activate(Level world, int i, int j, int k, int l)
+    public void onMetadataChange(World world, int i, int j, int k, int l)
     {
         onBlockDestroyed(world, i, j, k);
     }
 
-    public void onDestroyedByExplosion(Level world, int i, int j, int k)
+    public void onDestroyedByExplosion(World world, int i, int j, int k)
     {
         onBlockDestroyed(world, i, j, k);
     }
 
-    private void onBlockDestroyed(Level world, int i, int j, int k)
+    private void onBlockDestroyed(World world, int i, int j, int k)
     {
         int ai[][] = {
             {
@@ -135,13 +135,13 @@ public class SdkBlockGrapplingHook extends TemplateBlock
         };
         for(int l = 0; l < ai.length; l++)
         {
-            if(world.getTileId(ai[l][0], ai[l][1], ai[l][2]) != BlockListener.blockRope.id)
+            if(world.getBlockId(ai[l][0], ai[l][1], ai[l][2]) != BlockListener.blockRope.id)
             {
                 continue;
             }
-            for(int i1 = ai[l][1]; world.getTileId(ai[l][0], i1, ai[l][2]) == BlockListener.blockRope.id; i1--)
+            for(int i1 = ai[l][1]; world.getBlockId(ai[l][0], i1, ai[l][2]) == BlockListener.blockRope.id; i1--)
             {
-                world.setTile(ai[l][0], i1, ai[l][2], 0);
+                world.setBlock(ai[l][0], i1, ai[l][2], 0);
             }
 
         }
@@ -149,15 +149,15 @@ public class SdkBlockGrapplingHook extends TemplateBlock
     }
 
 
-    public boolean renderWorld(BlockRenderer renderblocks, BlockView iblockaccess, int i, int j, int k) {
-        int l = this.getColourMultiplier(iblockaccess, i, j, k);
+    public boolean renderWorld(BlockRenderManager renderblocks, BlockView iblockaccess, int i, int j, int k) {
+        int l = this.getColorMultiplier(iblockaccess, i, j, k);
         float f = (float)(l >> 16 & 0xff) / 255F;
         float f1 = (float)(l >> 8 & 0xff) / 255F;
         float f2 = (float)(l & 0xff) / 255F;
         return renderGrapplingHook2(renderblocks, i, j, k, f, f1, f2, iblockaccess);
     }
 
-    public boolean renderGrapplingHook2(BlockRenderer renderblocks, int i, int j, int k, float f, float f1, float f2,
+    public boolean renderGrapplingHook2(BlockRenderManager renderblocks, int i, int j, int k, float f, float f1, float f2,
                                                BlockView iblockaccess)
     {
         Tessellator tessellator = Tessellator.INSTANCE;
@@ -166,20 +166,20 @@ public class SdkBlockGrapplingHook extends TemplateBlock
         float f4 = f3 * f;
         float f5 = f3 * f1;
         float f6 = f3 * f2;
-        if(iblockaccess.getTileId(i,j,k) == BlockBase.GRASS.id)
+        if(iblockaccess.getBlockId(i,j,k) == Block.GRASS_BLOCK.id)
         {
             f = f1 = f2 = 1.0F;
         }
-        float f7 = getBrightness(iblockaccess, i, j, k);
-        int l = iblockaccess.getTileMeta(i, j, k);
-        if(isSideRendered(iblockaccess, i, j + 1, k, 1))
+        float f7 = getLuminance(iblockaccess, i, j, k);
+        int l = iblockaccess.getBlockMeta(i, j, k);
+        if(isSideVisible(iblockaccess, i, j + 1, k, 1))
         {
-            float f8 = getBrightness(iblockaccess, i, j + 1, k);
-            if(maxY != 1.0D && !material.isLiquid())
+            float f8 = getLuminance(iblockaccess, i, j + 1, k);
+            if(maxY != 1.0D && !material.isFluid())
             {
                 f8 = f7;
             }
-            tessellator.colour(f4 * f8, f5 * f8, f6 * f8);
+            tessellator.color(f4 * f8, f5 * f8, f6 * f8);
 //            int i1 = getBlockTexture(iblockaccess, i, j, k, 1);
             int i1 = TextureListener.grappling;
 //            if(renderblocks.overrideBlockTexture >= 0)

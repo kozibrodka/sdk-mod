@@ -4,12 +4,12 @@ package net.kozibrodka.sdk.atv;
 
 import net.kozibrodka.sdk.mixin.ScreenBaseAccessor;
 import net.kozibrodka.sdk_api.events.utils.SdkTools;
-import net.minecraft.client.gui.screen.container.ContainerBase;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import org.lwjgl.opengl.GL11;
 
 
-public class SdkGuiAtv extends ContainerBase
+public class SdkGuiAtv extends HandledScreen
 {
 
     public SdkGuiAtv(PlayerInventory inventoryplayer, SdkEntityAtv sdkentityatv)
@@ -18,20 +18,20 @@ public class SdkGuiAtv extends ContainerBase
         atv = sdkentityatv;
     }
 
-    protected void renderForeground()
+    protected void drawForeground()
     {
-        ((ScreenBaseAccessor)this).getTextManager().drawText(atv.getContainerName(), containerWidth / 2 - ((ScreenBaseAccessor)this).getTextManager().getTextWidth(atv.getContainerName()) / 2, 6, 0x404040);
-        ((ScreenBaseAccessor)this).getTextManager().drawText("Inventory", 8, (containerHeight - 132) + 2, 0x404040);
+        ((ScreenBaseAccessor)this).getTextManager().draw(atv.getName(), backgroundWidth / 2 - ((ScreenBaseAccessor)this).getTextManager().getWidth(atv.getName()) / 2, 6, 0x404040);
+        ((ScreenBaseAccessor)this).getTextManager().draw("Inventory", 8, (backgroundHeight - 132) + 2, 0x404040);
     }
 
-    protected void renderContainerBackground(float f)
+    protected void drawBackground(float f)
     {
         int i = SdkTools.minecraft.textureManager.getTextureId("/assets/sdk/stationapi/textures/item/guiAtv.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         SdkTools.minecraft.textureManager.bindTexture(i);
-        int j = (width - containerWidth) / 2;
-        int k = (height - containerHeight) / 2;
-        blit(j, k, 0, 0, containerWidth, containerHeight);
+        int j = (width - backgroundWidth) / 2;
+        int k = (height - backgroundHeight) / 2;
+        drawTexture(j, k, 0, 0, backgroundWidth, backgroundHeight);
     }
 
     private SdkEntityAtv atv;

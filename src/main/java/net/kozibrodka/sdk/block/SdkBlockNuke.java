@@ -2,10 +2,10 @@ package net.kozibrodka.sdk.block;
 
 import net.kozibrodka.sdk.entity.SdkEntityNukePrimed;
 import net.kozibrodka.sdk.events.TextureListener;
-import net.minecraft.block.BlockBase;
 import java.util.Random;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.level.Level;
+import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
 
@@ -15,51 +15,51 @@ public class SdkBlockNuke extends TemplateBlock
     public SdkBlockNuke(Identifier iid)
     {
         super(iid, Material.TNT);
-        setTicksRandomly(true);
+        setTickRandomly(true);
     }
 
-    public int getTextureForSide(int i)
+    public int getTexture(int i)
     {
         if(i == 0)
         {
-            return BlockBase.TNT.getTextureForSide(0);
+            return Block.TNT.getTexture(0);
         }
         if(i == 1)
         {
-            return BlockBase.TNT.getTextureForSide(1);
+            return Block.TNT.getTexture(1);
         } else
         {
             return TextureListener.nuke;
         }
     }
 
-    public int getTickrate()
+    public int getTickRate()
     {
         return 40;
     }
 
-    public void onBlockPlaced(Level world, int i, int j, int k)
+    public void onPlaced(World world, int i, int j, int k)
     {
-        world.method_216(i, j, k, id, getTickrate());
+        world.scheduleBlockUpdate(i, j, k, id, getTickRate());
     }
 
-    public void onScheduledTick(Level world, int i, int j, int k, Random random)
+    public void onTick(World world, int i, int j, int k, Random random)
     {
         if(!checkExplode(world, i, j, k))
         {
-            world.method_216(i, j, k, id, getTickrate());
+            world.scheduleBlockUpdate(i, j, k, id, getTickRate());
         }
     }
 
-    public void onAdjacentBlockUpdate(Level world, int i, int j, int k, int l)
+    public void neighborUpdate(World world, int i, int j, int k, int l)
     {
-        if(l > 0 && BlockBase.BY_ID[l].getEmitsRedstonePower() && world.hasRedstonePower(i, j, k))
+        if(l > 0 && Block.BLOCKS[l].canEmitRedstonePower() && world.isEmittingRedstonePower(i, j, k))
         {
             explode(world, i, j, k);
         }
     }
 
-    public boolean checkExplode(Level world, int i, int j, int k)
+    public boolean checkExplode(World world, int i, int j, int k)
     {
         for(int l = i - 1; l <= i + 1; l++)
         {
@@ -67,7 +67,7 @@ public class SdkBlockNuke extends TemplateBlock
             {
                 for(int j1 = k - 1; j1 <= k + 1; j1++)
                 {
-                    if(Math.abs(i - l) + Math.abs(k - j1) + Math.abs(j - i1) != 0 && world.getTileId(l, i1, j1) == BlockBase.FIRE.id)
+                    if(Math.abs(i - l) + Math.abs(k - j1) + Math.abs(j - i1) != 0 && world.getBlockId(l, i1, j1) == Block.FIRE.id)
                     {
                         explode(world, i, j, k);
                         return true;
@@ -81,27 +81,27 @@ public class SdkBlockNuke extends TemplateBlock
         return false;
     }
 
-    public void explode(Level world, int i, int j, int k)
+    public void explode(World world, int i, int j, int k)
     {
         onBlockDestroyedByPlayer(world, i, j, k, 0);
-        world.setTile(i, j, k, 0);
+        world.setBlock(i, j, k, 0);
     }
 
-    public int getDropCount(Random random)
+    public int getDroppedItemCount(Random random)
     {
         return 0;
     }
 
-    public void onDestroyedByExplosion(Level world, int i, int j, int k)
+    public void onDestroyedByExplosion(World world, int i, int j, int k)
     {
         SdkEntityNukePrimed sdkentitynukeprimed = new SdkEntityNukePrimed(world, (float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F);
-        sdkentitynukeprimed.fuse = world.rand.nextInt(sdkentitynukeprimed.fuse / 4) + sdkentitynukeprimed.fuse / 8;
+        sdkentitynukeprimed.fuse = world.random.nextInt(sdkentitynukeprimed.fuse / 4) + sdkentitynukeprimed.fuse / 8;
         world.spawnEntity(sdkentitynukeprimed);
     }
 
-    public void onBlockDestroyedByPlayer(Level world, int i, int j, int k, int l)
+    public void onBlockDestroyedByPlayer(World world, int i, int j, int k, int l)
     {
-        if(world.isServerSide)
+        if(world.isRemote)
         {
             return;
         } else
