@@ -55,7 +55,7 @@ public class SdkBlockCannon extends TemplateBlock
 
     public void neighborUpdate(World world, int i, int j, int k, int l)
     {
-        if(!world.isRemote && world.isEmittingRedstonePower(i, j, k))
+        if(!world.isRemote && world.isPowered(i, j, k))
         {
             int i1 = world.getBlockMeta(i, j, k);
             if(i1 > 0)

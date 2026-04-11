@@ -53,7 +53,7 @@ public class SdkBlockNuke extends TemplateBlock
 
     public void neighborUpdate(World world, int i, int j, int k, int l)
     {
-        if(l > 0 && Block.BLOCKS[l].canEmitRedstonePower() && world.isEmittingRedstonePower(i, j, k))
+        if(l > 0 && Block.BLOCKS[l].canEmitRedstonePower() && world.isPowered(i, j, k))
         {
             explode(world, i, j, k);
         }

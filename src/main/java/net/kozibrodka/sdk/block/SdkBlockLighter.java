@@ -22,7 +22,7 @@ public class SdkBlockLighter extends TemplateBlock
 
     public void neighborUpdate(World world, int i, int j, int k, int l)
     {
-        if(world.isEmittingRedstonePower(i, j, k))
+        if(world.isPowered(i, j, k))
         {
             if(world.getBlockId(i, j + 1, k) == 0)
             {
