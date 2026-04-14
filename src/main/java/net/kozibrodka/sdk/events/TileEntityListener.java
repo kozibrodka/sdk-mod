@@ -12,10 +12,10 @@ import net.modificationstation.stationapi.api.util.Null;
 
 public class TileEntityListener {
     @Entrypoint.Namespace
-    public static final Namespace MOD_ID = Null.get();
+    public static Namespace MOD_ID = Null.get();
 
     @EventListener
-    private static void registerTileEntities(BlockEntityRegisterEvent event) {
+    public static void registerTileEntities(BlockEntityRegisterEvent event) {
         event.register(SdkTileEntityGrinder.class, String.valueOf(Identifier.of(MOD_ID, "SdkTileEntityGrinder")));
         event.register(SdkTileEntityRope.class, String.valueOf(Identifier.of(MOD_ID, "SdkTileEntityRope")));
         event.register(SdkTileEntityPlaque.class, String.valueOf(Identifier.of(MOD_ID, "SdkTileEntityPlaque")));

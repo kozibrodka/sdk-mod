@@ -14,7 +14,7 @@ import net.modificationstation.stationapi.api.util.Null;
 public class RecipeListener {
 
     @Entrypoint.Namespace
-    public static final Namespace MOD_ID = Null.get();
+    public static Namespace MOD_ID = Null.get();
 
     @EventListener
     public void registerRecipes(RecipeRegisterEvent event) {

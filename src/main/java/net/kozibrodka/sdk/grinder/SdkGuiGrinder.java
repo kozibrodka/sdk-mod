@@ -18,8 +18,8 @@ public class SdkGuiGrinder extends HandledScreen
 
     protected void drawForeground()
     {
-        ((ScreenBaseAccessor)this).getTextManager().draw("Grinder", backgroundWidth / 2 - ((ScreenBaseAccessor)this).getTextManager().getWidth("Grinder") / 2, 6, 0x404040);
-        ((ScreenBaseAccessor)this).getTextManager().draw("Inventory", 8, (backgroundHeight - 96) + 2, 0x404040);
+        ((ScreenBaseAccessor)this).getTextRenderer().draw("Grinder", backgroundWidth / 2 - ((ScreenBaseAccessor)this).getTextRenderer().getWidth("Grinder") / 2, 6, 0x404040);
+        ((ScreenBaseAccessor)this).getTextRenderer().draw("Inventory", 8, (backgroundHeight - 96) + 2, 0x404040);
     }
 
     protected void drawBackground(float f)

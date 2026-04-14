@@ -9,5 +9,5 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface ScreenBaseAccessor {
 
     @Accessor
-    TextRenderer getTextManager();
+    TextRenderer getTextRenderer();
 }

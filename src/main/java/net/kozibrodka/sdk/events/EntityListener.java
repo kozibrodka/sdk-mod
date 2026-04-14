@@ -19,10 +19,10 @@ import net.modificationstation.stationapi.api.util.Null;
 public class EntityListener {
 
     @Entrypoint.Namespace
-    public static final Namespace MOD_ID = Null.get();
+    public static Namespace MOD_ID = Null.get();
 
     @EventListener
-    private static void registerEntities(EntityRegister event) {
+    public static void registerEntities(EntityRegister event) {
         event.register(SdkEntityAtv.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityAtv")));
         event.register(SdkEntityGrapplingHook.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityGrapplingHook")));
         event.register(SdkEntityNukePrimed.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityNukePrimed")));
@@ -57,7 +57,7 @@ public class EntityListener {
     }
 
     @EventListener
-    private static void registerMobHandlers(EntityHandlerRegistryEvent event) {
+    public static void registerMobHandlers(EntityHandlerRegistryEvent event) {
         Registry.register(event.registry, MOD_ID.id("SdkEntityAtv"), SdkEntityAtv::new);
         Registry.register(event.registry, MOD_ID.id("SdkEntityGrapplingHook"), SdkEntityGrapplingHook::new);
         Registry.register(event.registry, MOD_ID.id("SdkEntityNukePrimed"), SdkEntityNukePrimed::new);
@@ -90,7 +90,7 @@ public class EntityListener {
     }
 
     @EventListener
-    private static void registerMobsHandlers(MobHandlerRegistryEvent event) {
+    public static void registerMobsHandlers(MobHandlerRegistryEvent event) {
         Registry.register(event.registry, MOD_ID.id("SdkEntityLaserWolf"), SdkEntityLaserWolf::new);
     }
 

@@ -361,4 +361,9 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
             minecraft.setScreen(new SdkGuiAtv(entityplayer.inventory, (SdkEntityAtv)entityplayer.vehicle));
         }
     }
+
+    @Override
+    public void exitKey(PlayerEntity playerEntity) {
+
+    }
 }

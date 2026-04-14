@@ -12,10 +12,12 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.modificationstation.stationapi.api.client.gui.screen.GuiHandler;
+import net.modificationstation.stationapi.api.client.registry.GuiHandlerRegistry;
 import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
 import net.modificationstation.stationapi.api.event.registry.GuiHandlerRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
-import net.modificationstation.stationapi.api.registry.GuiHandlerRegistry;
+import net.modificationstation.stationapi.api.registry.Registry;
 import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.Namespace;
@@ -23,11 +25,10 @@ import net.modificationstation.stationapi.api.util.Null;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
 import net.modificationstation.stationapi.api.util.Null;
-import uk.co.benjiweber.expressions.tuple.BiTuple;
 
 public class BlockListener {
     @Entrypoint.Namespace
-    public static final Namespace MOD_ID = Null.get();
+    public static Namespace MOD_ID = Null.get();
 
 
     @EventListener
@@ -49,7 +50,7 @@ public class BlockListener {
     @EventListener
     public void registerGuiHandlers(GuiHandlerRegistryEvent event) {
         GuiHandlerRegistry registry = event.registry;
-        registry.registerValueNoMessage(Identifier.of(MOD_ID, "openGrinder"), BiTuple.of(this::openGrinder, SdkTileEntityGrinder::new));
+        Registry.register(registry ,MOD_ID.id("openGrinder"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openGrinder, SdkTileEntityGrinder::new));
 //        registry.registerValueNoMessage(Identifier.of(MOD_ID, "openATV"), BiTuple.of(this::openATV, SdkEntityAtv::new));
     }
 

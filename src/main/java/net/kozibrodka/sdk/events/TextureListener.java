@@ -23,7 +23,7 @@ import net.kozibrodka.sdk.entityBullet.*;
 public class TextureListener {
 
     @Entrypoint.Namespace
-    public static final Namespace MOD_ID = Null.get();
+    public static Namespace MOD_ID = Null.get();
 
     @EventListener
     public void registerTextures(TextureRegisterEvent event) {
@@ -141,7 +141,7 @@ public class TextureListener {
 //    }
 
     @EventListener
-    private static void registerEntityRenderers(EntityRendererRegisterEvent event) {
+    public static void registerEntityRenderers(EntityRendererRegisterEvent event) {
         event.renderers.put(SdkEntityBulletCasing.class, new SdkRenderBulletCasing());
         event.renderers.put(SdkEntityBulletCasingShell.class, new SdkRenderBulletCasingShell());
         event.renderers.put(SdkEntityBulletAk47.class, new SdkRenderBullet());
@@ -163,7 +163,7 @@ public class TextureListener {
     }
 
     @EventListener
-    private static void registerTileEntityRenderers(BlockEntityRendererRegisterEvent event){
+    public static void registerTileEntityRenderers(BlockEntityRendererRegisterEvent event){
         event.renderers.put(SdkTileEntityPlaque.class, new SdkTileEntityRendererPlaque());
     }
 }

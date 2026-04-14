@@ -53,7 +53,7 @@ public class SdkTileEntityPlaque extends BlockEntity
             itemStack = null;
             return true;
         }
-        if(itemStack.itemId == itemstack.itemId && itemstack.count < ((ItemBaseAccessor)itemstack.getItem()) .getMaxStackSize())
+        if(itemStack.itemId == itemstack.itemId && itemstack.count < ((ItemBaseAccessor)itemstack.getItem()) .getMaxCount())
         {
             itemstack.count++;
             itemStack = null;

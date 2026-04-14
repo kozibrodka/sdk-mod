@@ -20,8 +20,8 @@ public class SdkGuiAtv extends HandledScreen
 
     protected void drawForeground()
     {
-        ((ScreenBaseAccessor)this).getTextManager().draw(atv.getName(), backgroundWidth / 2 - ((ScreenBaseAccessor)this).getTextManager().getWidth(atv.getName()) / 2, 6, 0x404040);
-        ((ScreenBaseAccessor)this).getTextManager().draw("Inventory", 8, (backgroundHeight - 132) + 2, 0x404040);
+        ((ScreenBaseAccessor)this).getTextRenderer().draw(atv.getName(), backgroundWidth / 2 - ((ScreenBaseAccessor)this).getTextRenderer().getWidth(atv.getName()) / 2, 6, 0x404040);
+        ((ScreenBaseAccessor)this).getTextRenderer().draw("Inventory", 8, (backgroundHeight - 132) + 2, 0x404040);
     }
 
     protected void drawBackground(float f)

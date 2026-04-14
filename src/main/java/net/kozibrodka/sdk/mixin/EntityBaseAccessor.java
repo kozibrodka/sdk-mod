@@ -11,16 +11,16 @@ import net.minecraft.entity.Entity;
 public interface EntityBaseAccessor {
 
     @Accessor
-    Random getRand();
+    Random getRandom();
 
     @Accessor
-    int getField_1613();
+    int getHearts();
 
     @Invoker
     void invokeSetRotation(float f, float g);
 
     @Accessor
-    int getField_1648();
+    int getMaxAir();
 
     @Accessor
     void setFallDistance(float f);

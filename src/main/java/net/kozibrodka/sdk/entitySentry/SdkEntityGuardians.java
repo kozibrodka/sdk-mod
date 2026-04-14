@@ -28,7 +28,7 @@ public class SdkEntityGuardians extends MobEntity
     {
         super.initDataTracker();
         dataTracker.startTracking(17, "");
-        dataTracker.startTracking(18, new Integer(health));
+        dataTracker.startTracking(18, (health));
     }
 
     public String getOwner()
