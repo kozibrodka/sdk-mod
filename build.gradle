@@ -122,7 +122,7 @@ dependencies {
 	modRuntimeOnly("maven.modrinth:unitweaks:${project.unitweaks_version}-b1.7.3") {
 		transitive = false
 	}
-	modImplementation(files("libs/sdk-api-0.4.0.jar"))
+	modImplementation(files("libs/sdk-api-0.4.1.jar"))
 
 }
 
