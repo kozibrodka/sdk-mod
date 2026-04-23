@@ -2,7 +2,9 @@ package net.kozibrodka.sdk.block;
 
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk.events.TextureListener;
-import net.kozibrodka.sdk_api.events.ingame.mod_SdkGuns;
+import net.kozibrodka.sdk_api.ingame.mod_SdkBase;
+import net.kozibrodka.sdk_api.ingame.mod_SdkGuns;
+import net.kozibrodka.sdk_api.utils.SdkTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.render.Tessellator;
@@ -286,7 +288,7 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         if(entityplayer.inventory.getSelectedItem() != null && entityplayer.inventory.getSelectedItem().itemId == Item.BUCKET.id)
         {
             entityplayer.inventory.main[entityplayer.inventory.selectedSlot] = new ItemStack(ItemListener.itemOil);
-            mod_SdkGuns.setItemDamage(entityplayer.inventory.getSelectedItem(), ItemListener.itemOil.getMaxDamage() - 1);
+            mod_SdkBase.setItemDamage(entityplayer.inventory.getSelectedItem(), ItemListener.itemOil.getMaxDamage() - 1); //TODO
             world.setBlock(i, j, k, 0);
             return true;
         } else

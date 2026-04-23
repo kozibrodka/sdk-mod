@@ -3,10 +3,10 @@ package net.kozibrodka.sdk.itemGun;
 
 import net.kozibrodka.sdk.entityBullet.SdkEntityBulletShot;
 import net.kozibrodka.sdk.events.ItemListener;
-import net.kozibrodka.sdk_api.events.utils.SdkEntityBullet;
-import net.kozibrodka.sdk_api.events.utils.SdkEntityBulletCasing;
-import net.kozibrodka.sdk_api.events.utils.SdkEntityBulletCasingShell;
-import net.kozibrodka.sdk_api.events.utils.SdkItemGun;
+import net.kozibrodka.sdk_api.utils.SdkEntityBullet;
+import net.kozibrodka.sdk_api.casing.SdkEntityBulletCasing;
+import net.kozibrodka.sdk_api.casing.SdkEntityBulletCasingShell;
+import net.kozibrodka.sdk_api.utils.SdkItemGun;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;

@@ -1,8 +1,8 @@
 package net.kozibrodka.sdk.entityBullet;
 
 import net.kozibrodka.sdk.events.ItemListener;
-import net.kozibrodka.sdk_api.events.utils.SdkEntityBullet;
-import net.kozibrodka.sdk_api.events.utils.SdkItemGun;
+import net.kozibrodka.sdk_api.utils.SdkEntityBullet;
+import net.kozibrodka.sdk_api.utils.SdkItemGun;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
@@ -26,5 +26,10 @@ public class SdkEntityBulletShot extends SdkEntityBullet {
 
     public void playServerSound(World world) {
         world.playSound(this, ((SdkItemGun) ItemListener.itemGunShotgun).firingSound, ((SdkItemGun) ItemListener.itemGunShotgun).soundRangeFactor, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+    }
+
+    @Override
+    public void playImpactSound(World world) {
+        world.playSound(this, ((SdkItemGun) ItemListener.itemGunShotgun).impactSound, 0.5F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
     }
 }

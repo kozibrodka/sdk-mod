@@ -1,10 +1,9 @@
 
 package net.kozibrodka.sdk.entitySentry;
 
-
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk.itemGun.SdkItemGunLaser;
-import net.kozibrodka.sdk_api.events.utils.SdkItemGun;
+import net.kozibrodka.sdk_api.utils.SdkItemGun;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;

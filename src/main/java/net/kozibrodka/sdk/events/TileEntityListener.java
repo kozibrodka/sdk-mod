@@ -16,9 +16,9 @@ public class TileEntityListener {
 
     @EventListener
     public static void registerTileEntities(BlockEntityRegisterEvent event) {
-        event.register(SdkTileEntityGrinder.class, String.valueOf(Identifier.of(MOD_ID, "SdkTileEntityGrinder")));
-        event.register(SdkTileEntityRope.class, String.valueOf(Identifier.of(MOD_ID, "SdkTileEntityRope")));
-        event.register(SdkTileEntityPlaque.class, String.valueOf(Identifier.of(MOD_ID, "SdkTileEntityPlaque")));
+        event.register(SdkTileEntityGrinder.class, String.valueOf(Identifier.of(MOD_ID, "TileGrinder")));
+        event.register(SdkTileEntityRope.class, String.valueOf(Identifier.of(MOD_ID, "TileRope")));
+        event.register(SdkTileEntityPlaque.class, String.valueOf(Identifier.of(MOD_ID, "TilePlaque")));
 //TODO: Custom render for tile entity SdkTileEntityRendererPlaque
     }
 }

@@ -1,7 +1,6 @@
 package net.kozibrodka.sdk.block;
 
 import net.kozibrodka.sdk.events.TextureListener;
-import net.kozibrodka.sdk.mixin.EntityBaseAccessor;
 import net.kozibrodka.sdk.tileEntity.SdkTileEntityRope;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
@@ -37,7 +36,7 @@ public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWo
     {
         if(entity instanceof LivingEntity)
         {
-            ((EntityBaseAccessor)entity).setFallDistance(0.0F);
+            entity.fallDistance = 0.0F;
             if(entity.velocityY < (double)descensionSpeed)
             {
                 entity.velocityY = descensionSpeed;

@@ -4,7 +4,7 @@ package net.kozibrodka.sdk.entitySentry;
 
 
 import net.kozibrodka.sdk.events.ItemListener;
-import net.kozibrodka.sdk_api.events.utils.SdkItemGun;
+import net.kozibrodka.sdk_api.utils.SdkItemGun;
 import net.minecraft.world.World;
 
 public class SdkEntitySentryFlamethrower extends SdkEntitySentry

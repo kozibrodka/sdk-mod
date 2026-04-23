@@ -1,6 +1,5 @@
 package net.kozibrodka.sdk.tileEntity;
 
-import net.kozibrodka.sdk.mixin.ItemBaseAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -53,7 +52,7 @@ public class SdkTileEntityPlaque extends BlockEntity
             itemStack = null;
             return true;
         }
-        if(itemStack.itemId == itemstack.itemId && itemstack.count < ((ItemBaseAccessor)itemstack.getItem()) .getMaxCount())
+        if(itemStack.itemId == itemstack.itemId && itemstack.count < itemstack.getItem().getMaxCount())
         {
             itemstack.count++;
             itemStack = null;

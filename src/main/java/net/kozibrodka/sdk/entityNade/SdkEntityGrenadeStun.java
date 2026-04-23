@@ -1,10 +1,10 @@
 package net.kozibrodka.sdk.entityNade;
 
-import com.mojang.datafixers.util.Pair;
 import net.kozibrodka.sdk.events.ItemListener;
-import net.kozibrodka.sdk_api.events.ingame.mod_SdkFlasher;
-import net.kozibrodka.sdk_api.events.ingame.mod_SdkGuns;
-import net.kozibrodka.sdk_api.mixin.LivingAccessor;
+import net.kozibrodka.sdk_api.ingame.mod_SdkFlasher;
+import net.kozibrodka.sdk_api.ingame.mod_SdkGuns;
+import net.kozibrodka.sdk_api.ingame.mod_SdkUtility;
+import net.kozibrodka.sdk_api.utils.SdkPair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -149,13 +149,13 @@ public class SdkEntityGrenadeStun extends SdkEntityGrenade
                 {
                     j = Math.round(200F * f10);
                 }
-                if(!mod_SdkGuns.flashTimes.containsKey(entityliving) || (Integer) ((Pair) mod_SdkGuns.flashTimes.get(entityliving)).getFirst() < j)
+                if(!mod_SdkUtility.flashTimes.containsKey(entityliving) || (Integer) ((SdkPair) mod_SdkUtility.flashTimes.get(entityliving)).getLeft() < j)
                 {
-                    mod_SdkGuns.flashTimes.put(entityliving, new Pair(j, ((LivingAccessor)entityliving).getMovementSpeed()));
+                    mod_SdkUtility.flashTimes.put(entityliving, new SdkPair(j, entityliving.movementSpeed));
                 }
                 if(!(entityliving instanceof PlayerEntity))
                 {
-                    ((LivingAccessor)entityliving).setMovementSpeed(0.0F);
+                    entityliving.movementSpeed = 0.0F;
                     entityliving.attackCooldown = j;
                 }
             }

@@ -4,8 +4,9 @@ import net.kozibrodka.sdk.atv.SdkItemAtv;
 import net.kozibrodka.sdk.item.*;
 import net.kozibrodka.sdk.itemGun.*;
 import net.kozibrodka.sdk.itemNade.*;
-import net.kozibrodka.sdk_api.events.utils.SdkMap;
+import net.kozibrodka.sdk_api.utils.SdkMap;
 import net.mine_diver.unsafeevents.listener.EventListener;
+import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.template.item.TemplateArmorItem;
@@ -23,167 +24,158 @@ public class ItemListener {
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
         //AMMO
-        itemBulletLight = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletLight")).setTranslationKey(MOD_ID, "itemBulletLight").setMaxCount(32);
-        itemBulletMedium = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletMedium")).setTranslationKey(MOD_ID, "itemBulletMedium").setMaxCount(8);
-        itemBulletHeavy = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletHeavy")).setTranslationKey(MOD_ID, "itemBulletHeavy").setMaxCount(4);
-        itemBulletRocket = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletRocket")).setTranslationKey(MOD_ID, "itemBulletRocket").setMaxCount(4);
-        itemBulletRocketLaser = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletRocketLaser")).setTranslationKey(MOD_ID, "itemBulletRocketLaser").setMaxCount(4);
-        itemBulletShell = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBulletShell")).setTranslationKey(MOD_ID, "itemBulletShell").setMaxCount(8);
-        itemOil = (TemplateItem) new SdkItemOil(Identifier.of(MOD_ID, "itemOil")).setTranslationKey(MOD_ID, "itemOil");
+        itemBulletLight = new TemplateItem(Identifier.of(MOD_ID, "itemBulletLight")).setTranslationKey(MOD_ID, "itemBulletLight").setMaxCount(32);
+        itemBulletMedium = new TemplateItem(Identifier.of(MOD_ID, "itemBulletMedium")).setTranslationKey(MOD_ID, "itemBulletMedium").setMaxCount(8);
+        itemBulletHeavy = new TemplateItem(Identifier.of(MOD_ID, "itemBulletHeavy")).setTranslationKey(MOD_ID, "itemBulletHeavy").setMaxCount(4);
+        itemBulletRocket = new TemplateItem(Identifier.of(MOD_ID, "itemBulletRocket")).setTranslationKey(MOD_ID, "itemBulletRocket").setMaxCount(4);
+        itemBulletRocketLaser = new TemplateItem(Identifier.of(MOD_ID, "itemBulletRocketLaser")).setTranslationKey(MOD_ID, "itemBulletRocketLaser").setMaxCount(4);
+        itemBulletShell = new TemplateItem(Identifier.of(MOD_ID, "itemBulletShell")).setTranslationKey(MOD_ID, "itemBulletShell").setMaxCount(8);
+        itemOil = new SdkItemOil(Identifier.of(MOD_ID, "itemOil")).setTranslationKey(MOD_ID, "itemOil");
 
         //GUNS
-        itemGunAk47 = (TemplateItem) new SdkItemGunAk47(Identifier.of(MOD_ID, "itemGunAk47")).setTranslationKey(MOD_ID, "itemGunAk47");
-        itemGunMp5 = (TemplateItem) new SdkItemGunMp5(Identifier.of(MOD_ID, "itemGunMp5")).setTranslationKey(MOD_ID, "itemGunMp5");
-        itemGunShotgun = (TemplateItem) new SdkItemGunShotgun(Identifier.of(MOD_ID, "itemGunShotgun")).setTranslationKey(MOD_ID, "itemGunShotgun");
-        itemGunDeagle = (TemplateItem) new SdkItemGunDeagle(Identifier.of(MOD_ID, "itemGunDeagle")).setTranslationKey(MOD_ID, "itemGunDeagle");
-        itemGunSniper = (TemplateItem) new SdkItemGunSniper(Identifier.of(MOD_ID, "itemGunSniper")).setTranslationKey(MOD_ID, "itemGunSniper");
-        itemGunM4 = (TemplateItem) new SdkItemGunM4(Identifier.of(MOD_ID, "itemGunM4")).setTranslationKey(MOD_ID, "itemGunM4");
-        itemGunSg552 = (TemplateItem) new SdkItemGunSg552(Identifier.of(MOD_ID, "itemGunSg552")).setTranslationKey(MOD_ID, "itemGunSg552");
-        itemGunMinigun = (TemplateItem) new SdkItemGunMinigun(Identifier.of(MOD_ID, "itemGunMinigun")).setTranslationKey(MOD_ID, "itemGunMinigun");
-        itemGunLaser = (TemplateItem) new SdkItemGunLaser(Identifier.of(MOD_ID, "itemGunLaser")).setTranslationKey(MOD_ID, "itemGunLaser");
-        itemGunFlamethrower = (TemplateItem) new SdkItemGunFlamethrower(Identifier.of(MOD_ID, "itemGunFlamethrower")).setTranslationKey(MOD_ID, "itemGunFlamethrower");
-        itemGunRocketLauncherLaser = (TemplateItem) new SdkItemGunRocketLauncherLaser(Identifier.of(MOD_ID, "itemGunRocketLauncherLaser")).setTranslationKey(MOD_ID, "itemGunRocketLauncherLaser");
-        itemGunRocketLauncher = (TemplateItem) new SdkItemGunRocketLauncher(Identifier.of(MOD_ID, "itemGunRocketLauncher")).setTranslationKey(MOD_ID, "itemGunRocketLauncher");
+        itemGunAk47 = new SdkItemGunAk47(Identifier.of(MOD_ID, "itemGunAk47")).setTranslationKey(MOD_ID, "itemGunAk47");
+        itemGunMp5 = new SdkItemGunMp5(Identifier.of(MOD_ID, "itemGunMp5")).setTranslationKey(MOD_ID, "itemGunMp5");
+        itemGunShotgun = new SdkItemGunShotgun(Identifier.of(MOD_ID, "itemGunShotgun")).setTranslationKey(MOD_ID, "itemGunShotgun");
+        itemGunDeagle = new SdkItemGunDeagle(Identifier.of(MOD_ID, "itemGunDeagle")).setTranslationKey(MOD_ID, "itemGunDeagle");
+        itemGunSniper = new SdkItemGunSniper(Identifier.of(MOD_ID, "itemGunSniper")).setTranslationKey(MOD_ID, "itemGunSniper");
+        itemGunM4 = new SdkItemGunM4(Identifier.of(MOD_ID, "itemGunM4")).setTranslationKey(MOD_ID, "itemGunM4");
+        itemGunSg552 = new SdkItemGunSg552(Identifier.of(MOD_ID, "itemGunSg552")).setTranslationKey(MOD_ID, "itemGunSg552");
+        itemGunMinigun = new SdkItemGunMinigun(Identifier.of(MOD_ID, "itemGunMinigun")).setTranslationKey(MOD_ID, "itemGunMinigun");
+        itemGunLaser = new SdkItemGunLaser(Identifier.of(MOD_ID, "itemGunLaser")).setTranslationKey(MOD_ID, "itemGunLaser");
+        itemGunFlamethrower = new SdkItemGunFlamethrower(Identifier.of(MOD_ID, "itemGunFlamethrower")).setTranslationKey(MOD_ID, "itemGunFlamethrower");
+        itemGunRocketLauncherLaser = new SdkItemGunRocketLauncherLaser(Identifier.of(MOD_ID, "itemGunRocketLauncherLaser")).setTranslationKey(MOD_ID, "itemGunRocketLauncherLaser");
+        itemGunRocketLauncher = new SdkItemGunRocketLauncher(Identifier.of(MOD_ID, "itemGunRocketLauncher")).setTranslationKey(MOD_ID, "itemGunRocketLauncher");
 
         //NADES
-        itemGrenade = (TemplateItem) new SdkItemGrenade(Identifier.of(MOD_ID, "itemGrenade")).setTranslationKey(MOD_ID, "itemGrenade").setMaxCount(4);
-        itemGrenadeHe = (TemplateItem) new SdkItemGrenadeHE(Identifier.of(MOD_ID, "itemGrenadeHe")).setTranslationKey(MOD_ID, "itemGrenadeHe").setMaxCount(4);
-        itemGrenadeStun = (TemplateItem) new SdkItemGrenadeStun(Identifier.of(MOD_ID, "itemGrenadeStun")).setTranslationKey(MOD_ID, "itemGrenadeStun").setMaxCount(4);
-        itemGrenadeSmoke = (TemplateItem) new SdkItemGrenadeSmoke(Identifier.of(MOD_ID, "itemGrenadeSmoke")).setTranslationKey(MOD_ID, "itemGrenadeSmoke").setMaxCount(4);
-        itemGrenadeSticky = (TemplateItem) new SdkItemGrenadeSticky(Identifier.of(MOD_ID, "itemGrenadeSticky")).setTranslationKey(MOD_ID, "itemGrenadeSticky").setMaxCount(4);
-        itemGrenadeIncendiary = (TemplateItem) new SdkItemGrenadeIncendiary(Identifier.of(MOD_ID, "itemGrenadeIncendiary")).setTranslationKey(MOD_ID, "itemGrenadeIncendiary").setMaxCount(4);
-        itemGrenadeIncendiaryLit = (TemplateItem) new SdkItemGrenadeIncendiary(Identifier.of(MOD_ID, "itemGrenadeIncendiaryLit")).setTranslationKey(MOD_ID, "itemGrenadeIncendiaryLit").setMaxCount(4);
+        itemGrenade = new SdkItemGrenade(Identifier.of(MOD_ID, "itemGrenade")).setTranslationKey(MOD_ID, "itemGrenade").setMaxCount(4);
+        itemGrenadeHe = new SdkItemGrenadeHE(Identifier.of(MOD_ID, "itemGrenadeHe")).setTranslationKey(MOD_ID, "itemGrenadeHe").setMaxCount(4);
+        itemGrenadeStun = new SdkItemGrenadeStun(Identifier.of(MOD_ID, "itemGrenadeStun")).setTranslationKey(MOD_ID, "itemGrenadeStun").setMaxCount(4);
+        itemGrenadeSmoke = new SdkItemGrenadeSmoke(Identifier.of(MOD_ID, "itemGrenadeSmoke")).setTranslationKey(MOD_ID, "itemGrenadeSmoke").setMaxCount(4);
+        itemGrenadeSticky = new SdkItemGrenadeSticky(Identifier.of(MOD_ID, "itemGrenadeSticky")).setTranslationKey(MOD_ID, "itemGrenadeSticky").setMaxCount(4);
+        itemGrenadeIncendiary = new SdkItemGrenadeIncendiary(Identifier.of(MOD_ID, "itemGrenadeIncendiary")).setTranslationKey(MOD_ID, "itemGrenadeIncendiary").setMaxCount(4);
+        itemGrenadeIncendiaryLit = new SdkItemGrenadeIncendiary(Identifier.of(MOD_ID, "itemGrenadeIncendiaryLit")).setTranslationKey(MOD_ID, "itemGrenadeIncendiaryLit").setMaxCount(4);
 
         //UTIL
-        itemGoldCoin = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemGoldCoin")).setTranslationKey(MOD_ID, "itemGoldCoin");
-        itemLightometer = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemLightometer")).setTranslationKey(MOD_ID, "itemLightometer");
-        itemNightvisionGoggles = (TemplateArmorItem) new SdkItemNightvision(Identifier.of(MOD_ID, "itemNightvisionGoggles"), 1).setTranslationKey(MOD_ID, "itemNightvisionGoggles");
-        itemScubaTank = (TemplateArmorItem) new SdkItemScuba(Identifier.of(MOD_ID, "itemScubaTank"), 1).setTranslationKey(MOD_ID, "itemScubaTank");
-        itemParachute = (TemplateArmorItem) new SdkItemParachute(Identifier.of(MOD_ID, "itemParachute"), 1).setTranslationKey(MOD_ID, "itemParachute");
-        itemTelescope = (TemplateItem) new SdkItemTelescope(Identifier.of(MOD_ID, "itemTelescope")).setTranslationKey(MOD_ID, "itemTelescope");
+        itemGoldCoin = new TemplateItem(Identifier.of(MOD_ID, "itemGoldCoin")).setTranslationKey(MOD_ID, "itemGoldCoin");
+        itemLightometer = new TemplateItem(Identifier.of(MOD_ID, "itemLightometer")).setTranslationKey(MOD_ID, "itemLightometer");
+        itemNightvisionGoggles = new SdkItemNightvision(Identifier.of(MOD_ID, "itemNightvisionGoggles"), 1).setTranslationKey(MOD_ID, "itemNightvisionGoggles");
+        itemScubaTank = new SdkItemScuba(Identifier.of(MOD_ID, "itemScubaTank"), 1).setTranslationKey(MOD_ID, "itemScubaTank");
+        itemParachute = new SdkItemParachute(Identifier.of(MOD_ID, "itemParachute"), 1).setTranslationKey(MOD_ID, "itemParachute");
+        itemTelescope = new SdkItemTelescope(Identifier.of(MOD_ID, "itemTelescope")).setTranslationKey(MOD_ID, "itemTelescope");
 
-        itemAtv = (TemplateItem) new SdkItemAtv(Identifier.of(MOD_ID, "itemAtv")).setTranslationKey(MOD_ID, "itemAtv");
-        itemAtvBody = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemAtvBody")).setTranslationKey(MOD_ID, "itemAtvBody");
-        itemAtvWheel = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemAtvWheel")).setTranslationKey(MOD_ID, "itemAtvWheel");
+        itemAtv = new SdkItemAtv(Identifier.of(MOD_ID, "itemAtv")).setTranslationKey(MOD_ID, "itemAtv");
+        itemAtvBody = new TemplateItem(Identifier.of(MOD_ID, "itemAtvBody")).setTranslationKey(MOD_ID, "itemAtvBody");
+        itemAtvWheel = new TemplateItem(Identifier.of(MOD_ID, "itemAtvWheel")).setTranslationKey(MOD_ID, "itemAtvWheel");
 
-        itemWrench = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemWrench")).setTranslationKey(MOD_ID, "itemWrench").setMaxCount(1).setMaxDamage(15);
-        itemSentry = (TemplateItem) new SdkItemSentry(Identifier.of(MOD_ID, "itemSentry")).setTranslationKey(MOD_ID, "itemSentry").setMaxCount(1).setMaxDamage(0);
-        itemOilDrop = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemOilDrop")).setTranslationKey(MOD_ID, "itemOilDrop");
-        itemJetPack = (TemplateArmorItem) new SdkItemJetPack(Identifier.of(MOD_ID, "itemJetPack"), 1).setTranslationKey(MOD_ID, "itemJetPack");
+        itemWrench = new TemplateItem(Identifier.of(MOD_ID, "itemWrench")).setTranslationKey(MOD_ID, "itemWrench").setMaxCount(1).setMaxDamage(15);
+        itemSentry = new SdkItemSentry(Identifier.of(MOD_ID, "itemSentry")).setTranslationKey(MOD_ID, "itemSentry").setMaxCount(1).setMaxDamage(0);
+        itemOilDrop = new TemplateItem(Identifier.of(MOD_ID, "itemOilDrop")).setTranslationKey(MOD_ID, "itemOilDrop");
+        itemJetPack = new SdkItemJetPack(Identifier.of(MOD_ID, "itemJetPack"), 1).setTranslationKey(MOD_ID, "itemJetPack");
 
-        itemRope = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemRope")).setTranslationKey(MOD_ID, "itemRope");
-        itemGrapplingHook = (TemplateItem) new SdkItemGrapplingHook(Identifier.of(MOD_ID, "itemGrapplingHook")).setTranslationKey(MOD_ID, "itemGrapplingHook");
+        itemRope = new TemplateItem(Identifier.of(MOD_ID, "itemRope")).setTranslationKey(MOD_ID, "itemRope");
+        itemGrapplingHook = new SdkItemGrapplingHook(Identifier.of(MOD_ID, "itemGrapplingHook")).setTranslationKey(MOD_ID, "itemGrapplingHook");
 
         //PARTS
-        itemMetalParts = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemMetalParts")).setTranslationKey(MOD_ID, "itemMetalParts");
-        itemBarrelLong = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBarrelLong")).setTranslationKey(MOD_ID, "itemBarrelLong");
-        itemBarrelShort = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBarrelShort")).setTranslationKey(MOD_ID, "itemBarrelShort");
-        itemBarrelFat = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBarrelFat")).setTranslationKey(MOD_ID, "itemBarrelFat");
-        itemBarrelShotgun = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBarrelShotgun")).setTranslationKey(MOD_ID, "itemBarrelShotgun");
-        itemBarrelMinigun = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemBarrelMinigun")).setTranslationKey(MOD_ID, "itemBarrelMinigun");
-        itemGripWood = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemGripWood")).setTranslationKey(MOD_ID, "itemGripWood");
-        itemGripMetal = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemGripMetal")).setTranslationKey(MOD_ID, "itemGripMetal");
-        itemHandleMinigun = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemHandleMinigun")).setTranslationKey(MOD_ID, "itemHandleMinigun");
-        itemStockWood = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemStockWood")).setTranslationKey(MOD_ID, "itemStockWood");
-        itemStockMetal = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemStockMetal")).setTranslationKey(MOD_ID, "itemStockMetal");
-        itemReceiverMetal = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemReceiverMetal")).setTranslationKey(MOD_ID, "itemReceiverMetal");
-        itemReceiverDiamond = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemReceiverDiamond")).setTranslationKey(MOD_ID, "itemReceiverDiamond");
-        itemMagazine = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemMagazine")).setTranslationKey(MOD_ID, "itemMagazine");
-        itemScope = (TemplateItem) new TemplateItem(Identifier.of(MOD_ID, "itemScope")).setTranslationKey(MOD_ID, "itemScope");
+        itemMetalParts = new TemplateItem(Identifier.of(MOD_ID, "itemMetalParts")).setTranslationKey(MOD_ID, "itemMetalParts");
+        itemBarrelLong = new TemplateItem(Identifier.of(MOD_ID, "itemBarrelLong")).setTranslationKey(MOD_ID, "itemBarrelLong");
+        itemBarrelShort = new TemplateItem(Identifier.of(MOD_ID, "itemBarrelShort")).setTranslationKey(MOD_ID, "itemBarrelShort");
+        itemBarrelFat = new TemplateItem(Identifier.of(MOD_ID, "itemBarrelFat")).setTranslationKey(MOD_ID, "itemBarrelFat");
+        itemBarrelShotgun = new TemplateItem(Identifier.of(MOD_ID, "itemBarrelShotgun")).setTranslationKey(MOD_ID, "itemBarrelShotgun");
+        itemBarrelMinigun = new TemplateItem(Identifier.of(MOD_ID, "itemBarrelMinigun")).setTranslationKey(MOD_ID, "itemBarrelMinigun");
+        itemGripWood = new TemplateItem(Identifier.of(MOD_ID, "itemGripWood")).setTranslationKey(MOD_ID, "itemGripWood");
+        itemGripMetal = new TemplateItem(Identifier.of(MOD_ID, "itemGripMetal")).setTranslationKey(MOD_ID, "itemGripMetal");
+        itemHandleMinigun = new TemplateItem(Identifier.of(MOD_ID, "itemHandleMinigun")).setTranslationKey(MOD_ID, "itemHandleMinigun");
+        itemStockWood = new TemplateItem(Identifier.of(MOD_ID, "itemStockWood")).setTranslationKey(MOD_ID, "itemStockWood");
+        itemStockMetal = new TemplateItem(Identifier.of(MOD_ID, "itemStockMetal")).setTranslationKey(MOD_ID, "itemStockMetal");
+        itemReceiverMetal = new TemplateItem(Identifier.of(MOD_ID, "itemReceiverMetal")).setTranslationKey(MOD_ID, "itemReceiverMetal");
+        itemReceiverDiamond = new TemplateItem(Identifier.of(MOD_ID, "itemReceiverDiamond")).setTranslationKey(MOD_ID, "itemReceiverDiamond");
+        itemMagazine = new TemplateItem(Identifier.of(MOD_ID, "itemMagazine")).setTranslationKey(MOD_ID, "itemMagazine");
+        itemScope = new TemplateItem(Identifier.of(MOD_ID, "itemScope")).setTranslationKey(MOD_ID, "itemScope");
 
         //MAPS
-        SdkMap.nightvisionList.add(itemNightvisionGoggles.id);
-        SdkMap.parachuteList.add(itemParachute.id);
-        SdkMap.scubaTankList.add(itemScubaTank.id);
-        SdkMap.telescopeList.add(itemTelescope.id);
-        SdkMap.oilList.add(itemOil.id);
-        SdkMap.jetpackList.add(itemJetPack.id);
 
-        SdkMap.noReloadList.add(itemGunMinigun);
-        SdkMap.noReloadList.add(itemGunLaser);
-        SdkMap.noReloadList.add(itemGunFlamethrower);
+        SdkMap.NORELOAD_LIST.add(itemGunMinigun);
+        SdkMap.NORELOAD_LIST.add(itemGunLaser);
+        SdkMap.NORELOAD_LIST.add(itemGunFlamethrower);
 
-        SdkMap.redAmmoList.add(itemGunLaser);
+        SdkMap.HEAVYMG_LIST.add(itemGunMinigun);
 
-        SdkMap.oilAmmoList.add(itemGunFlamethrower);
+        SdkMap.SCOPED_LIST.add(itemGunSniper);
+        SdkMap.SCOPED_LIST.add(itemGunSg552);
 
-        SdkMap.sniperList.add(itemGunSniper);
-        SdkMap.scopedList.add(itemGunSniper);
-        SdkMap.scopedList.add(itemGunSg552);
-
-        //TODO: ADD TO MAPS
+        ///TODO: ADD TO MAPS REFACTORRR
     }
 
     //BRONIE
-    public static TemplateItem itemGunAk47;
-    public static TemplateItem itemGunMp5;
-    public static TemplateItem itemGunShotgun;
-    public static TemplateItem itemGunDeagle;
-    public static TemplateItem itemGunSniper;
-    public static TemplateItem itemGunM4;
-    public static TemplateItem itemGunSg552;
-    public static TemplateItem itemGunMinigun;
-    public static TemplateItem itemGunLaser;
-    public static TemplateItem itemGunFlamethrower;
-    public static TemplateItem itemGunRocketLauncherLaser;
-    public static TemplateItem itemGunRocketLauncher;
-//    public static TemplateItem itemGunAircraft;
-//    public static TemplateItem itemGunAircraftRocket;
-//    public static TemplateItem itemGunAircraftRocketPanzer;
+    public static Item itemGunAk47;
+    public static Item itemGunMp5;
+    public static Item itemGunShotgun;
+    public static Item itemGunDeagle;
+    public static Item itemGunSniper;
+    public static Item itemGunM4;
+    public static Item itemGunSg552;
+    public static Item itemGunMinigun;
+    public static Item itemGunLaser;
+    public static Item itemGunFlamethrower;
+    public static Item itemGunRocketLauncherLaser;
+    public static Item itemGunRocketLauncher;
+//    public static Item itemGunAircraft;
+//    public static Item itemGunAircraftRocket;
+//    public static Item itemGunAircraftRocketPanzer;
 
     //AMMO
-    public static TemplateItem itemBulletLight;
-    public static TemplateItem itemBulletMedium;
-    public static TemplateItem itemBulletHeavy;
-    public static TemplateItem itemOil;
-    public static TemplateItem itemBulletRocket;
-    public static TemplateItem itemBulletRocketLaser;
-    public static TemplateItem itemBulletShell;
+    public static Item itemBulletLight;
+    public static Item itemBulletMedium;
+    public static Item itemBulletHeavy;
+    public static Item itemOil;
+    public static Item itemBulletRocket;
+    public static Item itemBulletRocketLaser;
+    public static Item itemBulletShell;
 
 
     //granaty
-    public static TemplateItem itemGrenade;
-    public static TemplateItem itemGrenadeHe;
-    public static TemplateItem itemGrenadeStun;
-    public static TemplateItem itemGrenadeSmoke;
-    public static TemplateItem itemGrenadeSticky;
-    public static TemplateItem itemGrenadeIncendiary;
-    public static TemplateItem itemGrenadeIncendiaryLit;
+    public static Item itemGrenade;
+    public static Item itemGrenadeHe;
+    public static Item itemGrenadeStun;
+    public static Item itemGrenadeSmoke;
+    public static Item itemGrenadeSticky;
+    public static Item itemGrenadeIncendiary;
+    public static Item itemGrenadeIncendiaryLit;
 
     //util
-    public static TemplateItem itemGoldCoin;
-    public static TemplateItem itemLightometer;
-    public static TemplateArmorItem itemNightvisionGoggles;
-    public static TemplateArmorItem itemScubaTank;
-    public static TemplateArmorItem itemParachute;
-    public static TemplateItem itemTelescope;
+    public static Item itemGoldCoin;
+    public static Item itemLightometer;
+    public static Item itemNightvisionGoggles;
+    public static Item itemScubaTank;
+    public static Item itemParachute;
+    public static Item itemTelescope;
 
-    public static TemplateArmorItem itemJetPack;
-    public static TemplateItem itemWrench;
-    public static TemplateItem itemAtv;
-    public static TemplateItem itemOilDrop;
-    public static TemplateItem itemSentry;
+    public static Item itemJetPack;
+    public static Item itemWrench;
+    public static Item itemAtv;
+    public static Item itemOilDrop;
+    public static Item itemSentry;
 
-    public static TemplateItem itemRope;
-    public static TemplateItem itemGrapplingHook;
+    public static Item itemRope;
+    public static Item itemGrapplingHook;
 
     //parts
-    public static TemplateItem itemMetalParts;
-    public static TemplateItem itemBarrelLong;
-    public static TemplateItem itemBarrelShort;
-    public static TemplateItem itemBarrelFat;
-    public static TemplateItem itemBarrelShotgun;
-    public static TemplateItem itemBarrelMinigun;
-    public static TemplateItem itemGripWood;
-    public static TemplateItem itemGripMetal;
-    public static TemplateItem itemHandleMinigun;
-    public static TemplateItem itemStockWood;
-    public static TemplateItem itemStockMetal;
-    public static TemplateItem itemReceiverMetal;
-    public static TemplateItem itemReceiverDiamond;
-    public static TemplateItem itemMagazine;
-    public static TemplateItem itemScope;
-    public static TemplateItem itemAtvBody;
-    public static TemplateItem itemAtvWheel;
+    public static Item itemMetalParts;
+    public static Item itemBarrelLong;
+    public static Item itemBarrelShort;
+    public static Item itemBarrelFat;
+    public static Item itemBarrelShotgun;
+    public static Item itemBarrelMinigun;
+    public static Item itemGripWood;
+    public static Item itemGripMetal;
+    public static Item itemHandleMinigun;
+    public static Item itemStockWood;
+    public static Item itemStockMetal;
+    public static Item itemReceiverMetal;
+    public static Item itemReceiverDiamond;
+    public static Item itemMagazine;
+    public static Item itemScope;
+    public static Item itemAtvBody;
+    public static Item itemAtvWheel;
 
 }

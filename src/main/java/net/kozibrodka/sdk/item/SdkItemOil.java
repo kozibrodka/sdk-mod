@@ -1,7 +1,7 @@
 package net.kozibrodka.sdk.item;
 
 import net.kozibrodka.sdk.events.BlockListener;
-import net.kozibrodka.sdk_api.events.utils.SdkTools;
+import net.kozibrodka.sdk_api.utils.SdkToolsRender;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -47,7 +47,7 @@ public class SdkItemOil extends TemplateItem
         }
         if(world.getBlockId(i, j - 1, k) == BlockListener.blockOil.id && itemstack.getDamage() >= 4)
         {
-            itemstack.damage(-4, SdkTools.minecraft.player);
+            itemstack.damage(-4, SdkToolsRender.minecraft.player);
             world.setBlock(i, j - 1, k, 0);
         }
         if(!world.isAir(i, j, k))
@@ -56,7 +56,7 @@ public class SdkItemOil extends TemplateItem
         }
         if(BlockListener.blockOil.canPlaceAt(world, i, j, k) && itemstack.getDamage() < itemstack.getItem().getMaxDamage())
         {
-            itemstack.damage(4, SdkTools.minecraft.player);
+            itemstack.damage(4, SdkToolsRender.minecraft.player);
             world.setBlock(i, j, k, BlockListener.blockOil.id);
             if(itemstack.count == 0)
             {

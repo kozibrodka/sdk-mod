@@ -1,7 +1,7 @@
 package net.kozibrodka.sdk.render;
 
 
-import net.kozibrodka.sdk_api.events.utils.SdkEntityBullet;
+import net.kozibrodka.sdk_api.utils.SdkEntityBullet;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.entity.Entity;

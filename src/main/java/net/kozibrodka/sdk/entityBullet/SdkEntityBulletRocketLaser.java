@@ -3,7 +3,7 @@ package net.kozibrodka.sdk.entityBullet;
 
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk.events.SdkConfig;
-import net.kozibrodka.sdk_api.events.utils.*;
+import net.kozibrodka.sdk_api.utils.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -41,6 +41,11 @@ public class SdkEntityBulletRocketLaser extends SdkEntityBullet {
 
     public void playServerSound(World world) {
         world.playSound(this, ((SdkItemGun) ItemListener.itemGunRocketLauncherLaser).firingSound, ((SdkItemGun) ItemListener.itemGunRocketLauncherLaser).soundRangeFactor, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+    }
+
+    @Override
+    public void playImpactSound(World world) {
+        world.playSound(this, ((SdkItemGun) ItemListener.itemGunRocketLauncherLaser).impactSound, 0.5F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
     }
 
     public void tick() {

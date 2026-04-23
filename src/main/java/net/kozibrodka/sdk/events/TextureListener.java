@@ -7,8 +7,8 @@ import net.kozibrodka.sdk.entity.SdkEntityNukePrimed;
 import net.kozibrodka.sdk.entitySentry.SdkEntitySentry;
 import net.kozibrodka.sdk.render.*;
 import net.kozibrodka.sdk.tileEntity.SdkTileEntityPlaque;
-import net.kozibrodka.sdk_api.events.utils.SdkEntityBulletCasing;
-import net.kozibrodka.sdk_api.events.utils.SdkEntityBulletCasingShell;
+import net.kozibrodka.sdk_api.casing.SdkEntityBulletCasing;
+import net.kozibrodka.sdk_api.casing.SdkEntityBulletCasingShell;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.client.event.block.entity.BlockEntityRendererRegisterEvent;
 import net.modificationstation.stationapi.api.client.event.render.entity.EntityRendererRegisterEvent;
@@ -142,7 +142,7 @@ public class TextureListener {
 
     @EventListener
     public static void registerEntityRenderers(EntityRendererRegisterEvent event) {
-        event.renderers.put(SdkEntityBulletCasing.class, new SdkRenderBulletCasing());
+        event.renderers.put(SdkEntityBulletCasing.class, new SdkRenderBulletCasing()); //TODO REMOVE
         event.renderers.put(SdkEntityBulletCasingShell.class, new SdkRenderBulletCasingShell());
         event.renderers.put(SdkEntityBulletAk47.class, new SdkRenderBullet());
         event.renderers.put(SdkEntityBulletDeagle.class, new SdkRenderBullet());

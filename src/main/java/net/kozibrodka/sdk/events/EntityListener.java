@@ -23,75 +23,75 @@ public class EntityListener {
 
     @EventListener
     public static void registerEntities(EntityRegister event) {
-        event.register(SdkEntityAtv.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityAtv")));
-        event.register(SdkEntityGrapplingHook.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityGrapplingHook")));
-        event.register(SdkEntityNukePrimed.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityNukePrimed")));
+        event.register(SdkEntityAtv.class, String.valueOf(Identifier.of(MOD_ID, "Atv")));
+        event.register(SdkEntityGrapplingHook.class, String.valueOf(Identifier.of(MOD_ID, "GrapplingHook")));
+        event.register(SdkEntityNukePrimed.class, String.valueOf(Identifier.of(MOD_ID, "NukePrimed")));
 
-        event.register(SdkEntityBulletAk47.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityBulletAk47")));
-        event.register(SdkEntityBulletDeagle.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityBulletDeagle")));
-        event.register(SdkEntityBulletFlame.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityBulletFlame")));
-        event.register(SdkEntityBulletM4.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityBulletM4")));
-        event.register(SdkEntityBulletMinigun.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityBulletMinigun")));
-        event.register(SdkEntityBulletMp5.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityBulletMp5")));
-        event.register(SdkEntityBulletSg552.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityBulletSg552")));
-        event.register(SdkEntityBulletShot.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityBulletShot")));
-        event.register(SdkEntityBulletSniper.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityBulletSniper")));
-        event.register(SdkEntityBulletRocket.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityBulletRocket")));
-        event.register(SdkEntityBulletRocketLaser.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityBulletRocketLaser")));
-        event.register(SdkEntityBulletLaser.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityBulletLaser")));
+        event.register(SdkEntityBulletAk47.class, String.valueOf(Identifier.of(MOD_ID, "BulletAk47")));
+        event.register(SdkEntityBulletDeagle.class, String.valueOf(Identifier.of(MOD_ID, "BulletDeagle")));
+        event.register(SdkEntityBulletFlame.class, String.valueOf(Identifier.of(MOD_ID, "BulletFlame")));
+        event.register(SdkEntityBulletM4.class, String.valueOf(Identifier.of(MOD_ID, "BulletM4")));
+        event.register(SdkEntityBulletMinigun.class, String.valueOf(Identifier.of(MOD_ID, "BulletMinigun")));
+        event.register(SdkEntityBulletMp5.class, String.valueOf(Identifier.of(MOD_ID, "BulletMp5")));
+        event.register(SdkEntityBulletSg552.class, String.valueOf(Identifier.of(MOD_ID, "BulletSg552")));
+        event.register(SdkEntityBulletShot.class, String.valueOf(Identifier.of(MOD_ID, "BulletShot")));
+        event.register(SdkEntityBulletSniper.class, String.valueOf(Identifier.of(MOD_ID, "BulletSniper")));
+        event.register(SdkEntityBulletRocket.class, String.valueOf(Identifier.of(MOD_ID, "BulletRocket")));
+        event.register(SdkEntityBulletRocketLaser.class, String.valueOf(Identifier.of(MOD_ID, "BulletRocketLaser")));
+        event.register(SdkEntityBulletLaser.class, String.valueOf(Identifier.of(MOD_ID, "BulletLaser")));
 
-        event.register(SdkEntityLaserWolf.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntityLaserWolf")));
-        event.register(SdkEntitySentryAk47.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntitySentryAk47")));
-        event.register(SdkEntitySentryDeagle.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntitySentryDeagle")));
-        event.register(SdkEntitySentryMp5.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntitySentryMp5")));
-        event.register(SdkEntitySentryRocketLauncher.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntitySentryRocketLauncher")));
-        event.register(SdkEntitySentryRocketLauncherLaser.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntitySentryRocketLauncherLaser")));
-        event.register(SdkEntitySentryShotgun.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntitySentryShotgun")));
-        event.register(SdkEntitySentrySniper.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntitySentrySniper")));
-        event.register(SdkEntitySentryFlamethrower.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntitySentryFlamethrower")));
-        event.register(SdkEntitySentrySg552.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntitySentrySg552")));
-        event.register(SdkEntitySentryMinigun.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntitySentryMinigun")));
-        event.register(SdkEntitySentryLaser.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntitySentryLaser")));
-        event.register(SdkEntitySentryM4.class, String.valueOf(Identifier.of(MOD_ID, "SdkEntitySentryM4")));
+        event.register(SdkEntityLaserWolf.class, String.valueOf(Identifier.of(MOD_ID, "LaserWolf")));
+        event.register(SdkEntitySentryAk47.class, String.valueOf(Identifier.of(MOD_ID, "SentryAk47")));
+        event.register(SdkEntitySentryDeagle.class, String.valueOf(Identifier.of(MOD_ID, "SentryDeagle")));
+        event.register(SdkEntitySentryMp5.class, String.valueOf(Identifier.of(MOD_ID, "SentryMp5")));
+        event.register(SdkEntitySentryRocketLauncher.class, String.valueOf(Identifier.of(MOD_ID, "SentryRocketLauncher")));
+        event.register(SdkEntitySentryRocketLauncherLaser.class, String.valueOf(Identifier.of(MOD_ID, "SentryRocketLauncherLaser")));
+        event.register(SdkEntitySentryShotgun.class, String.valueOf(Identifier.of(MOD_ID, "SentryShotgun")));
+        event.register(SdkEntitySentrySniper.class, String.valueOf(Identifier.of(MOD_ID, "SentrySniper")));
+        event.register(SdkEntitySentryFlamethrower.class, String.valueOf(Identifier.of(MOD_ID, "SentryFlamethrower")));
+        event.register(SdkEntitySentrySg552.class, String.valueOf(Identifier.of(MOD_ID, "SentrySg552")));
+        event.register(SdkEntitySentryMinigun.class, String.valueOf(Identifier.of(MOD_ID, "SentryMinigun")));
+        event.register(SdkEntitySentryLaser.class, String.valueOf(Identifier.of(MOD_ID, "SentryLaser")));
+        event.register(SdkEntitySentryM4.class, String.valueOf(Identifier.of(MOD_ID, "SentryM4")));
 
     }
 
     @EventListener
     public static void registerMobHandlers(EntityHandlerRegistryEvent event) {
-        Registry.register(event.registry, MOD_ID.id("SdkEntityAtv"), SdkEntityAtv::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntityGrapplingHook"), SdkEntityGrapplingHook::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntityNukePrimed"), SdkEntityNukePrimed::new);
+        Registry.register(event.registry, MOD_ID.id("Atv"), SdkEntityAtv::new);
+        Registry.register(event.registry, MOD_ID.id("GrapplingHook"), SdkEntityGrapplingHook::new);
+        Registry.register(event.registry, MOD_ID.id("NukePrimed"), SdkEntityNukePrimed::new);
 
-        Registry.register(event.registry, MOD_ID.id("SdkEntityBulletAk47"), SdkEntityBulletAk47::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntityBulletDeagle"), SdkEntityBulletDeagle::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntityBulletFlame"), SdkEntityBulletFlame::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntityBulletM4"), SdkEntityBulletM4::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntityBulletMinigun"), SdkEntityBulletMinigun::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntityBulletMp5"), SdkEntityBulletMp5::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntityBulletSg552"), SdkEntityBulletSg552::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntityBulletShot"), SdkEntityBulletShot::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntityBulletSniper"), SdkEntityBulletSniper::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntityBulletRocket"), SdkEntityBulletRocket::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntityBulletRocketLaser"), SdkEntityBulletRocketLaser::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntityBulletLaser"), SdkEntityBulletLaser::new);
+        Registry.register(event.registry, MOD_ID.id("BulletAk47"), SdkEntityBulletAk47::new);
+        Registry.register(event.registry, MOD_ID.id("BulletDeagle"), SdkEntityBulletDeagle::new);
+        Registry.register(event.registry, MOD_ID.id("BulletFlame"), SdkEntityBulletFlame::new);
+        Registry.register(event.registry, MOD_ID.id("BulletM4"), SdkEntityBulletM4::new);
+        Registry.register(event.registry, MOD_ID.id("BulletMinigun"), SdkEntityBulletMinigun::new);
+        Registry.register(event.registry, MOD_ID.id("BulletMp5"), SdkEntityBulletMp5::new);
+        Registry.register(event.registry, MOD_ID.id("BulletSg552"), SdkEntityBulletSg552::new);
+        Registry.register(event.registry, MOD_ID.id("BulletShot"), SdkEntityBulletShot::new);
+        Registry.register(event.registry, MOD_ID.id("BulletSniper"), SdkEntityBulletSniper::new);
+        Registry.register(event.registry, MOD_ID.id("BulletRocket"), SdkEntityBulletRocket::new);
+        Registry.register(event.registry, MOD_ID.id("BulletRocketLaser"), SdkEntityBulletRocketLaser::new);
+        Registry.register(event.registry, MOD_ID.id("BulletLaser"), SdkEntityBulletLaser::new);
 
-        Registry.register(event.registry, MOD_ID.id("SdkEntitySentryAk47"), SdkEntitySentryAk47::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntitySentryDeagle"), SdkEntitySentryDeagle::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntitySentryMp5"), SdkEntitySentryMp5::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntitySentryRocketLauncher"), SdkEntitySentryRocketLauncher::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntitySentryRocketLauncherLaser"), SdkEntitySentryRocketLauncherLaser::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntitySentryShotgun"), SdkEntitySentryShotgun::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntitySentrySniper"), SdkEntitySentrySniper::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntitySentryFlamethrower"), SdkEntitySentryFlamethrower::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntitySentrySg552"), SdkEntitySentrySg552::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntitySentryMinigun"), SdkEntitySentryMinigun::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntitySentryLaser"), SdkEntitySentryLaser::new);
-        Registry.register(event.registry, MOD_ID.id("SdkEntitySentryM4"), SdkEntitySentryM4::new);
+        Registry.register(event.registry, MOD_ID.id("SentryAk47"), SdkEntitySentryAk47::new);
+        Registry.register(event.registry, MOD_ID.id("SentryDeagle"), SdkEntitySentryDeagle::new);
+        Registry.register(event.registry, MOD_ID.id("SentryMp5"), SdkEntitySentryMp5::new);
+        Registry.register(event.registry, MOD_ID.id("SentryRocketLauncher"), SdkEntitySentryRocketLauncher::new);
+        Registry.register(event.registry, MOD_ID.id("SentryRocketLauncherLaser"), SdkEntitySentryRocketLauncherLaser::new);
+        Registry.register(event.registry, MOD_ID.id("SentryShotgun"), SdkEntitySentryShotgun::new);
+        Registry.register(event.registry, MOD_ID.id("SentrySniper"), SdkEntitySentrySniper::new);
+        Registry.register(event.registry, MOD_ID.id("SentryFlamethrower"), SdkEntitySentryFlamethrower::new);
+        Registry.register(event.registry, MOD_ID.id("SentrySg552"), SdkEntitySentrySg552::new);
+        Registry.register(event.registry, MOD_ID.id("SentryMinigun"), SdkEntitySentryMinigun::new);
+        Registry.register(event.registry, MOD_ID.id("SentryLaser"), SdkEntitySentryLaser::new);
+        Registry.register(event.registry, MOD_ID.id("SentryM4"), SdkEntitySentryM4::new);
     }
 
     @EventListener
     public static void registerMobsHandlers(MobHandlerRegistryEvent event) {
-        Registry.register(event.registry, MOD_ID.id("SdkEntityLaserWolf"), SdkEntityLaserWolf::new);
+        Registry.register(event.registry, MOD_ID.id("LaserWolf"), SdkEntityLaserWolf::new);
     }
 
     public static Class sentryEntityClasses[];

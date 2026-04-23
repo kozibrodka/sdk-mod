@@ -3,7 +3,6 @@ package net.kozibrodka.sdk.block;
 import net.kozibrodka.sdk.events.TextureListener;
 import net.kozibrodka.sdk.grinder.SdkContainerGrinder;
 import net.kozibrodka.sdk.tileEntity.SdkTileEntityGrinder;
-import net.kozibrodka.sdk_api.events.utils.SdkTools;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;

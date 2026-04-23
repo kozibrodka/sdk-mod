@@ -2,9 +2,9 @@ package net.kozibrodka.sdk.atv;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.kozibrodka.sdk.events.ItemListener;
-import net.kozibrodka.sdk_api.events.utils.SdkItemCustomUseDelay;
-import net.kozibrodka.sdk_api.events.utils.SdkItemGun;
-import net.kozibrodka.sdk_api.events.utils.SdkVehicle;
+import net.kozibrodka.sdk_api.utils.SdkItemCustomUseDelay;
+import net.kozibrodka.sdk_api.utils.SdkItemGun;
+import net.kozibrodka.sdk_api.utils.SdkVehicle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -262,11 +262,11 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
     {
         if(gunA != null)
         {
-            ((SdkItemGun)gunA.getItem()).onItemRightClickEntity(gunA, world, this, -1.8F, 0.0F, 0.5625F, 90F, 0.0F);
+            ((SdkItemGun)gunA.getItem()).onItemRightClickEntity(gunA, world, this, -1.8F, 0.0F, 0.5625F, 90F, 0.0F,0);
         }
         if(gunB != null)
         {
-            ((SdkItemGun)gunB.getItem()).onItemRightClickEntity(gunB, world, this, -1.8F, 0.0F, -0.3125F, 90F, 0.0F);
+            ((SdkItemGun)gunB.getItem()).onItemRightClickEntity(gunB, world, this, -1.8F, 0.0F, -0.3125F, 90F, 0.0F,1);
         }
     }
 
@@ -348,22 +348,66 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
     public String SOUND_RIDING;
     public int SOUND_LOOP_TIME_MAX;
 
+//    @Override
+//    public void altFireKey(PlayerEntity entityplayer) {
+//        fireGuns();
+//    }
+//
+//    @Override
+//    public void inventoryAtvKey(Minecraft minecraft, PlayerEntity entityplayer) {
+//        if(minecraft.currentScreen instanceof SdkGuiAtv){
+//            minecraft.setScreen(null);
+//        }else{
+//            minecraft.setScreen(new SdkGuiAtv(entityplayer.inventory, (SdkEntityAtv)entityplayer.vehicle));
+//        }
+//    }
+
     @Override
-    public void altFireKey(PlayerEntity entityplayer) {
-        fireGuns();
+    public void setControls(boolean forward, boolean back, boolean left, boolean right, boolean up, boolean down, boolean fire) {
+
     }
 
     @Override
-    public void inventoryAtvKey(Minecraft minecraft, PlayerEntity entityplayer) {
-        if(minecraft.currentScreen instanceof SdkGuiAtv){
-            minecraft.setScreen(null);
-        }else{
-            minecraft.setScreen(new SdkGuiAtv(entityplayer.inventory, (SdkEntityAtv)entityplayer.vehicle));
-        }
+    public void reloadKey() {
+
     }
 
     @Override
     public void exitKey(PlayerEntity playerEntity) {
 
+    }
+
+    @Override
+    public void inventoryKey(PlayerEntity playerEntity) {
+    }
+
+    @Override
+    public void bombKey() {
+
+    }
+
+    @Override
+    public void rocketKey() {
+
+    }
+
+    @Override
+    public int getPercentHealth() {
+        return 0;
+    }
+
+    @Override
+    public float getArmorFactor() {
+        return 0;
+    }
+
+    @Override
+    public float getDmgReduce() {
+        return 0;
+    }
+
+    @Override
+    public float getDmgBroken() {
+        return 0;
     }
 }

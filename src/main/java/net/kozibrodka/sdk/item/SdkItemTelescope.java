@@ -1,6 +1,6 @@
 package net.kozibrodka.sdk.item;
 
-import net.kozibrodka.sdk_api.events.ingame.mod_SdkUtility;
+import net.kozibrodka.sdk_api.ingame.mod_SdkUtility;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -18,7 +18,7 @@ public class SdkItemTelescope extends TemplateItem
 
     public ItemStack use(ItemStack itemstack, World world, PlayerEntity entityplayer)
     {
-        mod_SdkUtility.useZoom();
+//        mod_SdkUtility.useZoom();
         return itemstack;
     }
 }

@@ -18,13 +18,10 @@ import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
 import net.modificationstation.stationapi.api.event.registry.GuiHandlerRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.registry.Registry;
-import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.Null;
-import net.modificationstation.stationapi.api.template.item.TemplateItem;
-import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
-import net.modificationstation.stationapi.api.util.Null;
+
 
 public class BlockListener {
     @Entrypoint.Namespace
@@ -33,14 +30,14 @@ public class BlockListener {
 
     @EventListener
     public void registerBlocks(BlockRegistryEvent event){
-        blockGrinder = (TemplateBlockWithEntity) new SdkBlockGrinder(Identifier.of(MOD_ID, "blockGrinder")).setTranslationKey(MOD_ID, "blockGrinder").setHardness(3.5F).setSoundGroup(Block.DEFAULT_SOUND_GROUP);
-        blockPlaque = (TemplateBlockWithEntity) new SdkBlockPlaque(Identifier.of(MOD_ID, "blockPlaque")).setTranslationKey(MOD_ID, "blockPlaque").setHardness(0.4F).setSoundGroup(Block.WOOD_SOUND_GROUP);
-        blockNuke = (TemplateBlock) new SdkBlockNuke(Identifier.of(MOD_ID, "blockNuke")).setTranslationKey(MOD_ID, "blockNuke").setHardness(0.0F).setSoundGroup(Block.DIRT_SOUND_GROUP);
-        blockLighter = (TemplateBlock) new SdkBlockLighter(Identifier.of(MOD_ID, "blockLighter")).setTranslationKey(MOD_ID, "blockLighter").setHardness(3.5F).setSoundGroup(Block.DEFAULT_SOUND_GROUP);
-        blockOil = (TemplateBlock) new SdkBlockOil(Identifier.of(MOD_ID, "blockOil")).setTranslationKey(MOD_ID, "blockOil").setHardness(-1F); //TODO set burnt rates?
-        blockCannon = (TemplateBlock) new SdkBlockCannon(Identifier.of(MOD_ID, "blockCannon")).setTranslationKey(MOD_ID, "blockCannon").setHardness(3.5F).setSoundGroup(Block.DEFAULT_SOUND_GROUP);
-        blockRope = (TemplateBlockWithEntity) new SdkBlockRope(Identifier.of(MOD_ID, "blockRope")).setTranslationKey(MOD_ID, "blockRope").setHardness(-1F).setSoundGroup(Block.WOOD_SOUND_GROUP).setResistance(6000000F);
-        blockGrapplingHook = (TemplateBlock) new SdkBlockGrapplingHook(Identifier.of(MOD_ID, "blockGrapplingHook")).setTranslationKey(MOD_ID, "blockGrapplingHook").setHardness(0.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
+        blockGrinder = new SdkBlockGrinder(Identifier.of(MOD_ID, "blockGrinder")).setTranslationKey(MOD_ID, "blockGrinder").setHardness(3.5F).setSoundGroup(Block.DEFAULT_SOUND_GROUP);
+        blockPlaque = new SdkBlockPlaque(Identifier.of(MOD_ID, "blockPlaque")).setTranslationKey(MOD_ID, "blockPlaque").setHardness(0.4F).setSoundGroup(Block.WOOD_SOUND_GROUP);
+        blockNuke = new SdkBlockNuke(Identifier.of(MOD_ID, "blockNuke")).setTranslationKey(MOD_ID, "blockNuke").setHardness(0.0F).setSoundGroup(Block.DIRT_SOUND_GROUP);
+        blockLighter =  new SdkBlockLighter(Identifier.of(MOD_ID, "blockLighter")).setTranslationKey(MOD_ID, "blockLighter").setHardness(3.5F).setSoundGroup(Block.DEFAULT_SOUND_GROUP);
+        blockOil =  new SdkBlockOil(Identifier.of(MOD_ID, "blockOil")).setTranslationKey(MOD_ID, "blockOil").setHardness(-1F); //TODO set burnt rates?
+        blockCannon =  new SdkBlockCannon(Identifier.of(MOD_ID, "blockCannon")).setTranslationKey(MOD_ID, "blockCannon").setHardness(3.5F).setSoundGroup(Block.DEFAULT_SOUND_GROUP);
+        blockRope = new SdkBlockRope(Identifier.of(MOD_ID, "blockRope")).setTranslationKey(MOD_ID, "blockRope").setHardness(-1F).setSoundGroup(Block.WOOD_SOUND_GROUP).setResistance(6000000F);
+        blockGrapplingHook =  new SdkBlockGrapplingHook(Identifier.of(MOD_ID, "blockGrapplingHook")).setTranslationKey(MOD_ID, "blockGrapplingHook").setHardness(0.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
 
         //TODO: blockPlaque render item(look at mod dc - emerald), part of BlockOil, Inventory icons, Render Item Lightometer?, Entity Sentry Model Yaw
 
@@ -64,12 +61,12 @@ public class BlockListener {
     }
 
     //blocks
-    public static TemplateBlockWithEntity blockRope;
-    public static TemplateBlock blockGrapplingHook;
-    public static TemplateBlockWithEntity blockPlaque;
-    public static TemplateBlockWithEntity blockGrinder;
-    public static TemplateBlock blockCannon;
-    public static TemplateBlock blockOil;
-    public static TemplateBlock blockLighter;
-    public static TemplateBlock blockNuke;
+    public static Block blockRope;
+    public static Block blockGrapplingHook;
+    public static Block blockPlaque;
+    public static Block blockGrinder;
+    public static Block blockCannon;
+    public static Block blockOil;
+    public static Block blockLighter;
+    public static Block blockNuke;
 }

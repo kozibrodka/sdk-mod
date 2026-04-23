@@ -4,7 +4,7 @@ package net.kozibrodka.sdk.render;
 
 import net.kozibrodka.sdk.entitySentry.SdkEntitySentry;
 import net.kozibrodka.sdk.entitySentry.SdkModelSentry;
-import net.kozibrodka.sdk_api.events.parachute.SdkModelParachute;
+import net.kozibrodka.sdk_api.utils.SdkEntityBullet;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;

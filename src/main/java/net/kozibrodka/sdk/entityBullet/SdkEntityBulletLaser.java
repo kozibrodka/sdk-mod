@@ -4,8 +4,7 @@ package net.kozibrodka.sdk.entityBullet;
 import net.kozibrodka.sdk.entityNade.SdkEntitySmokeFX;
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk.events.SdkConfig;
-import net.kozibrodka.sdk_api.events.ingame.mod_SdkGuns;
-import net.kozibrodka.sdk_api.events.utils.*;
+import net.kozibrodka.sdk_api.utils.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -46,6 +45,11 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
     public void playServerSound(World world)
     {
         world.playSound(this, ((SdkItemGun) ItemListener.itemGunLaser).firingSound, ((SdkItemGun)ItemListener.itemGunLaser).soundRangeFactor, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+    }
+
+    @Override
+    public void playImpactSound(World world) {
+        world.playSound(this, ((SdkItemGun) ItemListener.itemGunLaser).impactSound, 0.5F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
     }
 
     public void tick()
@@ -274,7 +278,8 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
         double d5 = (d + random.nextDouble() * d3 * 2D) - d3;
         double d6 = (d1 + random.nextDouble() * d4 * 2D) - d4;
         double d7 = (d2 + random.nextDouble() * d3 * 2D) - d3;
-        SdkTools.minecraft.particleManager.addParticle(new SdkEntitySmokeFX(world, d5, d6, d7, 0.0D, 0.0D, 0.0D, 2.5F, 1.0F, 1.0F, 1.0F));
+//        world.addParticle(); /// ????
+        SdkToolsRender.minecraft.particleManager.addParticle(new SdkEntitySmokeFX(world, d5, d6, d7, 0.0D, 0.0D, 0.0D, 2.5F, 1.0F, 1.0F, 1.0F));
 //        ModLoader.getMinecraftInstance().particleManager.addEffect(new SdkEntitySmokeFX(level, d5, d6, d7, 0.0D, 0.0D, 0.0D, 2.5F, 1.0F, 1.0F, 1.0F));
     }
 

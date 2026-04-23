@@ -1,7 +1,7 @@
 package net.kozibrodka.sdk.entityNade;
 
 import net.kozibrodka.sdk.events.ItemListener;
-import net.kozibrodka.sdk_api.events.utils.SdkPoint3d;
+import net.kozibrodka.sdk_api.utils.SdkPoint3d;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
