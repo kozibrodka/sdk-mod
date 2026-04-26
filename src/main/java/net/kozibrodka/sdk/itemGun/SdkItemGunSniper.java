@@ -17,6 +17,9 @@ public class SdkItemGunSniper extends SdkItemGun
     {
         super(i);
         firingSound = "sdk:sniper";
+        reloadSound = "sdk:reload";
+        emptySound = "sdk:gunempty";
+        ammoHudText = "/assets/sdk/stationapi/textures/gui/guiAmmoBullet.png";
         requiredBullet = ItemListener.itemBulletHeavy;
         numBullets = 1;
         damage = 12;
@@ -26,13 +29,22 @@ public class SdkItemGunSniper extends SdkItemGun
         recoil = 8F;
         soundRangeFactor = 8F;
         penetration = 1;
+        scopeOvText = "/assets/sdk/stationapi/textures/gui/miscScope.png";
+        scopeMaxZoom = 0.125F;
+        zoomSpeed = 0.075F;
+        unscopedUnAccuracy = 8F;
+        moveUnAccuracy = 0.25D;
+        jumpUnAccuracy = 0.25D;
+        noSneakUnAccuracy = 0.25D;
     }
 
+    @Override
     public SdkEntityBullet getBulletEntity(World world, Entity entity, float f, float f1, float f2, float f3, float f4)
     {
         return new SdkEntityBulletSniper(world, entity, this, f, f1, f2, f3, f4);
     }
 
+    @Override
     public SdkEntityBulletCasing getBulletCasingEntity(World world, Entity entity, float f)
     {
         return new SdkEntityBulletCasing(world, entity, f);

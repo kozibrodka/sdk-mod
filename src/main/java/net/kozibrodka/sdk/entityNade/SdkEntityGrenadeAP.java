@@ -3,7 +3,6 @@ package net.kozibrodka.sdk.entityNade;
 import net.kozibrodka.sdk.events.EntityListener;
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk.itemNade.SdkItemGrenadeAP;
-import net.kozibrodka.sdk.itemNade.SdkItemGrenadeHE;
 import net.kozibrodka.sdk_api.utils.SdkEntityGrenade;
 import net.kozibrodka.sdk_api.utils.SdkExplosion;
 import net.minecraft.entity.LivingEntity;
@@ -13,34 +12,34 @@ import net.minecraft.world.explosion.Explosion;
 import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-public class SdkEntityGrenadeHE extends SdkEntityGrenade implements EntitySpawnDataProvider {
+public class SdkEntityGrenadeAP extends SdkEntityGrenade implements EntitySpawnDataProvider {
 
-    public SdkEntityGrenadeHE(World world)
+    public SdkEntityGrenadeAP(World world)
     {
         super(world);
-        stack = new ItemStack(ItemListener.itemGrenadeHe, 1, 0);
+        stack = new ItemStack(ItemListener.itemGrenade, 1, 0);
     }
 
-    public SdkEntityGrenadeHE(World world, double d, double d1, double d2)
+    public SdkEntityGrenadeAP(World world, double d, double d1, double d2)
     {
         super(world, d, d1, d2);
-        stack = new ItemStack(ItemListener.itemGrenadeHe, 1, 0);
+        stack = new ItemStack(ItemListener.itemGrenade, 1, 0);
     }
 
-    public SdkEntityGrenadeHE(World world, LivingEntity entityliving)
+    public SdkEntityGrenadeAP(World world, LivingEntity entityliving)
     {
         super(world, entityliving);
-        stack = new ItemStack(ItemListener.itemGrenadeHe, 1, 0);
+        stack = new ItemStack(ItemListener.itemGrenade, 1, 0);
     }
 
     @Override
     public void playServerSound(World world) {
-        world.playSound(this, SdkItemGrenadeHE.throwSound, 1.0F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+        world.playSound(this, SdkItemGrenadeAP.throwSound, 1.0F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
     }
 
     @Override
     protected void handleBounce() {
-        world.playSound(this, SdkItemGrenadeHE.bounceSound, 0.25F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+        world.playSound(this, SdkItemGrenadeAP.bounceSound, 0.25F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
     }
 
     @Override
@@ -62,7 +61,7 @@ public class SdkEntityGrenadeHE extends SdkEntityGrenade implements EntitySpawnD
                     world.addParticle("smoke", x, y, z, world.random.nextDouble() - 0.5D, world.random.nextDouble() - 0.5D, world.random.nextDouble() - 0.5D);
                 }
             }
-            SdkExplosion explosion = new SdkExplosion(world, null, x,  y,  z, 3F, false, true, "random.explode", flagW);
+            SdkExplosion explosion = new SdkExplosion(world, null, x,  y,  z, 2F, false, false, "random.explode", flagW);
             explosion.explodeA();
             explosion.explodeB(true);
             dead = true;
@@ -71,6 +70,6 @@ public class SdkEntityGrenadeHE extends SdkEntityGrenade implements EntitySpawnD
 
     @Override
     public Identifier getHandlerIdentifier() {
-        return Identifier.of(EntityListener.MOD_ID, "NadeHe");
+        return Identifier.of(EntityListener.MOD_ID, "NadeAp");
     }
 }

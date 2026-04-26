@@ -16,14 +16,19 @@ public class SdkItemGrenadeStun extends TemplateItem
         super(i);
     }
 
+    @Override
     public ItemStack use(ItemStack itemstack, World world, PlayerEntity entityplayer)
     {
         itemstack.count--;
-        world.playSound(entityplayer, "sdk:grunt", 1.0F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
         if(!world.isRemote)
         {
+            world.playSound(entityplayer, "sdk:grunt", 1.0F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
             world.spawnEntity(new SdkEntityGrenadeStun(world, entityplayer));
         }
         return itemstack;
     }
+
+    public static String throwSound = "sdk:grunt";
+    public static String bounceSound = "sdk:stungrenadebounce";
+    public static String explosionSound = "sdk:stungrenade";
 }

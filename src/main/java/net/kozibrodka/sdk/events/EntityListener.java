@@ -4,6 +4,7 @@ import net.kozibrodka.sdk.atv.SdkEntityAtv;
 import net.kozibrodka.sdk.entity.SdkEntityGrapplingHook;
 import net.kozibrodka.sdk.entity.SdkEntityNukePrimed;
 import net.kozibrodka.sdk.entityBullet.*;
+import net.kozibrodka.sdk.entityNade.*;
 import net.kozibrodka.sdk.entitySentry.*;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.event.entity.EntityRegister;
@@ -14,7 +15,6 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.Null;
 import net.modificationstation.stationapi.api.registry.Registry;
-import net.modificationstation.stationapi.api.util.Null;
 
 public class EntityListener {
 
@@ -39,6 +39,13 @@ public class EntityListener {
         event.register(SdkEntityBulletRocket.class, String.valueOf(Identifier.of(MOD_ID, "BulletRocket")));
         event.register(SdkEntityBulletRocketLaser.class, String.valueOf(Identifier.of(MOD_ID, "BulletRocketLaser")));
         event.register(SdkEntityBulletLaser.class, String.valueOf(Identifier.of(MOD_ID, "BulletLaser")));
+
+        event.register(SdkEntityGrenadeAP.class, String.valueOf(Identifier.of(MOD_ID, "NadeAp")));
+        event.register(SdkEntityGrenadeHE.class, String.valueOf(Identifier.of(MOD_ID, "NadeHe")));
+        event.register(SdkEntityGrenadeIncendiary.class, String.valueOf(Identifier.of(MOD_ID, "NadeFire")));
+        event.register(SdkEntityGrenadeSmoke.class, String.valueOf(Identifier.of(MOD_ID, "NadeSmoke")));
+        event.register(SdkEntityGrenadeSticky.class, String.valueOf(Identifier.of(MOD_ID, "NadeSticky")));
+        event.register(SdkEntityGrenadeStun.class, String.valueOf(Identifier.of(MOD_ID, "NadeStun")));
 
         event.register(SdkEntityLaserWolf.class, String.valueOf(Identifier.of(MOD_ID, "LaserWolf")));
         event.register(SdkEntitySentryAk47.class, String.valueOf(Identifier.of(MOD_ID, "SentryAk47")));
@@ -74,6 +81,13 @@ public class EntityListener {
         Registry.register(event.registry, MOD_ID.id("BulletRocket"), SdkEntityBulletRocket::new);
         Registry.register(event.registry, MOD_ID.id("BulletRocketLaser"), SdkEntityBulletRocketLaser::new);
         Registry.register(event.registry, MOD_ID.id("BulletLaser"), SdkEntityBulletLaser::new);
+
+        Registry.register(event.registry, MOD_ID.id("NadeAp"), SdkEntityGrenadeAP::new);
+        Registry.register(event.registry, MOD_ID.id("NadeHe"), SdkEntityGrenadeHE::new);
+        Registry.register(event.registry, MOD_ID.id("NadeFire"), SdkEntityGrenadeIncendiary::new);
+        Registry.register(event.registry, MOD_ID.id("NadeSmoke"), SdkEntityGrenadeSmoke::new);
+        Registry.register(event.registry, MOD_ID.id("NadeSticky"), SdkEntityGrenadeSticky::new);
+        Registry.register(event.registry, MOD_ID.id("NadeStun"), SdkEntityGrenadeStun::new);
 
         Registry.register(event.registry, MOD_ID.id("SentryAk47"), SdkEntitySentryAk47::new);
         Registry.register(event.registry, MOD_ID.id("SentryDeagle"), SdkEntitySentryDeagle::new);

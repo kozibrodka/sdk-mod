@@ -63,6 +63,7 @@ public class SdkEntityGrapplingHook extends Entity
     {
     }
 
+    @Override
     public boolean shouldRender(double d)
     {
         return true;

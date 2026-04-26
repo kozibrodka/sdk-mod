@@ -1,53 +1,84 @@
 package net.kozibrodka.sdk.entityNade;
 
+import net.kozibrodka.sdk.events.EntityListener;
 import net.kozibrodka.sdk.events.ItemListener;
+import net.kozibrodka.sdk.itemNade.SdkItemGrenadeHE;
+import net.kozibrodka.sdk.itemNade.SdkItemGrenadeStun;
+import net.kozibrodka.sdk_api.events.SdkGlass;
+import net.kozibrodka.sdk_api.ingame.mod_SdkBase;
 import net.kozibrodka.sdk_api.ingame.mod_SdkFlasher;
-import net.kozibrodka.sdk_api.ingame.mod_SdkGuns;
-import net.kozibrodka.sdk_api.ingame.mod_SdkUtility;
+import net.kozibrodka.sdk_api.utils.SdkEntityGrenade;
+import net.kozibrodka.sdk_api.utils.SdkEnvTool;
 import net.kozibrodka.sdk_api.utils.SdkPair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
+import net.modificationstation.stationapi.api.util.Identifier;
+
 import java.util.ArrayList;
 
-public class SdkEntityGrenadeStun extends SdkEntityGrenade
+public class SdkEntityGrenadeStun extends SdkEntityGrenade implements EntitySpawnDataProvider
 {
 
     public SdkEntityGrenadeStun(World world)
     {
         super(world);
-        BOUNCE_SOUND = "sdk:stungrenadebounce";
         stack = new ItemStack(ItemListener.itemGrenadeStun, 1, 0);
     }
 
     public SdkEntityGrenadeStun(World world, double d, double d1, double d2)
     {
         super(world, d, d1, d2);
-        BOUNCE_SOUND = "sdk:stungrenadebounce";
         stack = new ItemStack(ItemListener.itemGrenadeStun, 1, 0);
     }
 
     public SdkEntityGrenadeStun(World world, LivingEntity entityliving)
     {
         super(world, entityliving);
-        BOUNCE_SOUND = "sdk:stungrenadebounce";
         stack = new ItemStack(ItemListener.itemGrenadeStun, 1, 0);
     }
 
+    @Override
+    public void playServerSound(World world) {
+        world.playSound(this, SdkItemGrenadeStun.throwSound, 1.0F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+    }
+
+    @Override
+    protected void handleBounce() {
+        world.playSound(this, SdkItemGrenadeStun.bounceSound, 0.25F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+    }
+
+    public void doFlash(boolean flag){
+        if(SdkEnvTool.isEnvClient() && SdkGlass.sdk_apiGlass.muzzle_flash){
+            mod_SdkFlasher.LightEntity(world, this, 15, 2);
+        }
+    }
+
+    public boolean canLivingSeeFlash(LivingEntity entity) { /// Works on Snow layer
+        return this.world.raycast(Vec3d.createCached(entity.x, entity.y + (double)entity.getEyeHeight(), entity.z), Vec3d.createCached(this.x, this.y + (double)this.getEyeHeight() + 0.126F, this.z)) == null;
+    }
+
+    @Override
     protected void explode()
     {
         if(!exploded)
         {
             exploded = true;
-            world.playSound(this, "sdk:stungrenade", 4F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
-            mod_SdkFlasher.LightEntity(world, this, 15, 2);
+            world.playSound(this, SdkItemGrenadeStun.explosionSound, 4F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+            doFlash(true);
             ArrayList arraylist = getEntityLivingsInRange(32D);
             for(int i = 0; i < arraylist.size(); i++)
             {
                 LivingEntity entityliving = (LivingEntity)arraylist.get(i);
-                if(!entityliving.canSee(this))
+//                if(!entityliving.canSee(this))
+//                {
+//                    continue;
+//                }
+                if(!canLivingSeeFlash(entityliving))
                 {
                     continue;
                 }
@@ -149,9 +180,9 @@ public class SdkEntityGrenadeStun extends SdkEntityGrenade
                 {
                     j = Math.round(200F * f10);
                 }
-                if(!mod_SdkUtility.flashTimes.containsKey(entityliving) || (Integer) ((SdkPair) mod_SdkUtility.flashTimes.get(entityliving)).getLeft() < j)
+                if(!mod_SdkBase.flashTimes.containsKey(entityliving) || (Integer) ((SdkPair) mod_SdkBase.flashTimes.get(entityliving)).getLeft() < j)
                 {
-                    mod_SdkUtility.flashTimes.put(entityliving, new SdkPair(j, entityliving.movementSpeed));
+                    mod_SdkBase.flashTimes.put(entityliving, new SdkPair(j, entityliving.movementSpeed));
                 }
                 if(!(entityliving instanceof PlayerEntity))
                 {
@@ -192,6 +223,11 @@ public class SdkEntityGrenadeStun extends SdkEntityGrenade
         }
 
         return arraylist;
+    }
+
+    @Override
+    public Identifier getHandlerIdentifier() {
+        return Identifier.of(EntityListener.MOD_ID, "NadeStun");
     }
 
     protected String BOUNCE_SOUND;

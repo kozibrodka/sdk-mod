@@ -16,6 +16,8 @@ public class SdkItemParachute extends TemplateArmorItem implements ArmorTextureP
         setMaxDamage(7);
     }
 
+    //TODO PARACHUTE SOUND? b1.5_01 sdk video i heard
+
     @Override
     public Identifier getTexture(ArmorItem armour) {
         return ItemListener.MOD_ID.id("parachute");

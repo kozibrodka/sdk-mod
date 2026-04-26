@@ -67,6 +67,7 @@ public class SdkRenderBulletFlame extends EntityRenderer {
         GL11.glPopMatrix();
     }
 
+    @Override
     public void render(Entity entity, double d, double d1, double d2,
                        float f, float f1)
     {

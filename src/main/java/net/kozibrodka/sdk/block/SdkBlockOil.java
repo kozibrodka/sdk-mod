@@ -35,26 +35,31 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         BLOCKS_IGNORE_META_UPDATE[id] = true; //?
     }
 
+    @Override
     public Box getCollisionShape(World world, int i, int j, int k)
     {
         return null;
     }
 
+    @Override
     public boolean isOpaque()
     {
         return false;
     }
 
+    @Override
     public boolean isFullCube()
     {
         return false;
     }
 
+    @Override
     public int getTickRate()
     {
         return 100;
     }
 
+    @Override
     public void onTick(World world, int i, int j, int k, Random random)
     {
         int l = world.getBlockMeta(i, j, k);
@@ -97,6 +102,7 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         return false;
     }
 
+    @Override
     public boolean canPlaceAt(World world, int i, int j, int k)
     {
         return world.method_1783(i, j - 1, k);
@@ -106,7 +112,6 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
     {
         if(world.getBlockId(i, j, k) != id)
         {
-            return;
         } else
         {
             world.notifyNeighbors(i, j, k, id);
@@ -116,10 +121,10 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
             world.notifyNeighbors(i, j, k + 1, id);
             world.notifyNeighbors(i, j - 1, k, id);
             world.notifyNeighbors(i, j + 1, k, id);
-            return;
         }
     }
 
+    @Override
     public void onPlaced(World world, int i, int j, int k)
     {
         super.onPlaced(world, i, j, k);
@@ -164,6 +169,7 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         checkForFire(world, i, j, k);
     }
 
+    @Override
     public void onBreak(World world, int i, int j, int k)
     {
         super.onBreak(world, i, j, k);
@@ -207,6 +213,7 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         }
     }
 
+    @Override
     public void onBlockBreakStart(World world, int i, int j, int k, PlayerEntity entityplayer)
     {
         setFireAbove(world, i, j, k, world.getBlockMeta(i, j, k));
@@ -278,17 +285,19 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         return false;
     }
 
+    @Override
     public int getDroppedItemId(int i, Random random)
     {
         return 0;
     }
 
+    @Override
     public boolean onUse(World world, int i, int j, int k, PlayerEntity entityplayer)
     {
         if(entityplayer.inventory.getSelectedItem() != null && entityplayer.inventory.getSelectedItem().itemId == Item.BUCKET.id)
         {
             entityplayer.inventory.main[entityplayer.inventory.selectedSlot] = new ItemStack(ItemListener.itemOil);
-            mod_SdkBase.setItemDamage(entityplayer.inventory.getSelectedItem(), ItemListener.itemOil.getMaxDamage() - 1); //TODO
+            SdkTools.setItemDamage(entityplayer.inventory.getSelectedItem(), ItemListener.itemOil.getMaxDamage() - 1); //TODO
             world.setBlock(i, j, k, 0);
             return true;
         } else
@@ -349,9 +358,9 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         }
         //TODO FIX
         float f3 = 0.3125F/16;
-        float f4 = i + 0;
+        float f4 = i;
         float f5 = i + 1;
-        float f6 = k + 0;
+        float f6 = k;
         float f7 = k + 1;
         float f16 = 256;
         byte byte0 = 0;
@@ -452,30 +461,30 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
             if(iblockaccess.shouldSuffocate(i - 1, j, k) && iblockaccess.getBlockId(i - 1, j + 1, k) == id)
             {
                 tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k + 1) + f1, d1, d2);
-                tessellator.vertex((float)i + f2, (float)(j + 0) - f1, (float)(k + 1) + f1, d, d2);
-                tessellator.vertex((float)i + f2, (float)(j + 0) - f1, (float)(k + 0) - f1, d, d3);
-                tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k + 0) - f1, d1, d3);
+                tessellator.vertex((float)i + f2, (float)(j) - f1, (float)(k + 1) + f1, d, d2);
+                tessellator.vertex((float)i + f2, (float)(j) - f1, (float)(k) - f1, d, d3);
+                tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k) - f1, d1, d3);
             }
             if(iblockaccess.shouldSuffocate(i + 1, j, k) && iblockaccess.getBlockId(i + 1, j + 1, k) == id)
             {
-                tessellator.vertex((float)(i + 1) - f2, (float)(j + 0) - f1, (float)(k + 1) + f1, d, d3);
+                tessellator.vertex((float)(i + 1) - f2, (float)(j) - f1, (float)(k + 1) + f1, d, d3);
                 tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k + 1) + f1, d1, d3);
-                tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k + 0) - f1, d1, d2);
-                tessellator.vertex((float)(i + 1) - f2, (float)(j + 0) - f1, (float)(k + 0) - f1, d, d2);
+                tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k) - f1, d1, d2);
+                tessellator.vertex((float)(i + 1) - f2, (float)(j) - f1, (float)(k) - f1, d, d2);
             }
             if(iblockaccess.shouldSuffocate(i, j, k - 1) && iblockaccess.getBlockId(i, j + 1, k - 1) == id)
             {
-                tessellator.vertex((float)(i + 1) + f1, (float)(j + 0) - f1, (float)k + f2, d, d3);
+                tessellator.vertex((float)(i + 1) + f1, (float)(j) - f1, (float)k + f2, d, d3);
                 tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)k + f2, d1, d3);
-                tessellator.vertex((float)(i + 0) - f1, (float)(j + 1) + f1, (float)k + f2, d1, d2);
-                tessellator.vertex((float)(i + 0) - f1, (float)(j + 0) - f1, (float)k + f2, d, d2);
+                tessellator.vertex((float)(i) - f1, (float)(j + 1) + f1, (float)k + f2, d1, d2);
+                tessellator.vertex((float)(i) - f1, (float)(j) - f1, (float)k + f2, d, d2);
             }
             if(iblockaccess.shouldSuffocate(i, j, k + 1) && iblockaccess.getBlockId(i, j + 1, k + 1) == id)
             {
                 tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d1, d2);
-                tessellator.vertex((float)(i + 1) + f1, (float)(j + 0) - f1, (float)(k + 1) - f2, d, d2);
-                tessellator.vertex((float)(i + 0) - f1, (float)(j + 0) - f1, (float)(k + 1) - f2, d, d3);
-                tessellator.vertex((float)(i + 0) - f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d1, d3);
+                tessellator.vertex((float)(i + 1) + f1, (float)(j) - f1, (float)(k + 1) - f2, d, d2);
+                tessellator.vertex((float)(i) - f1, (float)(j) - f1, (float)(k + 1) - f2, d, d3);
+                tessellator.vertex((float)(i) - f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d1, d3);
             }
         }
         int l1 = iblockaccess.getBlockMeta(i, j, k);

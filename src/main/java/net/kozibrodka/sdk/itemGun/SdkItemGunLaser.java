@@ -17,6 +17,9 @@ public class SdkItemGunLaser extends SdkItemGun
     {
         super(i);
         firingSound = "sdk:laser";
+        reloadSound = "sdk:reload";
+        emptySound = "sdk:gunempty";
+        ammoHudText = "/assets/sdk/stationapi/textures/gui/guiAmmoRedstone.png";
         requiredBullet = Item.REDSTONE;
         numBullets = 1;
         damage = 10;
@@ -26,13 +29,18 @@ public class SdkItemGunLaser extends SdkItemGun
         recoil = 0.0F;
         soundRangeFactor = 2.0F;
         penetration = 3;
+        ammoRenderLiquid = true;
+        bulletDrop = 0.0F;
+        panzerDamage = 10;
     }
 
+    @Override
     public SdkEntityBullet getBulletEntity(World world, Entity entity, float f, float f1, float f2, float f3, float f4)
     {
         return new SdkEntityBulletLaser(world, entity, this, f, f1, f2, f3, f4);
     }
 
+    @Override
     public SdkEntityBulletCasing getBulletCasingEntity(World world, Entity entity, float f)
     {
         return null;

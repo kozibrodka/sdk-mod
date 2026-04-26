@@ -9,7 +9,6 @@ import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
-import net.modificationstation.stationapi.api.template.item.TemplateArmorItem;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.Namespace;
@@ -47,7 +46,7 @@ public class ItemListener {
         itemGunRocketLauncher = new SdkItemGunRocketLauncher(Identifier.of(MOD_ID, "itemGunRocketLauncher")).setTranslationKey(MOD_ID, "itemGunRocketLauncher");
 
         //NADES
-        itemGrenade = new SdkItemGrenade(Identifier.of(MOD_ID, "itemGrenade")).setTranslationKey(MOD_ID, "itemGrenade").setMaxCount(4);
+        itemGrenade = new SdkItemGrenadeAP(Identifier.of(MOD_ID, "itemGrenade")).setTranslationKey(MOD_ID, "itemGrenade").setMaxCount(4);
         itemGrenadeHe = new SdkItemGrenadeHE(Identifier.of(MOD_ID, "itemGrenadeHe")).setTranslationKey(MOD_ID, "itemGrenadeHe").setMaxCount(4);
         itemGrenadeStun = new SdkItemGrenadeStun(Identifier.of(MOD_ID, "itemGrenadeStun")).setTranslationKey(MOD_ID, "itemGrenadeStun").setMaxCount(4);
         itemGrenadeSmoke = new SdkItemGrenadeSmoke(Identifier.of(MOD_ID, "itemGrenadeSmoke")).setTranslationKey(MOD_ID, "itemGrenadeSmoke").setMaxCount(4);
@@ -103,7 +102,6 @@ public class ItemListener {
         SdkMap.SCOPED_LIST.add(itemGunSniper);
         SdkMap.SCOPED_LIST.add(itemGunSg552);
 
-        ///TODO: ADD TO MAPS REFACTORRR
     }
 
     //BRONIE

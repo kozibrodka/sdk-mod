@@ -17,6 +17,9 @@ public class SdkItemGunRocketLauncherLaser extends SdkItemGun
     {
         super(i);
         firingSound = "sdk:rocket";
+        reloadSound = "sdk:reload";
+        emptySound = "sdk:gunempty";
+        ammoHudText = "/assets/sdk/stationapi/textures/gui/guiAmmoBullet.png";
         requiredBullet = ItemListener.itemBulletRocketLaser;
         numBullets = 1;
         damage = 10;
@@ -25,13 +28,19 @@ public class SdkItemGunRocketLauncherLaser extends SdkItemGun
         useDelay = 40;
         recoil = 0.0F;
         penetration = 3;
+        bulletDrop = 0.0F;
+        explosionPower = 3.0F;
+        explosionBlocks = true;
+        explosionFire = false;
     }
 
+    @Override
     public SdkEntityBullet getBulletEntity(World world, Entity entity, float f, float f1, float f2, float f3, float f4)
     {
         return new SdkEntityBulletRocketLaser(world, entity, this, f, f1, f2, f3, f4);
     }
 
+    @Override
     public SdkEntityBulletCasing getBulletCasingEntity(World world, Entity entity, float f)
     {
         return null;

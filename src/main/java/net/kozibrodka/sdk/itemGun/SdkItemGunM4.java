@@ -17,6 +17,9 @@ public class SdkItemGunM4 extends SdkItemGun
     {
         super(i);
         firingSound = "sdk:m";
+        reloadSound = "sdk:reload";
+        emptySound = "sdk:gunempty";
+        ammoHudText = "/assets/sdk/stationapi/textures/gui/guiAmmoBullet.png";
         requiredBullet = ItemListener.itemBulletLight;
         numBullets = 1;
         burstShots = 2;
@@ -28,11 +31,13 @@ public class SdkItemGunM4 extends SdkItemGun
         penetration = 0;
     }
 
+    @Override
     public SdkEntityBullet getBulletEntity(World world, Entity entity, float f, float f1, float f2, float f3, float f4)
     {
         return new SdkEntityBulletM4(world, entity, this, f, f1, f2, f3, f4);
     }
 
+    @Override
     public SdkEntityBulletCasing getBulletCasingEntity(World world, Entity entity, float f)
     {
         return new SdkEntityBulletCasing(world, entity, f);

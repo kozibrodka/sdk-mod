@@ -1,12 +1,15 @@
 package net.kozibrodka.sdk.entityBullet;
 
+import net.kozibrodka.sdk.events.EntityListener;
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk_api.utils.SdkEntityBullet;
 import net.kozibrodka.sdk_api.utils.SdkItemGun;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
+import net.modificationstation.stationapi.api.util.Identifier;
 
-public class SdkEntityBulletShot extends SdkEntityBullet {
+public class SdkEntityBulletShot extends SdkEntityBullet implements EntitySpawnDataProvider {
 
     public SdkEntityBulletShot(World world) {
         super(world);
@@ -24,12 +27,14 @@ public class SdkEntityBulletShot extends SdkEntityBullet {
         setBoundingBoxSpacing(0.03125F, 0.03125F);
     }
 
+    @Override
     public void playServerSound(World world) {
-        world.playSound(this, ((SdkItemGun) ItemListener.itemGunShotgun).firingSound, ((SdkItemGun) ItemListener.itemGunShotgun).soundRangeFactor, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+        /// Bullets > 1, no playServerSound
+//        world.playSound(this, ((SdkItemGun) ItemListener.itemGunShotgun).firingSound, ((SdkItemGun) ItemListener.itemGunShotgun).soundRangeFactor, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
     }
 
     @Override
-    public void playImpactSound(World world) {
-        world.playSound(this, ((SdkItemGun) ItemListener.itemGunShotgun).impactSound, 0.5F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+    public Identifier getHandlerIdentifier() {
+        return Identifier.of(EntityListener.MOD_ID, "BulletShot");
     }
 }

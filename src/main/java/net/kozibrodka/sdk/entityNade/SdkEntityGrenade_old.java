@@ -12,10 +12,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 
-public class SdkEntityGrenade extends ItemEntity
+public class SdkEntityGrenade_old extends ItemEntity
 {
 
-    public SdkEntityGrenade(World world)
+    public SdkEntityGrenade_old(World world)
     {
         super(world);
         bounceSound = "sdk:grenadebounce";
@@ -29,13 +29,13 @@ public class SdkEntityGrenade extends ItemEntity
         stack = new ItemStack(ItemListener.itemGrenade, 1, 0);
     }
 
-    public SdkEntityGrenade(World world, double d, double d1, double d2)
+    public SdkEntityGrenade_old(World world, double d, double d1, double d2)
     {
         this(world);
         setPosition(d, d1, d2);
     }
 
-    public SdkEntityGrenade(World world, LivingEntity entityliving)
+    public SdkEntityGrenade_old(World world, LivingEntity entityliving)
     {
         this(world);
         changeLookDirection(entityliving.yaw, 0.0F);
@@ -57,11 +57,13 @@ public class SdkEntityGrenade extends ItemEntity
         prevZ = z;
     }
 
+    @Override
     public boolean shouldRender(double d)
     {
         return true;
     }
 
+    @Override
     public void tick()
     {
         double d = velocityX;
@@ -150,28 +152,33 @@ public class SdkEntityGrenade extends ItemEntity
         }
     }
 
+    @Override
     public boolean isCollidable()
     {
         return true;
     }
 
+    @Override
     public boolean damage(Entity entity, int i)
     {
         return false;
     }
 
+    @Override
     public void writeNbt(NbtCompound nbttagcompound)
     {
         super.writeNbt(nbttagcompound);
         nbttagcompound.putByte("Fuse", (byte)fuse);
     }
 
+    @Override
     public void readNbt(NbtCompound nbttagcompound)
     {
         super.readNbt(nbttagcompound);
         fuse = nbttagcompound.getByte("Fuse");
     }
 
+    @Override
     public void onPlayerInteraction(PlayerEntity entityplayer)
     {
     }

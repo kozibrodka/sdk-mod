@@ -1,12 +1,17 @@
 package net.kozibrodka.sdk.entityBullet;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.kozibrodka.sdk.events.EntityListener;
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk_api.utils.SdkEntityBullet;
 import net.kozibrodka.sdk_api.utils.SdkItemGun;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
+import net.modificationstation.stationapi.api.util.Identifier;
 
-public class SdkEntityBulletSg552 extends SdkEntityBullet
+public class SdkEntityBulletSg552 extends SdkEntityBullet implements EntitySpawnDataProvider
 {
 
     public SdkEntityBulletSg552(World world)
@@ -25,13 +30,21 @@ public class SdkEntityBulletSg552 extends SdkEntityBullet
         super(world, entity, sdkitemgun, f, f1, f2, f3, f4);
     }
 
+    @Override
+    @Environment(EnvType.CLIENT)
+    public void setPositionAndAnglesAvoidEntities(double x, double y, double z, float pitch, float yaw, int interpolationSteps) {
+            this.setPosition(x, y, z);
+            this.setRotation(pitch, yaw);
+    }
+
+    @Override
     public void playServerSound(World world)
     {
         world.playSound(this, ((SdkItemGun) ItemListener.itemGunSg552).firingSound, ((SdkItemGun)ItemListener.itemGunSg552).soundRangeFactor, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
     }
 
     @Override
-    public void playImpactSound(World world) {
-        world.playSound(this, ((SdkItemGun) ItemListener.itemGunSg552).impactSound, 0.5F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+    public Identifier getHandlerIdentifier() {
+        return Identifier.of(EntityListener.MOD_ID, "BulletSg552");
     }
 }

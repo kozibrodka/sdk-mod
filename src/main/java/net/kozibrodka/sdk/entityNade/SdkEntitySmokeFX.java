@@ -30,6 +30,7 @@ public class SdkEntitySmokeFX extends Particle {
         noClip = false;
     }
 
+    @Override
     public void render(Tessellator tessellator, float f, float f1, float f2, float f3, float f4, float f5)
     {
         float f6 = (((float)particleAge + f) / (float)maxParticleAge) * 32F;
@@ -45,6 +46,7 @@ public class SdkEntitySmokeFX extends Particle {
         super.render(tessellator, f, f1, f2, f3, f4, f5);
     }
 
+    @Override
     public void tick()
     {
         prevX = x;

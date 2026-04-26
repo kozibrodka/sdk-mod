@@ -1,26 +1,29 @@
 package net.kozibrodka.sdk.entityBullet;
 
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.kozibrodka.sdk.entityNade.SdkEntitySmokeFX;
+import net.kozibrodka.sdk.events.EntityListener;
 import net.kozibrodka.sdk.events.ItemListener;
-import net.kozibrodka.sdk.events.SdkConfig;
 import net.kozibrodka.sdk_api.utils.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.Monster;
 import net.minecraft.entity.passive.PigEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
+import net.modificationstation.stationapi.api.util.Identifier;
+
 import java.util.List;
 
-public class SdkEntityBulletLaser extends SdkEntityBullet
+public class SdkEntityBulletLaser extends SdkEntityBullet implements EntitySpawnDataProvider
 {
 
     public SdkEntityBulletLaser(World world)
@@ -42,39 +45,24 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
         setBoundingBoxSpacing(0.5F, 0.5F);
     }
 
+    @Override
     public void playServerSound(World world)
     {
         world.playSound(this, ((SdkItemGun) ItemListener.itemGunLaser).firingSound, ((SdkItemGun)ItemListener.itemGunLaser).soundRangeFactor, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
     }
 
     @Override
-    public void playImpactSound(World world) {
-        world.playSound(this, ((SdkItemGun) ItemListener.itemGunLaser).impactSound, 0.5F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
-    }
-
     public void tick()
     {
         baseTick();
-        if(timeInAir == 200)
-        {
+        if (serverSpawned && !serverSoundPlayed) {
+            playServerSound(world);
+            serverSoundPlayed = true;
+        }
+        if(y > 256 || timeInAir >= maxTimeAir || y < 0){
             markDead();
         }
-        if(inGround)
-        {
-            int i = world.getBlockId(xTile, yTile, zTile);
-            if(i != inTile)
-            {
-                inGround = false;
-                velocityX *= random.nextFloat() * 0.2F;
-                velocityY *= random.nextFloat() * 0.2F;
-                velocityZ *= random.nextFloat() * 0.2F;
-                timeInTile = 0;
-                timeInAir = 0;
-            }
-        } else
-        {
-            timeInAir++;
-        }
+        timeInAir++;
         Vec3d vec3d = Vec3d.createCached(x, y, z);
         Vec3d vec3d1 = Vec3d.createCached(x + velocityX, y + velocityY, z + velocityZ);
         HitResult movingobjectposition = rayTraceBlocks(vec3d, vec3d1);
@@ -117,7 +105,7 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
         {
             if(movingobjectposition.entity != null)
             {
-                boolean flag = false;
+                boolean flag = false; //TODO
 //                if(owner instanceof SdkEntityLaserWolf)       //inna czesc moda
 //                {
 //                    SdkEntityLaserWolf sdkentitylaserwolf = (SdkEntityLaserWolf)owner;
@@ -142,7 +130,7 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
                 {
                     if(movingobjectposition.entity instanceof MobEntity)
                     {
-                        if(entity instanceof PigEntity)
+                        if(entity instanceof PigEntity && !world.isRemote)
                         {
                             int l = random.nextInt(3);
                             for(int l1 = 0; l1 < l; l1++)
@@ -152,7 +140,7 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
 
                         }
                         movingobjectposition.entity.markDead();
-                        if(movingobjectposition.entity.dead)
+                        if(movingobjectposition.entity.dead && SdkEnvTool.isEnvClient())
                         {
                             for(int i1 = 0; i1 < 16; i1++)
                             {
@@ -172,7 +160,7 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
                 int k = world.getBlockId(movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ);
                 if(k != Block.GLASS.id)
                 {
-                    if(k == Block.DIAMOND_BLOCK.id || k == Block.GOLD_BLOCK.id || k == Block.IRON_BLOCK.id)
+                    if(SdkMap.BOUNCABLE_LIST.contains(k))
                     {
                         int j1 = movingobjectposition.side;   //side hit
                         if(j1 == 0 || j1 == 1)
@@ -195,16 +183,17 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
                             {
                                 world.setBlock(movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ, Block.GLASS.id);
                             } else
-                            if(SdkConfig.laserSetsFireToBlocks && SdkTools.isFlammable(k))
+                            if(SdkTools.isFlammable(k))
                             {
                                 world.setBlock(movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ, Block.FIRE.id);
                             } else
                             {
                                 world.setBlock(movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ, 0);
                             }
-                            for(int k1 = 0; k1 < 16; k1++)
-                            {
-                                doSmoke((double)movingobjectposition.blockX + 0.5D, (double)movingobjectposition.blockY + 0.5D, (double)movingobjectposition.blockZ + 0.5D, 0.5D, 0.5D);
+                            if(SdkEnvTool.isEnvClient()) {
+                                for (int k1 = 0; k1 < 16; k1++) {
+                                    doSmoke((double) movingobjectposition.blockX + 0.5D, (double) movingobjectposition.blockY + 0.5D, (double) movingobjectposition.blockZ + 0.5D, 0.5D, 0.5D);
+                                }
                             }
 
                         }
@@ -229,60 +218,33 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
 
     public void damageEntity(Entity entity)
     {
-        int i = damage;
-        if((owner instanceof Monster) && (entity instanceof PlayerEntity))
-        {
-            if(world.difficulty == 0)
+        int l = (damage- ((timeInAir-1)/10)); /// Opad DMG z czasem
+        if (entity instanceof LivingEntity) {
+            SdkTools.attackEntityIgnoreDelay((LivingEntity) entity, owner, l);
+        } else {
+            if(entity instanceof SdkVehicle panzer)
             {
-                i = 0;
-            }
-            if(world.difficulty == 1)
-            {
-                i = i / 3 + 1;
-            }
-            if(world.difficulty == 3)
-            {
-                i = (i * 3) / 2;
-            }
-        }
-        if(entity instanceof LivingEntity)
-        {
-            SdkTools.attackEntityIgnoreDelay((LivingEntity) entity, owner, i);
-        } else
-        {
-////            entity.damage(owner, i);
-//            entity.damage(this, i); //TESTTTT
-
-            if(entity instanceof WW2Plane || entity instanceof WW2Tank || entity instanceof WW2Truck || entity instanceof WW2Cannon)
-            {
-                if(entity instanceof WW2Truck && penetration >= 1)
-                {
-                    entity.damage(this, i);
-                }
-                if(entity instanceof WW2Plane && penetration >= 2)
-                {
-                    entity.damage(this, i);
-                }
-                if((entity instanceof WW2Tank && penetration >= 3) || (entity instanceof WW2Cannon && penetration >= 3))
-                {
-                    entity.damage(this, i);
+                if(penetration > panzer.getArmorFactor()){
+                    entity.damage(this, l);
                 }
             }else {
-                entity.damage(owner, i);
+                entity.damage(owner, l);
             }
         }
+        noImpSound = true;
+        markDead();
     }
 
+    @Environment(EnvType.CLIENT)
     public void doSmoke(double d, double d1, double d2, double d3, double d4)
     {
         double d5 = (d + random.nextDouble() * d3 * 2D) - d3;
         double d6 = (d1 + random.nextDouble() * d4 * 2D) - d4;
         double d7 = (d2 + random.nextDouble() * d3 * 2D) - d3;
-//        world.addParticle(); /// ????
         SdkToolsRender.minecraft.particleManager.addParticle(new SdkEntitySmokeFX(world, d5, d6, d7, 0.0D, 0.0D, 0.0D, 2.5F, 1.0F, 1.0F, 1.0F));
-//        ModLoader.getMinecraftInstance().particleManager.addEffect(new SdkEntitySmokeFX(level, d5, d6, d7, 0.0D, 0.0D, 0.0D, 2.5F, 1.0F, 1.0F, 1.0F));
     }
 
+    @Override
     public float getBrightnessAtEyes(float f)
     {
         return 2.0F;
@@ -436,5 +398,10 @@ public class SdkEntityBulletLaser extends SdkEntityBullet
         }
 
         return null;
+    }
+
+    @Override
+    public Identifier getHandlerIdentifier() {
+        return Identifier.of(EntityListener.MOD_ID, "BulletLaser");
     }
 }

@@ -34,8 +34,8 @@ public class TextureListener {
         ItemListener.itemBulletRocketLaser.setTexture(Identifier.of(MOD_ID, "item/itemBulletRocketLaser"));
         ItemListener.itemBulletShell.setTexture(Identifier.of(MOD_ID, "item/itemBulletShell"));
 
-        ItemListener.itemGrenade.setTexture(Identifier.of(MOD_ID, "item/itemGrenade"));
-        ItemListener.itemGrenadeHe.setTexture(Identifier.of(MOD_ID, "item/itemGrenadeHE"));
+        ItemListener.itemGrenade.setTexture(Identifier.of(MOD_ID, "item/itemGrenadeAp"));
+        ItemListener.itemGrenadeHe.setTexture(Identifier.of(MOD_ID, "item/itemGrenadeHe"));
         ItemListener.itemGrenadeStun.setTexture(Identifier.of(MOD_ID, "item/itemGrenadeStun"));
         ItemListener.itemGrenadeSmoke.setTexture(Identifier.of(MOD_ID, "item/itemGrenadeSmoke"));
         ItemListener.itemGrenadeSticky.setTexture(Identifier.of(MOD_ID, "item/itemGrenadeSticky"));
@@ -142,7 +142,7 @@ public class TextureListener {
 
     @EventListener
     public static void registerEntityRenderers(EntityRendererRegisterEvent event) {
-        event.renderers.put(SdkEntityBulletCasing.class, new SdkRenderBulletCasing()); //TODO REMOVE
+        event.renderers.put(SdkEntityBulletCasing.class, new SdkRenderBulletCasing());
         event.renderers.put(SdkEntityBulletCasingShell.class, new SdkRenderBulletCasingShell());
         event.renderers.put(SdkEntityBulletAk47.class, new SdkRenderBullet());
         event.renderers.put(SdkEntityBulletDeagle.class, new SdkRenderBullet());
