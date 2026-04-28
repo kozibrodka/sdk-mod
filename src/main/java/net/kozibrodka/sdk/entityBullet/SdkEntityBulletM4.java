@@ -21,6 +21,7 @@ public class SdkEntityBulletM4 extends SdkEntityBullet implements EntitySpawnDat
     public SdkEntityBulletM4(World world, double d, double d1, double d2)
     {
         super(world, d, d1, d2);
+        bulletDrop = ((SdkItemGun) ItemListener.itemGunM4).bulletDrop;
     }
 
     public SdkEntityBulletM4(World world, Entity entity, SdkItemGun sdkitemgun, float f, float f1, float f2, float f3,

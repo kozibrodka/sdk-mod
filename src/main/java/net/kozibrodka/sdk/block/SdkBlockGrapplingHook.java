@@ -27,6 +27,7 @@ public class SdkBlockGrapplingHook extends TemplateBlock
         setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
     }
 
+    @Override
     public int getTexture(int i)
     {
         if(i == 1 || i == 0)
@@ -38,21 +39,25 @@ public class SdkBlockGrapplingHook extends TemplateBlock
         }
     }
 
+    @Override
     public Box getCollisionShape(World world, int i, int j, int k)
     {
         return null;
     }
 
+    @Override
     public boolean isOpaque()
     {
         return false;
     }
 
+    @Override
     public boolean isFullCube()
     {
         return false;
     }
 
+    @Override
     public boolean canPlaceAt(World world, int i, int j, int k)
     {
         int l = world.getBlockId(i, j - 1, k);
@@ -65,6 +70,7 @@ public class SdkBlockGrapplingHook extends TemplateBlock
         }
     }
 
+    @Override
     public void neighborUpdate(World world, int i, int j, int k, int l)
     {
         func_314_h(world, i, j, k);
@@ -84,16 +90,19 @@ public class SdkBlockGrapplingHook extends TemplateBlock
         }
     }
 
+    @Override
     public int getDroppedItemId(int i, Random random)
     {
         return ItemListener.itemGrapplingHook.id;
     }
 
+    @Override
     public int getDroppedItemCount(Random random)
     {
         return 1;
     }
 
+    @Override
     public boolean isSideVisible(BlockView iblockaccess, int i, int j, int k, int l)
     {
         Material materialM = iblockaccess.getMaterial(i, j, k);
@@ -110,11 +119,13 @@ public class SdkBlockGrapplingHook extends TemplateBlock
         }
     }
 
+    @Override
     public void onMetadataChange(World world, int i, int j, int k, int l)
     {
         onBlockDestroyed(world, i, j, k);
     }
 
+    @Override
     public void onDestroyedByExplosion(World world, int i, int j, int k)
     {
         onBlockDestroyed(world, i, j, k);
@@ -122,7 +133,7 @@ public class SdkBlockGrapplingHook extends TemplateBlock
 
     private void onBlockDestroyed(World world, int i, int j, int k)
     {
-        int ai[][] = {
+        int[][] ai = {
             {
                 i - 1, j - 1, k
             }, {

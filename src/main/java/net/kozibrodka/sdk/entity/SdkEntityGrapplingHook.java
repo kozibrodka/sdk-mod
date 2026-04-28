@@ -1,8 +1,11 @@
 package net.kozibrodka.sdk.entity;
 
 import net.kozibrodka.sdk.events.BlockListener;
+import net.kozibrodka.sdk.events.EntityListener;
 import net.kozibrodka.sdk.events.HookListener;
 import net.kozibrodka.sdk.events.ItemListener;
+import net.kozibrodka.sdk.network.GrapplingPacket;
+import net.kozibrodka.sdk_api.utils.SdkEnvTool;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,9 +16,16 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.network.packet.PacketHelper;
+import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
+import net.modificationstation.stationapi.api.server.entity.HasTrackingParameters;
+import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.TriState;
+
 import java.util.List;
 
-public class SdkEntityGrapplingHook extends Entity
+@HasTrackingParameters(trackingDistance = 240, updatePeriod = 1200, sendVelocity = TriState.TRUE)
+public class SdkEntityGrapplingHook extends Entity implements EntitySpawnDataProvider
 {
 
     public SdkEntityGrapplingHook(World world)
@@ -37,6 +47,7 @@ public class SdkEntityGrapplingHook extends Entity
     {
         this(world);
         setPosition(d, d1, d2);
+        serverSpawned = true;
     }
 
     public SdkEntityGrapplingHook(World world, PlayerEntity entityplayer)
@@ -59,6 +70,7 @@ public class SdkEntityGrapplingHook extends Entity
         startPosZ = owner.z;
     }
 
+    @Override
     protected void initDataTracker()
     {
     }
@@ -91,8 +103,9 @@ public class SdkEntityGrapplingHook extends Entity
         ticksInGround = 0;
     }
 
+    @Override
     public void setPositionAndAnglesAvoidEntities(double d, double d1, double d2, float f,
-                                        float f1, int i)
+                                                  float f1, int i)
     {
         field_6387_m = d;
         field_6386_n = d1;
@@ -105,6 +118,7 @@ public class SdkEntityGrapplingHook extends Entity
         velocityZ = veloocityZ;
     }
 
+    @Override
     public void setVelocityClient(double d, double d1, double d2)
     {
         veloocityX = velocityX = d;
@@ -112,9 +126,18 @@ public class SdkEntityGrapplingHook extends Entity
         velocityZ = veloocityZ = d2;
     }
 
+    @Override
     public void tick()
     {
         super.tick();
+        if (serverSpawned && !serverSoundPlayed) {
+            world.playSound(this, "sdk:grunt", 1.0F, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+            serverSoundPlayed = true;
+        }
+        if(!packetSend && SdkEnvTool.isEnvServ()){
+            PacketHelper.sendToAllTracking(this, new GrapplingPacket(this.id, owner.name));
+            packetSend = true;
+        }
         if(field_6388_l > 0)
         {
             double d = x + (field_6387_m - x) / (double)field_6388_l;
@@ -287,7 +310,7 @@ public class SdkEntityGrapplingHook extends Entity
                         world.setBlock(xTile, yTile + 1, zTile, BlockListener.blockGrapplingHook.id);
                         world.setBlockMeta(xTile, yTile + 1, zTile, byte2);
                         world.setBlock(k1, l1, i2, BlockListener.blockRope.id);
-                        world.setBlockMeta(k1, l1, i2, byte2);
+                        world.setBlockMeta(k1, l1, i2, byte2 + 4); ///
                         if(owner != null)
                         {
                             owner.clearStackInHand();
@@ -322,7 +345,7 @@ public class SdkEntityGrapplingHook extends Entity
         double d7 = 0.0D;
         for(int l = 0; l < k; l++)
         {
-            double d10 = ((boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (double)(l + 0)) / (double)k) - 0.125D) + 0.125D;
+            double d10 = ((boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (double)(l)) / (double)k) - 0.125D) + 0.125D;
             double d11 = ((boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (double)(l + 1)) / (double)k) - 0.125D) + 0.125D;
             Box axisalignedbb1 = Box.createCached(boundingBox.minX, d10, boundingBox.minZ, boundingBox.maxX, d11, boundingBox.maxZ);
         }
@@ -372,6 +395,7 @@ public class SdkEntityGrapplingHook extends Entity
         setPosition(x, y, z);
     }
 
+    @Override
     public void writeNbt(NbtCompound nbttagcompound)
     {
         nbttagcompound.putShort("xTile", (short)xTile);
@@ -381,6 +405,7 @@ public class SdkEntityGrapplingHook extends Entity
         nbttagcompound.putByte("inGround", (byte)(inGround ? 1 : 0));
     }
 
+    @Override
     public void readNbt(NbtCompound nbttagcompound)
     {
         xTile = nbttagcompound.getShort("xTile");
@@ -390,6 +415,7 @@ public class SdkEntityGrapplingHook extends Entity
         inGround = nbttagcompound.getByte("inGround") == 1;
     }
 
+    @Override
     public float getShadowRadius()
     {
         return 0.0F;
@@ -418,6 +444,7 @@ public class SdkEntityGrapplingHook extends Entity
         return byte0;
     }
 
+    @Override
     public void markDead()
     {
         super.markDead();
@@ -446,4 +473,14 @@ public class SdkEntityGrapplingHook extends Entity
     private double veloocityZ;
     private double startPosX;
     private double startPosZ;
+    public boolean serverSpawned;
+    public boolean serverSoundPlayed;
+    public boolean packetSend;
+
+    @Override
+    public Identifier getHandlerIdentifier() {
+        {
+            return Identifier.of(EntityListener.MOD_ID, "GrapplingHook");
+        }
+    }
 }

@@ -9,8 +9,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
+import net.modificationstation.stationapi.api.server.entity.HasTrackingParameters;
 import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.TriState;
 
+@HasTrackingParameters(trackingDistance = 240, updatePeriod = 1, sendVelocity = TriState.TRUE)
 public class SdkEntityBulletRocketLaser extends SdkEntityShell implements EntitySpawnDataProvider {
 
     public SdkEntityBulletRocketLaser(World world)
@@ -25,6 +28,7 @@ public class SdkEntityBulletRocketLaser extends SdkEntityShell implements Entity
         super(world, d, d1, d2);
         rotationYawOffset = 0.0F;
         setBoundingBoxSpacing(0.25F, 0.25F);
+        bulletDrop = ((SdkItemGun) ItemListener.itemGunRocketLauncherLaser).bulletDrop;
     }
 
     public SdkEntityBulletRocketLaser(World world, Entity entity, SdkItemGun sdkitemgun, float f, float f1, float f2, float f3, float f4) {

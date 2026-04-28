@@ -5,6 +5,7 @@ import net.kozibrodka.sdk.item.*;
 import net.kozibrodka.sdk.itemGun.*;
 import net.kozibrodka.sdk.itemNade.*;
 import net.kozibrodka.sdk_api.utils.SdkMap;
+import net.kozibrodka.sdk_api.utils.SdkTelescopeItem;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
@@ -23,73 +24,73 @@ public class ItemListener {
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
         //AMMO
-        itemBulletLight = new TemplateItem(Identifier.of(MOD_ID, "itemBulletLight")).setTranslationKey(MOD_ID, "itemBulletLight").setMaxCount(32);
-        itemBulletMedium = new TemplateItem(Identifier.of(MOD_ID, "itemBulletMedium")).setTranslationKey(MOD_ID, "itemBulletMedium").setMaxCount(8);
-        itemBulletHeavy = new TemplateItem(Identifier.of(MOD_ID, "itemBulletHeavy")).setTranslationKey(MOD_ID, "itemBulletHeavy").setMaxCount(4);
-        itemBulletRocket = new TemplateItem(Identifier.of(MOD_ID, "itemBulletRocket")).setTranslationKey(MOD_ID, "itemBulletRocket").setMaxCount(4);
-        itemBulletRocketLaser = new TemplateItem(Identifier.of(MOD_ID, "itemBulletRocketLaser")).setTranslationKey(MOD_ID, "itemBulletRocketLaser").setMaxCount(4);
-        itemBulletShell = new TemplateItem(Identifier.of(MOD_ID, "itemBulletShell")).setTranslationKey(MOD_ID, "itemBulletShell").setMaxCount(8);
-        itemOil = new SdkItemOil(Identifier.of(MOD_ID, "itemOil")).setTranslationKey(MOD_ID, "itemOil");
+        itemBulletCasing = new TemplateItem(Identifier.of(MOD_ID, "BulletCasing")).setTranslationKey(MOD_ID, "BulletCasing").setMaxCount(64);
+        itemShellCasing = new TemplateItem(Identifier.of(MOD_ID, "ShellCasing")).setTranslationKey(MOD_ID, "ShellCasing").setMaxCount(64);
+        itemBulletLight = new TemplateItem(Identifier.of(MOD_ID, "BulletLight")).setTranslationKey(MOD_ID, "BulletLight").setMaxCount(32);
+        itemBulletMedium = new TemplateItem(Identifier.of(MOD_ID, "BulletMedium")).setTranslationKey(MOD_ID, "BulletMedium").setMaxCount(8);
+        itemBulletHeavy = new TemplateItem(Identifier.of(MOD_ID, "BulletHeavy")).setTranslationKey(MOD_ID, "BulletHeavy").setMaxCount(4);
+        itemBulletRocket = new TemplateItem(Identifier.of(MOD_ID, "BulletRocket")).setTranslationKey(MOD_ID, "BulletRocket").setMaxCount(4);
+        itemBulletRocketLaser = new TemplateItem(Identifier.of(MOD_ID, "BulletRocketLaser")).setTranslationKey(MOD_ID, "BulletRocketLaser").setMaxCount(4);
+        itemBulletShell = new TemplateItem(Identifier.of(MOD_ID, "BulletShell")).setTranslationKey(MOD_ID, "BulletShell").setMaxCount(8);
+        itemOil = new SdkItemOil(Identifier.of(MOD_ID, "Oil")).setTranslationKey(MOD_ID, "Oil");
 
         //GUNS
-        itemGunAk47 = new SdkItemGunAk47(Identifier.of(MOD_ID, "itemGunAk47")).setTranslationKey(MOD_ID, "itemGunAk47");
-        itemGunMp5 = new SdkItemGunMp5(Identifier.of(MOD_ID, "itemGunMp5")).setTranslationKey(MOD_ID, "itemGunMp5");
-        itemGunShotgun = new SdkItemGunShotgun(Identifier.of(MOD_ID, "itemGunShotgun")).setTranslationKey(MOD_ID, "itemGunShotgun");
-        itemGunDeagle = new SdkItemGunDeagle(Identifier.of(MOD_ID, "itemGunDeagle")).setTranslationKey(MOD_ID, "itemGunDeagle");
-        itemGunSniper = new SdkItemGunSniper(Identifier.of(MOD_ID, "itemGunSniper")).setTranslationKey(MOD_ID, "itemGunSniper");
-        itemGunM4 = new SdkItemGunM4(Identifier.of(MOD_ID, "itemGunM4")).setTranslationKey(MOD_ID, "itemGunM4");
-        itemGunSg552 = new SdkItemGunSg552(Identifier.of(MOD_ID, "itemGunSg552")).setTranslationKey(MOD_ID, "itemGunSg552");
-        itemGunMinigun = new SdkItemGunMinigun(Identifier.of(MOD_ID, "itemGunMinigun")).setTranslationKey(MOD_ID, "itemGunMinigun");
-        itemGunLaser = new SdkItemGunLaser(Identifier.of(MOD_ID, "itemGunLaser")).setTranslationKey(MOD_ID, "itemGunLaser");
-        itemGunFlamethrower = new SdkItemGunFlamethrower(Identifier.of(MOD_ID, "itemGunFlamethrower")).setTranslationKey(MOD_ID, "itemGunFlamethrower");
-        itemGunRocketLauncherLaser = new SdkItemGunRocketLauncherLaser(Identifier.of(MOD_ID, "itemGunRocketLauncherLaser")).setTranslationKey(MOD_ID, "itemGunRocketLauncherLaser");
-        itemGunRocketLauncher = new SdkItemGunRocketLauncher(Identifier.of(MOD_ID, "itemGunRocketLauncher")).setTranslationKey(MOD_ID, "itemGunRocketLauncher");
+        itemGunAk47 = new SdkItemGunAk47(Identifier.of(MOD_ID, "GunAk47")).setTranslationKey(MOD_ID, "GunAk47");
+        itemGunMp5 = new SdkItemGunMp5(Identifier.of(MOD_ID, "GunMp5")).setTranslationKey(MOD_ID, "GunMp5");
+        itemGunShotgun = new SdkItemGunShotgun(Identifier.of(MOD_ID, "GunShotgun")).setTranslationKey(MOD_ID, "GunShotgun");
+        itemGunDeagle = new SdkItemGunDeagle(Identifier.of(MOD_ID, "GunDeagle")).setTranslationKey(MOD_ID, "GunDeagle");
+        itemGunSniper = new SdkItemGunSniper(Identifier.of(MOD_ID, "GunSniper")).setTranslationKey(MOD_ID, "GunSniper");
+        itemGunM4 = new SdkItemGunM4(Identifier.of(MOD_ID, "GunM4")).setTranslationKey(MOD_ID, "GunM4");
+        itemGunSg552 = new SdkItemGunSg552(Identifier.of(MOD_ID, "GunSg552")).setTranslationKey(MOD_ID, "GunSg552");
+        itemGunMinigun = new SdkItemGunMinigun(Identifier.of(MOD_ID, "GunMinigun")).setTranslationKey(MOD_ID, "GunMinigun");
+        itemGunLaser = new SdkItemGunLaser(Identifier.of(MOD_ID, "GunLaser")).setTranslationKey(MOD_ID, "GunLaser");
+        itemGunFlamethrower = new SdkItemGunFlamethrower(Identifier.of(MOD_ID, "GunFlamethrower")).setTranslationKey(MOD_ID, "GunFlamethrower");
+        itemGunRocketLauncherLaser = new SdkItemGunRocketLauncherLaser(Identifier.of(MOD_ID, "GunRocketLauncherLaser")).setTranslationKey(MOD_ID, "GunRocketLauncherLaser");
+        itemGunRocketLauncher = new SdkItemGunRocketLauncher(Identifier.of(MOD_ID, "GunRocketLauncher")).setTranslationKey(MOD_ID, "GunRocketLauncher");
 
         //NADES
-        itemGrenade = new SdkItemGrenadeAP(Identifier.of(MOD_ID, "itemGrenade")).setTranslationKey(MOD_ID, "itemGrenade").setMaxCount(4);
-        itemGrenadeHe = new SdkItemGrenadeHE(Identifier.of(MOD_ID, "itemGrenadeHe")).setTranslationKey(MOD_ID, "itemGrenadeHe").setMaxCount(4);
-        itemGrenadeStun = new SdkItemGrenadeStun(Identifier.of(MOD_ID, "itemGrenadeStun")).setTranslationKey(MOD_ID, "itemGrenadeStun").setMaxCount(4);
-        itemGrenadeSmoke = new SdkItemGrenadeSmoke(Identifier.of(MOD_ID, "itemGrenadeSmoke")).setTranslationKey(MOD_ID, "itemGrenadeSmoke").setMaxCount(4);
-        itemGrenadeSticky = new SdkItemGrenadeSticky(Identifier.of(MOD_ID, "itemGrenadeSticky")).setTranslationKey(MOD_ID, "itemGrenadeSticky").setMaxCount(4);
-        itemGrenadeIncendiary = new SdkItemGrenadeIncendiary(Identifier.of(MOD_ID, "itemGrenadeIncendiary")).setTranslationKey(MOD_ID, "itemGrenadeIncendiary").setMaxCount(4);
-        itemGrenadeIncendiaryLit = new SdkItemGrenadeIncendiary(Identifier.of(MOD_ID, "itemGrenadeIncendiaryLit")).setTranslationKey(MOD_ID, "itemGrenadeIncendiaryLit").setMaxCount(4);
+        itemGrenade = new SdkItemGrenadeAP(Identifier.of(MOD_ID, "Grenade")).setTranslationKey(MOD_ID, "Grenade").setMaxCount(4);
+        itemGrenadeHe = new SdkItemGrenadeHE(Identifier.of(MOD_ID, "GrenadeHe")).setTranslationKey(MOD_ID, "GrenadeHe").setMaxCount(4);
+        itemGrenadeStun = new SdkItemGrenadeStun(Identifier.of(MOD_ID, "GrenadeStun")).setTranslationKey(MOD_ID, "GrenadeStun").setMaxCount(4);
+        itemGrenadeSmoke = new SdkItemGrenadeSmoke(Identifier.of(MOD_ID, "GrenadeSmoke")).setTranslationKey(MOD_ID, "GrenadeSmoke").setMaxCount(4);
+        itemGrenadeSticky = new SdkItemGrenadeSticky(Identifier.of(MOD_ID, "GrenadeSticky")).setTranslationKey(MOD_ID, "GrenadeSticky").setMaxCount(4);
+        itemGrenadeIncendiary = new SdkItemGrenadeIncendiary(Identifier.of(MOD_ID, "GrenadeIncendiary")).setTranslationKey(MOD_ID, "GrenadeIncendiary").setMaxCount(4);
+        itemGrenadeIncendiaryLit = new SdkItemGrenadeIncendiary(Identifier.of(MOD_ID, "GrenadeIncendiaryLit")).setTranslationKey(MOD_ID, "GrenadeIncendiaryLit").setMaxCount(4);
 
         //UTIL
-        itemGoldCoin = new TemplateItem(Identifier.of(MOD_ID, "itemGoldCoin")).setTranslationKey(MOD_ID, "itemGoldCoin");
-        itemLightometer = new TemplateItem(Identifier.of(MOD_ID, "itemLightometer")).setTranslationKey(MOD_ID, "itemLightometer");
-        itemNightvisionGoggles = new SdkItemNightvision(Identifier.of(MOD_ID, "itemNightvisionGoggles"), 1).setTranslationKey(MOD_ID, "itemNightvisionGoggles");
-        itemScubaTank = new SdkItemScuba(Identifier.of(MOD_ID, "itemScubaTank"), 1).setTranslationKey(MOD_ID, "itemScubaTank");
-        itemParachute = new SdkItemParachute(Identifier.of(MOD_ID, "itemParachute"), 1).setTranslationKey(MOD_ID, "itemParachute");
-        itemTelescope = new SdkItemTelescope(Identifier.of(MOD_ID, "itemTelescope")).setTranslationKey(MOD_ID, "itemTelescope");
+        itemLightometer = new TemplateItem(Identifier.of(MOD_ID, "Lightometer")).setTranslationKey(MOD_ID, "Lightometer"); //TODO
+        itemNightvisionGoggles = new ItemNightvision(Identifier.of(MOD_ID, "NightvisionGoggles")).setTranslationKey(MOD_ID, "NightvisionGoggles");
+        itemScubaTank = new ItemScuba(Identifier.of(MOD_ID, "ScubaTank")).setTranslationKey(MOD_ID, "ScubaTank");
+        itemParachute = new ItemParachute(Identifier.of(MOD_ID, "Parachute")).setTranslationKey(MOD_ID, "Parachute");
+        itemTelescope = new SdkTelescopeItem(Identifier.of(MOD_ID, "Telescope"), new float[]{1.0F, 0.5F, 0.25F, 0.125F, 0.0625F}, 0.0625F, "/assets/sdk/stationapi/textures/gui/miscTelescope.png").setTranslationKey(MOD_ID, "Telescope");
+        itemJetPack = new ItemJetPack(Identifier.of(MOD_ID, "JetPack")).setTranslationKey(MOD_ID, "JetPack");
+        itemGrapplingHook = new SdkItemGrapplingHook(Identifier.of(MOD_ID, "GrapplingHook")).setTranslationKey(MOD_ID, "GrapplingHook");
+        itemRope = new TemplateItem(Identifier.of(MOD_ID, "Rope")).setTranslationKey(MOD_ID, "Rope");
+        itemGoldCoin = new TemplateItem(Identifier.of(MOD_ID, "GoldCoin")).setTranslationKey(MOD_ID, "GoldCoin");
+        itemOilDrop = new TemplateItem(Identifier.of(MOD_ID, "OilDrop")).setTranslationKey(MOD_ID, "OilDrop");
 
-        itemAtv = new SdkItemAtv(Identifier.of(MOD_ID, "itemAtv")).setTranslationKey(MOD_ID, "itemAtv");
-        itemAtvBody = new TemplateItem(Identifier.of(MOD_ID, "itemAtvBody")).setTranslationKey(MOD_ID, "itemAtvBody");
-        itemAtvWheel = new TemplateItem(Identifier.of(MOD_ID, "itemAtvWheel")).setTranslationKey(MOD_ID, "itemAtvWheel");
-
-        itemWrench = new TemplateItem(Identifier.of(MOD_ID, "itemWrench")).setTranslationKey(MOD_ID, "itemWrench").setMaxCount(1).setMaxDamage(15);
-        itemSentry = new SdkItemSentry(Identifier.of(MOD_ID, "itemSentry")).setTranslationKey(MOD_ID, "itemSentry").setMaxCount(1).setMaxDamage(0);
-        itemOilDrop = new TemplateItem(Identifier.of(MOD_ID, "itemOilDrop")).setTranslationKey(MOD_ID, "itemOilDrop");
-        itemJetPack = new SdkItemJetPack(Identifier.of(MOD_ID, "itemJetPack"), 1).setTranslationKey(MOD_ID, "itemJetPack");
-
-        itemRope = new TemplateItem(Identifier.of(MOD_ID, "itemRope")).setTranslationKey(MOD_ID, "itemRope");
-        itemGrapplingHook = new SdkItemGrapplingHook(Identifier.of(MOD_ID, "itemGrapplingHook")).setTranslationKey(MOD_ID, "itemGrapplingHook");
+        itemAtv = new SdkItemAtv(Identifier.of(MOD_ID, "Atv")).setTranslationKey(MOD_ID, "Atv");
+        itemAtvBody = new TemplateItem(Identifier.of(MOD_ID, "AtvBody")).setTranslationKey(MOD_ID, "AtvBody");
+        itemAtvWheel = new TemplateItem(Identifier.of(MOD_ID, "AtvWheel")).setTranslationKey(MOD_ID, "AtvWheel");
+        itemWrench = new TemplateItem(Identifier.of(MOD_ID, "Wrench")).setTranslationKey(MOD_ID, "Wrench").setMaxCount(1).setMaxDamage(15);
+        itemSentry = new SdkItemSentry(Identifier.of(MOD_ID, "Sentry")).setTranslationKey(MOD_ID, "Sentry").setMaxCount(1).setMaxDamage(0);
 
         //PARTS
-        itemMetalParts = new TemplateItem(Identifier.of(MOD_ID, "itemMetalParts")).setTranslationKey(MOD_ID, "itemMetalParts");
-        itemBarrelLong = new TemplateItem(Identifier.of(MOD_ID, "itemBarrelLong")).setTranslationKey(MOD_ID, "itemBarrelLong");
-        itemBarrelShort = new TemplateItem(Identifier.of(MOD_ID, "itemBarrelShort")).setTranslationKey(MOD_ID, "itemBarrelShort");
-        itemBarrelFat = new TemplateItem(Identifier.of(MOD_ID, "itemBarrelFat")).setTranslationKey(MOD_ID, "itemBarrelFat");
-        itemBarrelShotgun = new TemplateItem(Identifier.of(MOD_ID, "itemBarrelShotgun")).setTranslationKey(MOD_ID, "itemBarrelShotgun");
-        itemBarrelMinigun = new TemplateItem(Identifier.of(MOD_ID, "itemBarrelMinigun")).setTranslationKey(MOD_ID, "itemBarrelMinigun");
-        itemGripWood = new TemplateItem(Identifier.of(MOD_ID, "itemGripWood")).setTranslationKey(MOD_ID, "itemGripWood");
-        itemGripMetal = new TemplateItem(Identifier.of(MOD_ID, "itemGripMetal")).setTranslationKey(MOD_ID, "itemGripMetal");
-        itemHandleMinigun = new TemplateItem(Identifier.of(MOD_ID, "itemHandleMinigun")).setTranslationKey(MOD_ID, "itemHandleMinigun");
-        itemStockWood = new TemplateItem(Identifier.of(MOD_ID, "itemStockWood")).setTranslationKey(MOD_ID, "itemStockWood");
-        itemStockMetal = new TemplateItem(Identifier.of(MOD_ID, "itemStockMetal")).setTranslationKey(MOD_ID, "itemStockMetal");
-        itemReceiverMetal = new TemplateItem(Identifier.of(MOD_ID, "itemReceiverMetal")).setTranslationKey(MOD_ID, "itemReceiverMetal");
-        itemReceiverDiamond = new TemplateItem(Identifier.of(MOD_ID, "itemReceiverDiamond")).setTranslationKey(MOD_ID, "itemReceiverDiamond");
-        itemMagazine = new TemplateItem(Identifier.of(MOD_ID, "itemMagazine")).setTranslationKey(MOD_ID, "itemMagazine");
-        itemScope = new TemplateItem(Identifier.of(MOD_ID, "itemScope")).setTranslationKey(MOD_ID, "itemScope");
+        itemMetalParts = new TemplateItem(Identifier.of(MOD_ID, "MetalParts")).setTranslationKey(MOD_ID, "MetalParts");
+        itemBarrelLong = new TemplateItem(Identifier.of(MOD_ID, "BarrelLong")).setTranslationKey(MOD_ID, "BarrelLong");
+        itemBarrelShort = new TemplateItem(Identifier.of(MOD_ID, "BarrelShort")).setTranslationKey(MOD_ID, "BarrelShort");
+        itemBarrelFat = new TemplateItem(Identifier.of(MOD_ID, "BarrelFat")).setTranslationKey(MOD_ID, "BarrelFat");
+        itemBarrelShotgun = new TemplateItem(Identifier.of(MOD_ID, "BarrelShotgun")).setTranslationKey(MOD_ID, "BarrelShotgun");
+        itemBarrelMinigun = new TemplateItem(Identifier.of(MOD_ID, "BarrelMinigun")).setTranslationKey(MOD_ID, "BarrelMinigun");
+        itemGripWood = new TemplateItem(Identifier.of(MOD_ID, "GripWood")).setTranslationKey(MOD_ID, "GripWood");
+        itemGripMetal = new TemplateItem(Identifier.of(MOD_ID, "GripMetal")).setTranslationKey(MOD_ID, "GripMetal");
+        itemHandleMinigun = new TemplateItem(Identifier.of(MOD_ID, "HandleMinigun")).setTranslationKey(MOD_ID, "HandleMinigun");
+        itemStockWood = new TemplateItem(Identifier.of(MOD_ID, "StockWood")).setTranslationKey(MOD_ID, "StockWood");
+        itemStockMetal = new TemplateItem(Identifier.of(MOD_ID, "StockMetal")).setTranslationKey(MOD_ID, "StockMetal");
+        itemReceiverMetal = new TemplateItem(Identifier.of(MOD_ID, "ReceiverMetal")).setTranslationKey(MOD_ID, "ReceiverMetal");
+        itemReceiverDiamond = new TemplateItem(Identifier.of(MOD_ID, "ReceiverDiamond")).setTranslationKey(MOD_ID, "ReceiverDiamond");
+        itemMagazine = new TemplateItem(Identifier.of(MOD_ID, "Magazine")).setTranslationKey(MOD_ID, "Magazine");
+        itemScope = new TemplateItem(Identifier.of(MOD_ID, "Scope")).setTranslationKey(MOD_ID, "Scope");
 
         //MAPS
 
@@ -117,11 +118,10 @@ public class ItemListener {
     public static Item itemGunFlamethrower;
     public static Item itemGunRocketLauncherLaser;
     public static Item itemGunRocketLauncher;
-//    public static Item itemGunAircraft;
-//    public static Item itemGunAircraftRocket;
-//    public static Item itemGunAircraftRocketPanzer;
 
     //AMMO
+    public static Item itemBulletCasing;
+    public static Item itemShellCasing;
     public static Item itemBulletLight;
     public static Item itemBulletMedium;
     public static Item itemBulletHeavy;

@@ -20,6 +20,7 @@ public class SdkEntityBulletMp5 extends SdkEntityBullet implements EntitySpawnDa
     public SdkEntityBulletMp5(World world, double d, double d1, double d2)
     {
         super(world, d, d1, d2);
+        bulletDrop = ((SdkItemGun) ItemListener.itemGunMp5).bulletDrop;
     }
 
     public SdkEntityBulletMp5(World world, Entity entity, SdkItemGun sdkitemgun, float f, float f1, float f2, float f3,

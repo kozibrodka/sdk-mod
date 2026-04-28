@@ -25,7 +25,8 @@
       "net.kozibrodka.sdk.events.RecipeListener"
     ],
     "stationapi:event_bus_client": [
-      "net.kozibrodka.sdk.events.TextureListener"
+      "net.kozibrodka.sdk.events.TextureListener",
+      "net.kozibrodka.sdk.events.RenderListener"
     ],
     "stationapi:event_bus_server": [
 

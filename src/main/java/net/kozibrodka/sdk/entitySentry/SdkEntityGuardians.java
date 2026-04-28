@@ -24,6 +24,7 @@ public class SdkEntityGuardians extends MobEntity
         health = 20;
     }
 
+    @Override
     protected void initDataTracker()
     {
         super.initDataTracker();
@@ -41,6 +42,7 @@ public class SdkEntityGuardians extends MobEntity
         dataTracker.set(17, s);
     }
 
+    @Override
     public boolean damage(Entity entity1, int i)
     {
         if(super.damage(entity1, i))
@@ -60,6 +62,7 @@ public class SdkEntityGuardians extends MobEntity
         }
     }
 
+    @Override
     protected Entity getTargetInRange()
     {
         return getNearestEntityLivingInRange(this, range);
@@ -92,6 +95,7 @@ public class SdkEntityGuardians extends MobEntity
         return entityliving;
     }
 
+    @Override
     protected void attack(Entity entity, float f)
     {
         if(okToAttack(entity) && (double)f < 2.5D && entity.boundingBox.maxY > boundingBox.minY && entity.boundingBox.minY < boundingBox.maxY)
@@ -119,12 +123,10 @@ public class SdkEntityGuardians extends MobEntity
                     {
                         class1 = Class.forName("net.minecraft.src.mod_AIManager");
                     }
-                    aiManagerIsPet = class1.getDeclaredMethod("isPet", new Class[] {
-                            LivingEntity.class
-                    });
+                    aiManagerIsPet = class1.getDeclaredMethod("isPet", LivingEntity.class);
                 }
                 flag = ((Boolean)aiManagerIsPet.invoke(null, new Object[] {
-                    (LivingEntity)entity
+                        entity
                 })).booleanValue();
             }
             catch(Exception exception)
@@ -136,23 +138,27 @@ public class SdkEntityGuardians extends MobEntity
         return !flag && !(entity instanceof SdkEntityGuardians) && (!(entity instanceof PlayerEntity) || !((PlayerEntity)entity).name.equals(getOwner())) && (!(entity instanceof WolfEntity) || !((WolfEntity)entity).isTamed() || !((WolfEntity)entity).getOwnerName().equals(getOwner()));
     }
 
+    @Override
     protected float getPathfindingFavor(int i, int j, int k)
     {
         return 1.0F;
     }
 
+    @Override
     public void writeNbt(NbtCompound nbttagcompound)
     {
         super.writeNbt(nbttagcompound);
         nbttagcompound.putString("Owner", getOwner() == null ? "" : getOwner());
     }
 
+    @Override
     public void readNbt(NbtCompound nbttagcompound)
     {
         super.readNbt(nbttagcompound);
         setOwner(nbttagcompound.getString("Owner"));
     }
 
+    @Override
     protected void tickLiving()
     {
         super.tickLiving();

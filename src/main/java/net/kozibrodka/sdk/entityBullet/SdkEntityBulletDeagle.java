@@ -20,6 +20,7 @@ public class SdkEntityBulletDeagle extends SdkEntityBullet implements EntitySpaw
     public SdkEntityBulletDeagle(World world, double d, double d1, double d2)
     {
         super(world, d, d1, d2);
+        bulletDrop = ((SdkItemGun) ItemListener.itemGunDeagle).bulletDrop;
     }
 
     public SdkEntityBulletDeagle(World world, Entity entity, SdkItemGun sdkitemgun, float f, float f1, float f2, float f3,

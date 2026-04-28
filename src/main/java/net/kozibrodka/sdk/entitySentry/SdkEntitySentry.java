@@ -20,7 +20,7 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
         super(world);
         height = 1.5F;
         angerMap = new HashMap();
-        texture = "/sdk/mobSentry.png";
+        texture = "/assets/sdk/stationapi/textures/entity/mobSentry.png";
         health = 20;
     }
 
@@ -30,6 +30,7 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
         setPosition(d, d1, d2);
     }
 
+    @Override
     public boolean damage(Entity entity, int i)
     {
         if((entity instanceof LivingEntity) && okToAttack(entity))
@@ -38,11 +39,10 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
             for(int j = 0; j < list.size(); j++)
             {
                 Entity entity1 = (Entity)list.get(j);
-                if(!(entity1 instanceof SdkEntitySentry))
+                if(!(entity1 instanceof SdkEntitySentry sdkentitysentry))
                 {
                     continue;
                 }
-                SdkEntitySentry sdkentitysentry = (SdkEntitySentry)entity1;
                 if(sdkentitysentry.getOwner() != null && sdkentitysentry.getOwner() != "" && sdkentitysentry.getOwner() == getOwner())
                 {
                     sdkentitysentry.becomeAngryAt(entity);
@@ -56,13 +56,11 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
 
     private void becomeAngryAt(Entity entity)
     {
-        if(angerMap.containsKey(entity))
-        {
-            angerMap.remove(entity);
-        }
+        angerMap.remove(entity);
         angerMap.put(entity, Integer.valueOf(400 + random.nextInt(400)));
     }
 
+    @Override
     public void tick()
     {
         baseTick();
@@ -86,6 +84,7 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
         }
     }
 
+    @Override
     protected void tickLiving()
     {
         if(!dead)
@@ -123,6 +122,7 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
 
     }
 
+    @Override
     protected Entity getTargetInRange()
     {
         LivingEntity entityliving = getNearestAnger(this);
@@ -166,11 +166,11 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
         return entityliving;
     }
 
+    @Override
     public void lookAt(Entity entity, float f, float f1)
     {
         if(!okToAttack(entity))
         {
-            return;
         } else
         {
             double d = entity.x - x;
@@ -181,7 +181,6 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
             float f3 = (float)((Math.atan2(d2, d3) * 180D) / 3.1415927410125732D);
             pitch = -b(-pitch, f3, f1);
             yaw = b(yaw, f2, f);
-            return;
         }
     }
 
@@ -203,25 +202,30 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
         return f + f3;
     }
 
+    @Override
     protected int getDroppedItemId()
     {
         return gun.requiredBullet.id;
     }
 
+    @Override
     protected String getHurtSound()
     {
         return "sdk:mechhurt";
     }
 
+    @Override
     protected String getDeathSound()
     {
         return null;
     }
 
+    @Override
     public void applyKnockback(Entity entity, int i, double d, double d1) //knockback
     {
     }
 
+    @Override
     public void markDead()
     {
         super.markDead();
@@ -229,6 +233,7 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
         gun = null;
     }
 
+    @Override
     public boolean interact(PlayerEntity entityplayer)
     {
         if(entityplayer.getHand() != null && entityplayer.getHand().itemId == ItemListener.itemWrench.id)
@@ -258,5 +263,5 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
     protected SdkItemGun gun;
     protected ItemStack itemStack;
     protected int ATTACK_DELAY;
-    private Map angerMap;
+    private final Map angerMap;
 }

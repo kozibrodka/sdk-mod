@@ -26,7 +26,7 @@ public class SdkRenderAtv extends EntityRenderer
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
         GL11.glRotatef(180F - f, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(-f2, 0.0F, 0.0F, 1.0F);
-        bindTexture("/assets/sdk/stationapi/textures/mob/mobAtv.png");
+        bindTexture("/assets/sdk/stationapi/textures/entity/mobAtv.png");
         GL11.glScalef(-1F, -1F, 1.0F);
         GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
         GL11.glScalef(1.5F, 1.5F, 1.5F);

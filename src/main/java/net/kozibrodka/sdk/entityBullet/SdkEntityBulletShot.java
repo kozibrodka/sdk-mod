@@ -19,6 +19,7 @@ public class SdkEntityBulletShot extends SdkEntityBullet implements EntitySpawnD
     public SdkEntityBulletShot(World world, double d, double d1, double d2) {
         super(world, d, d1, d2);
         setBoundingBoxSpacing(0.03125F, 0.03125F);
+        bulletDrop = ((SdkItemGun) ItemListener.itemGunShotgun).bulletDrop;
     }
 
     public SdkEntityBulletShot(World world, Entity entity, SdkItemGun sdkitemgun, float f, float f1, float f2, float f3,

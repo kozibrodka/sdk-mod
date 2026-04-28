@@ -13,6 +13,7 @@ public class SdkEntitySentryAk47 extends SdkEntitySentry
     {
         super(world);
         setParameters();
+        texture = "/assets/sdk/stationapi/textures/entity/mobSentry.png";
     }
 
     public SdkEntitySentryAk47(World world, double d, double d1, double d2)

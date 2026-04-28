@@ -1,11 +1,15 @@
 package net.kozibrodka.sdk.render;
 
 import net.kozibrodka.sdk.entity.SdkEntityGrapplingHook;
+import net.kozibrodka.sdk_api.utils.SdkToolsRender;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
+
+import java.util.Objects;
 
 public class SdkRenderGrapplingHook extends EntityRenderer
 {
@@ -43,6 +47,12 @@ public class SdkRenderGrapplingHook extends EntityRenderer
         GL11.glPopMatrix();
         if(sdkentitygrapplinghook.owner != null)
         {
+            double localRoperY = sdkentitygrapplinghook.owner.y;
+            double localRoperPrevY = sdkentitygrapplinghook.owner.prevY;
+            if(!Objects.equals(SdkToolsRender.minecraft.player.name, sdkentitygrapplinghook.owner.name)){
+                localRoperY += 1.62D;
+                localRoperPrevY += 1.62D;
+            }
             float f9 = ((sdkentitygrapplinghook.owner.prevYaw + (sdkentitygrapplinghook.owner.yaw - sdkentitygrapplinghook.owner.prevYaw) * f1) * 3.141593F) / 180F;
             float f10 = ((sdkentitygrapplinghook.owner.prevPitch + (sdkentitygrapplinghook.owner.pitch - sdkentitygrapplinghook.owner.prevPitch) * f1) * 3.141593F) / 180F;
             double d3 = MathHelper.sin(f9);
@@ -50,15 +60,15 @@ public class SdkRenderGrapplingHook extends EntityRenderer
             double d5 = MathHelper.sin(f10);
             double d6 = MathHelper.cos(f10);
             double d7 = (sdkentitygrapplinghook.owner.prevX + (sdkentitygrapplinghook.owner.x - sdkentitygrapplinghook.owner.prevX) * (double)f1) - d4 * 0.69999999999999996D - d3 * 0.5D * d6;
-            double d8 = (sdkentitygrapplinghook.owner.prevY + (sdkentitygrapplinghook.owner.y - sdkentitygrapplinghook.owner.prevY) * (double)f1) - d5 * 0.5D;
+            double d8 = (localRoperPrevY + (localRoperY - localRoperPrevY) * (double)f1) - d5 * 0.5D;
             double d9 = ((sdkentitygrapplinghook.owner.prevZ + (sdkentitygrapplinghook.owner.z - sdkentitygrapplinghook.owner.prevZ) * (double)f1) - d3 * 0.69999999999999996D) + d4 * 0.5D * d6;
-            if(dispatcher.options.thirdPerson)
+            if(dispatcher.options.thirdPerson && Objects.equals(SdkToolsRender.minecraft.player.name, sdkentitygrapplinghook.owner.name))
             {
                 float f11 = ((sdkentitygrapplinghook.owner.lastBodyYaw + (sdkentitygrapplinghook.owner.bodyYaw - sdkentitygrapplinghook.owner.lastBodyYaw) * f1) * 3.141593F) / 180F;
                 double d11 = MathHelper.sin(f11);
                 double d13 = MathHelper.cos(f11);
                 d7 = (sdkentitygrapplinghook.owner.prevX + (sdkentitygrapplinghook.owner.x - sdkentitygrapplinghook.owner.prevX) * (double)f1) - d13 * 0.34999999999999998D - d11 * 0.84999999999999998D;
-                d8 = (sdkentitygrapplinghook.owner.prevY + (sdkentitygrapplinghook.owner.y - sdkentitygrapplinghook.owner.prevY) * (double)f1) - 0.45000000000000001D;
+                d8 = (localRoperPrevY + (localRoperY - localRoperPrevY) * (double)f1) - 0.45000000000000001D;
                 d9 = ((sdkentitygrapplinghook.owner.prevZ + (sdkentitygrapplinghook.owner.z - sdkentitygrapplinghook.owner.prevZ) * (double)f1) - d11 * 0.34999999999999998D) + d13 * 0.84999999999999998D;
             }
             double d10 = sdkentitygrapplinghook.prevX + (sdkentitygrapplinghook.x - sdkentitygrapplinghook.prevX) * (double)f1;
@@ -84,6 +94,7 @@ public class SdkRenderGrapplingHook extends EntityRenderer
         }
     }
 
+    @Override
     public void render(Entity entity, double d, double d1, double d2,
                        float f, float f1)
     {

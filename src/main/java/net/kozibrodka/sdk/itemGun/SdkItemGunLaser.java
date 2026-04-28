@@ -3,7 +3,7 @@ package net.kozibrodka.sdk.itemGun;
 
 import net.kozibrodka.sdk.entityBullet.SdkEntityBulletLaser;
 import net.kozibrodka.sdk_api.utils.SdkEntityBullet;
-import net.kozibrodka.sdk_api.casing.SdkEntityBulletCasing;
+import net.kozibrodka.sdk_api.utils.SdkEntityCasing;
 import net.kozibrodka.sdk_api.utils.SdkItemGun;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -41,7 +41,7 @@ public class SdkItemGunLaser extends SdkItemGun
     }
 
     @Override
-    public SdkEntityBulletCasing getBulletCasingEntity(World world, Entity entity, float f)
+    public SdkEntityCasing getBulletCasingEntity(World world, Entity entity, float f)
     {
         return null;
     }

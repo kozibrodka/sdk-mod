@@ -1,25 +1,22 @@
 package net.kozibrodka.sdk.item;
 
 import net.kozibrodka.sdk.events.ItemListener;
+import net.kozibrodka.sdk_api.utils.SdkScubaItem;
 import net.minecraft.item.ArmorItem;
 import net.modificationstation.stationapi.api.client.item.ArmorTextureProvider;
-
 import net.modificationstation.stationapi.api.template.item.TemplateArmorItem;
 import net.modificationstation.stationapi.api.util.Identifier;
-import net.modificationstation.stationapi.api.template.item.TemplateItem;
 
 
-public class SdkItemParachute extends TemplateArmorItem implements ArmorTextureProvider {
-    public SdkItemParachute(Identifier i, int j)
+public class ItemScuba extends SdkScubaItem implements ArmorTextureProvider {
+
+    public ItemScuba(Identifier i)
     {
-        super(i, 1, j, 1);
-        setMaxDamage(7);
+        super(i, 127,0);
     }
-
-    //TODO PARACHUTE SOUND? b1.5_01 sdk video i heard
 
     @Override
     public Identifier getTexture(ArmorItem armour) {
-        return ItemListener.MOD_ID.id("parachute");
+        return ItemListener.MOD_ID.id("scubaTank");
     }
 }

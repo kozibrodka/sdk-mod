@@ -13,6 +13,7 @@ public class SdkTileEntityRope extends BlockEntity
         delay = 5;
     }
 
+    @Override
     public void tick()
     {
         if(delay == 0)
@@ -20,7 +21,11 @@ public class SdkTileEntityRope extends BlockEntity
             if(world.getBlockId(x, y - 1, z) == 0 || world.getBlockId(x, y - 1, z) == Block.SNOW.id)
             {
                 world.setBlock(x, y - 1, z, BlockListener.blockRope.id);
-                world.setBlockMeta(x, y - 1, z, world.getBlockMeta(x, y, z));
+                int metaD = world.getBlockMeta(x, y, z);
+                if(metaD > 5){
+                    metaD -= 4;
+                }
+                world.setBlockMeta(x, y - 1, z, metaD);
                 delay--;
             }
         } else
@@ -31,12 +36,14 @@ public class SdkTileEntityRope extends BlockEntity
         super.tick();
     }
 
+    @Override
     public void readNbt(NbtCompound nbttagcompound)
     {
         super.readNbt(nbttagcompound);
         delay = nbttagcompound.getShort("Delay");
     }
 
+    @Override
     public void writeNbt(NbtCompound nbttagcompound)
     {
         super.writeNbt(nbttagcompound);

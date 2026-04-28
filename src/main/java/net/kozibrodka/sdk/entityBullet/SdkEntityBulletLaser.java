@@ -36,6 +36,7 @@ public class SdkEntityBulletLaser extends SdkEntityBullet implements EntitySpawn
     {
         super(world, d, d1, d2);
         setBoundingBoxSpacing(0.5F, 0.5F);
+        bulletDrop = ((SdkItemGun) ItemListener.itemGunLaser).bulletDrop;
     }
 
     public SdkEntityBulletLaser(World world, Entity entity, SdkItemGun sdkitemgun, float f, float f1, float f2, float f3,

@@ -1,6 +1,5 @@
 package net.kozibrodka.sdk.events;
 
-import net.kozibrodka.sdk_api.events.CasingListener;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -50,8 +49,8 @@ public class RecipeListener {
     }
 
     public void addGunRecipes(RecipeRegisterEvent event){
-        CraftingRegistry.addShapedRecipe(new ItemStack(Item.IRON_INGOT, 1), "XX", "XX", Character.valueOf('X'), CasingListener.itemBulletCasing);
-        CraftingRegistry.addShapedRecipe(new ItemStack(Item.IRON_INGOT, 1), "XX", "XX", Character.valueOf('X'), CasingListener.itemBulletCasingShell);
+        CraftingRegistry.addShapedRecipe(new ItemStack(Item.IRON_INGOT, 1), "XX", "XX", Character.valueOf('X'), ItemListener.itemBulletCasing);
+        CraftingRegistry.addShapedRecipe(new ItemStack(Item.IRON_INGOT, 1), "XX", "XX", Character.valueOf('X'), ItemListener.itemShellCasing);
         CraftingRegistry.addShapedRecipe(new ItemStack(ItemListener.itemBulletLight, 4), "X", "#", Character.valueOf('X'), Item.IRON_INGOT, Character.valueOf('#'), Item.GUNPOWDER);
         CraftingRegistry.addShapedRecipe(new ItemStack(ItemListener.itemBulletMedium, 4), "X ", "##", Character.valueOf('X'), Item.IRON_INGOT, Character.valueOf('#'), Item.GUNPOWDER);
         CraftingRegistry.addShapedRecipe(new ItemStack(ItemListener.itemBulletShell, 4), "X ", "#Y", Character.valueOf('X'), Item.IRON_INGOT, Character.valueOf('#'), Item.GUNPOWDER, Character.valueOf('Y'), Item.PAPER);

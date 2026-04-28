@@ -26,7 +26,7 @@ public class SdkTextureLightometerFX extends DynamicTexture
         {
             BufferedImage bufferedimage = ImageIO.read(Objects.requireNonNull((Minecraft.class).getResource("/assets/sdk/stationapi/textures/item/itemLightometer.png")));
             bufferedimage.getRGB(0, 0, 16, 16, watchIconImageData, 0, 16);
-            bufferedimage = ImageIO.read(Objects.requireNonNull((Minecraft.class).getResource("/assets/sdk/stationapi/textures/item/miscLightometer.png")));
+            bufferedimage = ImageIO.read(Objects.requireNonNull((Minecraft.class).getResource("/assets/sdk/stationapi/textures/gui/miscLightometer.png")));
             bufferedimage.getRGB(0, 0, 16, 16, dialImageData, 0, 16);
         }
         catch(IOException ioexception)

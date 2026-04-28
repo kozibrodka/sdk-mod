@@ -1,7 +1,8 @@
 
-package net.kozibrodka.sdk.entitySentry;
+package net.kozibrodka.sdk.model;
 
 
+import net.kozibrodka.sdk.entitySentry.SdkEntitySentry;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.EntityModel;
 
@@ -57,19 +58,23 @@ public class SdkModelSentry extends EntityModel
         });
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, SdkEntitySentry sentry)
+    @Override
+    public void setAngles(float f, float f1, float f2, float f3, float f4, float f5)
     {
         for(int i = 0; i < headModels.length; i++)
         {
-            headModels[i].yaw = sentry.yaw / 57.29578F; //TODO:
-            headModels[i].pitch = sentry.pitch / 57.29578F;
+//            headModels[i].yaw = sentry.yaw / 57.29578F; //TODO:
+//            headModels[i].pitch = sentry.pitch / 57.29578F;
+            headModels[i].yaw = f3 / 57.29578F;
+            headModels[i].pitch = f4 / 57.29578F;
         }
 
     }
 
-    public void render(float f, float f1, float f2, float f3, float f4, float f5, SdkEntitySentry sentry)
+    @Override
+    public void render(float f, float f1, float f2, float f3, float f4, float f5)
     {
-        setRotationAngles(f, f1, f2, f3, f4, f5, sentry);
+        setAngles(f, f1, f2, f3, f4, f5);
         for(int i = 0; i < headModels.length; i++)
         {
             headModels[i].render(f5);

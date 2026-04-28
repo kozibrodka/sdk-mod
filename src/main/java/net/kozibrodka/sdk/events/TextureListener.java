@@ -1,24 +1,13 @@
 package net.kozibrodka.sdk.events;
 
-import net.kozibrodka.sdk.atv.SdkEntityAtv;
-import net.kozibrodka.sdk.atv.SdkRenderAtv;
-import net.kozibrodka.sdk.entity.SdkEntityGrapplingHook;
-import net.kozibrodka.sdk.entity.SdkEntityNukePrimed;
-import net.kozibrodka.sdk.entitySentry.SdkEntitySentry;
-import net.kozibrodka.sdk.render.*;
-import net.kozibrodka.sdk.tileEntity.SdkTileEntityPlaque;
-import net.kozibrodka.sdk_api.casing.SdkEntityBulletCasing;
-import net.kozibrodka.sdk_api.casing.SdkEntityBulletCasingShell;
+import net.kozibrodka.sdk.render.SdkTextureLightometerFX;
 import net.mine_diver.unsafeevents.listener.EventListener;
-import net.modificationstation.stationapi.api.client.event.block.entity.BlockEntityRendererRegisterEvent;
-import net.modificationstation.stationapi.api.client.event.render.entity.EntityRendererRegisterEvent;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.Null;
-import net.kozibrodka.sdk.entityBullet.*;
 
 public class TextureListener {
 
@@ -27,6 +16,8 @@ public class TextureListener {
 
     @EventListener
     public void registerTextures(TextureRegisterEvent event) {
+        ItemListener.itemBulletCasing.setTexture(Identifier.of(MOD_ID, "item/itemBulletCasing"));
+        ItemListener.itemShellCasing.setTexture(Identifier.of(MOD_ID, "item/itemBulletCasingShell"));
         ItemListener.itemBulletLight.setTexture(Identifier.of(MOD_ID, "item/itemBullet9mm"));
         ItemListener.itemBulletHeavy.setTexture(Identifier.of(MOD_ID, "item/itemBullet50Cal"));
         ItemListener.itemBulletMedium.setTexture(Identifier.of(MOD_ID, "item/itemBullet357"));
@@ -107,6 +98,10 @@ public class TextureListener {
         BlockListener.blockRope.asItem().setTextureId(registerBlockTexture("block/blockRope"));
         BlockListener.blockOil.asItem().setTextureId(oil_juction);
         BlockListener.blockPlaque.asItem().setTextureId(plaque);
+
+//        Atlases.getGuiItems().addTextureBinder(Identifier.of(MOD_ID, "blockOil"), SdkTextureLightometerFX::new);
+//        Atlases.getGuiItems().addTextureBinder(10, SdkTextureLightometerFX::new)
+//        Atlases.getGuiItems().addTextureBinder("asda", SdkTextureLightometerFX::new);
     }
 
     private int registerBlockTexture(String s) {
@@ -135,35 +130,36 @@ public class TextureListener {
     public static int empty;
     public static int plaque;
 
+////    @EventListener
+////    public void registerAnimation(TextureRegisterEvent event) {
+////        Atlases.getGuiItems().addTextureBinder(Identifier.of(MOD_ID, "blockOil"), "as", SdkTextureLightometerFX::new);
+////    }
+//
 //    @EventListener
-//    public void registerAnimation(TextureRegisterEvent event) {
-//        Atlases.getGuiItems().addTextureBinder(Identifier.of(MOD_ID, "blockOil"), "as", SdkTextureLightometerFX::new);
+//    public static void registerEntityRenderers(EntityRendererRegisterEvent event) {
+//        event.renderers.put(EntityBulletCasing.class, new SdkRenderBulletCasing());
+//        event.renderers.put(EntityShellCasing.class, new SdkRenderShellCasing());
+//        event.renderers.put(SdkEntityBulletAk47.class, new SdkRenderBullet());
+//        event.renderers.put(SdkEntityBulletDeagle.class, new SdkRenderBullet());
+//        event.renderers.put(SdkEntityBulletFlame.class, new SdkRenderBulletFlame());
+//        event.renderers.put(SdkEntityBulletM4.class, new SdkRenderBullet());
+//        event.renderers.put(SdkEntityBulletMinigun.class, new SdkRenderBullet());
+//        event.renderers.put(SdkEntityBulletMp5.class, new SdkRenderBullet());
+//        event.renderers.put(SdkEntityBulletSg552.class, new SdkRenderBullet());
+//        event.renderers.put(SdkEntityBulletShot.class, new SdkRenderBulletShot());
+//        event.renderers.put(SdkEntityBulletSniper.class, new SdkRenderBullet());
+//        event.renderers.put(SdkEntityBulletRocket.class, new SdkRenderBulletRocket());
+//        event.renderers.put(SdkEntityBulletRocketLaser.class, new SdkRenderBulletRocketLaser());
+//        event.renderers.put(SdkEntityBulletLaser.class, new SdkRenderBulletLaser());
+//        event.renderers.put(SdkEntityAtv.class, new SdkRenderAtv());
+//        event.renderers.put(SdkEntityGrapplingHook.class, new SdkRenderGrapplingHook());
+//        event.renderers.put(SdkEntityNukePrimed.class, new SdkRenderNukePrimed());
+//        event.renderers.put(SdkEntitySentry.class, new SdkRenderSentry());
+//        event.renderers.put(SdkEntityParachute.class, new LivingEntityRenderer(new SdkModelParachute(), 0.0F));
 //    }
-
-    @EventListener
-    public static void registerEntityRenderers(EntityRendererRegisterEvent event) {
-        event.renderers.put(SdkEntityBulletCasing.class, new SdkRenderBulletCasing());
-        event.renderers.put(SdkEntityBulletCasingShell.class, new SdkRenderBulletCasingShell());
-        event.renderers.put(SdkEntityBulletAk47.class, new SdkRenderBullet());
-        event.renderers.put(SdkEntityBulletDeagle.class, new SdkRenderBullet());
-        event.renderers.put(SdkEntityBulletFlame.class, new SdkRenderBulletFlame());
-        event.renderers.put(SdkEntityBulletM4.class, new SdkRenderBullet());
-        event.renderers.put(SdkEntityBulletMinigun.class, new SdkRenderBullet());
-        event.renderers.put(SdkEntityBulletMp5.class, new SdkRenderBullet());
-        event.renderers.put(SdkEntityBulletSg552.class, new SdkRenderBullet());
-        event.renderers.put(SdkEntityBulletShot.class, new SdkRenderBulletShot());
-        event.renderers.put(SdkEntityBulletSniper.class, new SdkRenderBullet());
-        event.renderers.put(SdkEntityBulletRocket.class, new SdkRenderBulletRocket());
-        event.renderers.put(SdkEntityBulletRocketLaser.class, new SdkRenderBulletRocketLaser());
-        event.renderers.put(SdkEntityBulletLaser.class, new SdkRenderBulletLaser());
-        event.renderers.put(SdkEntityAtv.class, new SdkRenderAtv());
-        event.renderers.put(SdkEntityGrapplingHook.class, new SdkRenderGrapplingHook());
-        event.renderers.put(SdkEntityNukePrimed.class, new SdkRenderNukePrimed());
-        event.renderers.put(SdkEntitySentry.class, new SdkRenderSentry());
-    }
-
-    @EventListener
-    public static void registerTileEntityRenderers(BlockEntityRendererRegisterEvent event){
-        event.renderers.put(SdkTileEntityPlaque.class, new SdkTileEntityRendererPlaque());
-    }
+//
+//    @EventListener
+//    public static void registerTileEntityRenderers(BlockEntityRendererRegisterEvent event){
+//        event.renderers.put(SdkTileEntityPlaque.class, new SdkTileEntityRendererPlaque());
+//    }
 }

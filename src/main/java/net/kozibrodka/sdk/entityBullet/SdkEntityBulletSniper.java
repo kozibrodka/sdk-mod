@@ -9,8 +9,11 @@ import net.kozibrodka.sdk_api.utils.SdkItemGun;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
+import net.modificationstation.stationapi.api.server.entity.HasTrackingParameters;
 import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.TriState;
 
+@HasTrackingParameters(trackingDistance = 240, updatePeriod = 1, sendVelocity = TriState.TRUE)
 public class SdkEntityBulletSniper extends SdkEntityBullet implements EntitySpawnDataProvider
 {
 
@@ -22,6 +25,7 @@ public class SdkEntityBulletSniper extends SdkEntityBullet implements EntitySpaw
     public SdkEntityBulletSniper(World world, double d, double d1, double d2)
     {
         super(world, d, d1, d2);
+        bulletDrop = ((SdkItemGun) ItemListener.itemGunSniper).bulletDrop;
     }
 
     public SdkEntityBulletSniper(World world, Entity entity, SdkItemGun sdkitemgun, float f, float f1, float f2, float f3,
@@ -30,11 +34,15 @@ public class SdkEntityBulletSniper extends SdkEntityBullet implements EntitySpaw
         super(world, entity, sdkitemgun, f, f1, f2, f3, f4);
     }
 
-    @Override
     @Environment(EnvType.CLIENT)
-    public void setPositionAndAnglesAvoidEntities(double x, double y, double z, float pitch, float yaw, int interpolationSteps) {
-        this.setPosition(x, y, z);
-        this.setRotation(pitch, yaw);
+    @Override
+    public void setVelocityClient(double x, double y, double z) {
+        if(!receivedP) { /// "WYDAJE" mi się, że z tym received jest wieksza szansa na particles zniszczenia...
+            velocityX = x;
+            velocityY = y;
+            velocityZ = z;
+            receivedP = true;
+        }
     }
 
     @Override
@@ -47,4 +55,6 @@ public class SdkEntityBulletSniper extends SdkEntityBullet implements EntitySpaw
     public Identifier getHandlerIdentifier() {
         return Identifier.of(EntityListener.MOD_ID, "BulletSniper");
     }
+
+//    public boolean receivedP;
 }

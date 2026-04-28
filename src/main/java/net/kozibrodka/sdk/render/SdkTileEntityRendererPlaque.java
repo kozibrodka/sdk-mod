@@ -19,8 +19,9 @@ public class SdkTileEntityRendererPlaque extends BlockEntityRenderer
         blockrender = new BlockRenderManager();
     }
 
+    @Override
     public void render(BlockEntity tileentity, double d, double d1, double d2,
-                                 float f)
+                       float f)
     {
         renderTileEntityPlaque((SdkTileEntityPlaque)tileentity, d, d1, d2, f);
     }
@@ -70,8 +71,6 @@ public class SdkTileEntityRendererPlaque extends BlockEntityRenderer
                 GL11.glTranslatef(0.0F, -0.5625F, 0.5F);
                 GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
                 int j = itemstack.getTextureId();
-
-
 //                if(itemstack.itemId < 256)
 //                {
 //                    method_1064("/terrain.png");

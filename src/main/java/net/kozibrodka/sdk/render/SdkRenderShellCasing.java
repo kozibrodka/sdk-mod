@@ -1,21 +1,21 @@
 package net.kozibrodka.sdk.render;
 
-import net.kozibrodka.sdk_api.casing.SdkEntityBulletCasing;
+import net.kozibrodka.sdk_api.utils.SdkEntityCasing;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
-public class SdkRenderBulletCasingShell extends EntityRenderer {
+public class SdkRenderShellCasing extends EntityRenderer {
 
-    public SdkRenderBulletCasingShell()
+    public SdkRenderShellCasing()
     {
     }
 
-    public void renderArrow(SdkEntityBulletCasing sdkentitybulletcasing, double d, double d1, double d2,
+    public void renderArrow(SdkEntityCasing sdkentitybulletcasing, double d, double d1, double d2,
                             float f, float f1)
     {
-        bindTexture("/assets/sdk/stationapi/textures/item/itemShells.png");
+        bindTexture("/assets/sdk/stationapi/textures/gui/itemShells.png");
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
         GL11.glRotatef(sdkentitybulletcasing.prevYaw + (sdkentitybulletcasing.yaw - sdkentitybulletcasing.prevYaw) * f1, 0.0F, 1.0F, 0.0F);
@@ -65,9 +65,10 @@ public class SdkRenderBulletCasingShell extends EntityRenderer {
         GL11.glPopMatrix();
     }
 
+    @Override
     public void render(Entity entity, double d, double d1, double d2,
                        float f, float f1)
     {
-        renderArrow((SdkEntityBulletCasing)entity, d, d1, d2, f, f1);
+        renderArrow((SdkEntityCasing)entity, d, d1, d2, f, f1);
     }
 }

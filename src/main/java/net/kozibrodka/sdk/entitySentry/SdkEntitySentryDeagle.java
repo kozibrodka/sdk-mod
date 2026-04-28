@@ -13,6 +13,7 @@ public class SdkEntitySentryDeagle extends SdkEntitySentry
     {
         super(world);
         setParameters();
+        texture = "/assets/sdk/stationapi/textures/entity/mobSentry.png";
     }
 
     public SdkEntitySentryDeagle(World world, double d, double d1, double d2)

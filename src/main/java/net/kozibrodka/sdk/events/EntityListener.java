@@ -2,7 +2,9 @@ package net.kozibrodka.sdk.events;
 
 import net.kozibrodka.sdk.atv.SdkEntityAtv;
 import net.kozibrodka.sdk.entity.SdkEntityGrapplingHook;
+import net.kozibrodka.sdk.entity.SdkEntityLaserWolf;
 import net.kozibrodka.sdk.entity.SdkEntityNukePrimed;
+import net.kozibrodka.sdk.entity.SdkEntityParachute;
 import net.kozibrodka.sdk.entityBullet.*;
 import net.kozibrodka.sdk.entityNade.*;
 import net.kozibrodka.sdk.entitySentry.*;
@@ -26,6 +28,10 @@ public class EntityListener {
         event.register(SdkEntityAtv.class, String.valueOf(Identifier.of(MOD_ID, "Atv")));
         event.register(SdkEntityGrapplingHook.class, String.valueOf(Identifier.of(MOD_ID, "GrapplingHook")));
         event.register(SdkEntityNukePrimed.class, String.valueOf(Identifier.of(MOD_ID, "NukePrimed")));
+        event.register(SdkEntityParachute.class, String.valueOf(Identifier.of(MOD_ID, "Parachute")));
+
+        event.register(EntityBulletCasing.class, String.valueOf(Identifier.of(MOD_ID, "BulletCasing")));
+        event.register(EntityShellCasing.class, String.valueOf(Identifier.of(MOD_ID, "ShellCasing")));
 
         event.register(SdkEntityBulletAk47.class, String.valueOf(Identifier.of(MOD_ID, "BulletAk47")));
         event.register(SdkEntityBulletDeagle.class, String.valueOf(Identifier.of(MOD_ID, "BulletDeagle")));
@@ -68,6 +74,10 @@ public class EntityListener {
         Registry.register(event.registry, MOD_ID.id("Atv"), SdkEntityAtv::new);
         Registry.register(event.registry, MOD_ID.id("GrapplingHook"), SdkEntityGrapplingHook::new);
         Registry.register(event.registry, MOD_ID.id("NukePrimed"), SdkEntityNukePrimed::new);
+        Registry.register(event.registry, MOD_ID.id("Parachute"), SdkEntityParachute::new);
+
+        Registry.register(event.registry, MOD_ID.id("BulletCasing"), EntityBulletCasing::new);
+        Registry.register(event.registry, MOD_ID.id("ShellCasing"), EntityShellCasing::new);
 
         Registry.register(event.registry, MOD_ID.id("BulletAk47"), SdkEntityBulletAk47::new);
         Registry.register(event.registry, MOD_ID.id("BulletDeagle"), SdkEntityBulletDeagle::new);

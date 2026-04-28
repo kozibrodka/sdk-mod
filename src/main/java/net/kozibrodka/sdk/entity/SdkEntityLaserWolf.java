@@ -1,5 +1,5 @@
 
-package net.kozibrodka.sdk.entitySentry;
+package net.kozibrodka.sdk.entity;
 
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk.itemGun.SdkItemGunLaser;

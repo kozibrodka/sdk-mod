@@ -22,6 +22,7 @@ public class SdkEntityBulletAk47 extends SdkEntityBullet implements EntitySpawnD
     public SdkEntityBulletAk47(World world, double d, double d1, double d2)
     {
         super(world, d, d1, d2);
+        bulletDrop = ((SdkItemGun) ItemListener.itemGunAk47).bulletDrop;
     }
 
     public SdkEntityBulletAk47(World world, Entity entity, SdkItemGun sdkitemgun, float f, float f1, float f2, float f3,
