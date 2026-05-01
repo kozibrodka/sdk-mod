@@ -3,11 +3,15 @@
 package net.kozibrodka.sdk.entitySentry;
 
 
+import net.kozibrodka.sdk.events.EntityListener;
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk_api.utils.SdkItemGun;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
+import net.modificationstation.stationapi.api.server.entity.MobSpawnDataProvider;
+import net.modificationstation.stationapi.api.util.Identifier;
 
-public class SdkEntitySentryFlamethrower extends SdkEntitySentry
+public class SdkEntitySentryFlamethrower extends SdkEntitySentry implements MobSpawnDataProvider
 {
 
     public SdkEntitySentryFlamethrower(World world)
@@ -29,7 +33,13 @@ public class SdkEntitySentryFlamethrower extends SdkEntitySentry
         range = 16F;
     }
 
-    protected int getDropItemId()
+    @Override
+    public Identifier getHandlerIdentifier() {
+        return Identifier.of(EntityListener.MOD_ID, "SentryFlamethrower");
+    }
+
+    @Override
+    protected int getDroppedItemId()
     {
         return 0;
     }

@@ -1,14 +1,21 @@
 package net.kozibrodka.sdk.entitySentry;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.kozibrodka.sdk.events.ItemListener;
+import net.kozibrodka.sdk.network.AskPacket;
 import net.kozibrodka.sdk_api.utils.SdkItemGun;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Monster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.network.packet.PacketHelper;
+
 import java.util.*;
 
 public abstract class SdkEntitySentry extends SdkEntityGuardians
@@ -43,7 +50,7 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
                 {
                     continue;
                 }
-                if(sdkentitysentry.getOwner() != null && sdkentitysentry.getOwner() != "" && sdkentitysentry.getOwner() == getOwner())
+                if(sdkentitysentry.getOwner() != null && !Objects.equals(sdkentitysentry.getOwner(), "") && Objects.equals(sdkentitysentry.getOwner(), getOwner()))
                 {
                     sdkentitysentry.becomeAngryAt(entity);
                 }
@@ -65,6 +72,73 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
     {
         baseTick();
         tickMovement();
+        if(world.isRemote){
+            this.tickLiving();
+        }
+    }
+
+    public boolean asked;
+
+    @Override
+    public void tickMovement() {
+        if (this.bodyTrackingIncrements > 0) {
+            double var1 = this.x + (this.lerpX - this.x) / (double)this.bodyTrackingIncrements;
+            double var3 = this.y + (this.lerpY - this.y) / (double)this.bodyTrackingIncrements;
+            double var5 = this.z + (this.lerpZ - this.z) / (double)this.bodyTrackingIncrements;
+            --this.bodyTrackingIncrements;
+            this.setPosition(var1, var3, var5);
+//            this.setRotation(this.yaw, this.pitch);
+            List var9 = this.world.getEntityCollisions(this, this.boundingBox.contract((double)0.03125F, (double)0.0F, (double)0.03125F));
+            if (var9.size() > 0) {
+                double var10 = (double)0.0F;
+
+                for(int var12 = 0; var12 < var9.size(); ++var12) {
+                    Box var13 = (Box)var9.get(var12);
+                    if (var13.maxY > var10) {
+                        var10 = var13.maxY;
+                    }
+                }
+
+                var3 += var10 - this.boundingBox.minY;
+                this.setPosition(var1, var3, var5);
+            }
+        }
+
+        if (this.isImmobile()) {
+            this.jumping = false;
+            this.sidewaysSpeed = 0.0F;
+            this.forwardSpeed = 0.0F;
+            this.rotationSpeed = 0.0F;
+        } else if (!this.interpolateOnly) {
+            this.tickLiving();
+        }
+
+        boolean var14 = this.isSubmergedInWater();
+        boolean var2 = this.isTouchingLava();
+        if (this.jumping) {
+            if (var14) {
+                this.velocityY += (double)0.04F;
+            } else if (var2) {
+                this.velocityY += (double)0.04F;
+            } else if (this.onGround) {
+                this.jump();
+            }
+        }
+
+        this.sidewaysSpeed *= 0.98F;
+        this.forwardSpeed *= 0.98F;
+        this.rotationSpeed *= 0.9F;
+        this.travel(this.sidewaysSpeed, this.forwardSpeed);
+        List var16 = this.world.getEntities(this, this.boundingBox.expand((double)0.2F, (double)0.0F, (double)0.2F));
+        if (var16 != null && var16.size() > 0) {
+            for(int var4 = 0; var4 < var16.size(); ++var4) {
+                Entity var17 = (Entity)var16.get(var4);
+                if (var17.isPushable()) {
+                    var17.onCollision(this);
+                }
+            }
+        }
+
     }
 
     protected void attackEntity(Entity entity, float f)
@@ -77,7 +151,9 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
                 {
                     itemStack = new ItemStack(gun);
                 }
-                gun.useOryginal(itemStack, world, this, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+                if(!world.isRemote) {
+                    gun.useOryginal(itemStack, world, this, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+                }
                 attackCooldown = ATTACK_DELAY;
             }
             movementBlocked = true;
@@ -106,6 +182,7 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
                 yaw++;
                 pitch = 0.0F;
             }
+//            this.setRotation(this.yaw, this.pitch);
         }
         for(Iterator iterator = angerMap.entrySet().iterator(); iterator.hasNext();)
         {
@@ -175,7 +252,7 @@ public abstract class SdkEntitySentry extends SdkEntityGuardians
         {
             double d = entity.x - x;
             double d1 = entity.z - z;
-            double d2 = (entity.boundingBox.minY + entity.boundingBox.maxY) / 2D - (y + (double)getShadowRadius());
+            double d2 = (entity.boundingBox.minY + entity.boundingBox.maxY) / 2D - (y + (double)(this.height / 2.0F));
             double d3 = MathHelper.sqrt(d * d + d1 * d1);
             float f2 = (float)((Math.atan2(d1, d) * 180D) / 3.1415927410125732D) - 90F;
             float f3 = (float)((Math.atan2(d2, d3) * 180D) / 3.1415927410125732D);

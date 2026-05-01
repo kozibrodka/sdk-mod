@@ -24,16 +24,19 @@ public class SdkTileEntityGrinder extends BlockEntity
         cookTime = 0;
     }
 
+    @Override
     public int size()
     {
         return itemStacks.length;
     }
 
+    @Override
     public ItemStack getStack(int i)
     {
         return itemStacks[i];
     }
 
+    @Override
     public ItemStack removeStack(int i, int j)
     {
         if(itemStacks[i] != null)
@@ -56,6 +59,7 @@ public class SdkTileEntityGrinder extends BlockEntity
         }
     }
 
+    @Override
     public void setStack(int i, ItemStack itemstack)
     {
         itemStacks[i] = itemstack;
@@ -65,11 +69,13 @@ public class SdkTileEntityGrinder extends BlockEntity
         }
     }
 
+    @Override
     public String getName()
     {
         return "Grinder";
     }
 
+    @Override
     public void readNbt(NbtCompound nbttagcompound)
     {
         super.readNbt(nbttagcompound);
@@ -90,6 +96,7 @@ public class SdkTileEntityGrinder extends BlockEntity
         currentItemBurnTime = nbttagcompound.getShort("CurrentItemBurnTime");
     }
 
+    @Override
     public void writeNbt(NbtCompound nbttagcompound)
     {
         super.writeNbt(nbttagcompound);
@@ -111,6 +118,7 @@ public class SdkTileEntityGrinder extends BlockEntity
         nbttagcompound.put("Items", nbttaglist);
     }
 
+    @Override
     public int getMaxCountPerStack()
     {
         return 64;
@@ -137,6 +145,7 @@ public class SdkTileEntityGrinder extends BlockEntity
         return burnTime > 0;
     }
 
+    @Override
     public void tick()
     {
         isActive = isBurning() && canSmelt();
@@ -145,6 +154,14 @@ public class SdkTileEntityGrinder extends BlockEntity
         {
             burnTime--;
         }
+        if(lastActive != isActive){
+            if(isActive){
+                world.setBlockMeta(x,y,z,1);
+            }else{
+                world.setBlockMeta(x,y,z,0);
+            }
+        }
+        lastActive = isActive;
         if(!world.isRemote)
         {
             if(burnTime == 0 && canSmelt())
@@ -200,7 +217,7 @@ public class SdkTileEntityGrinder extends BlockEntity
             return false;
         }
         ItemStack itemstack = null;
-        if(itemStacks[0].itemId == Block.GRASS_BLOCK.id || itemStacks[0].itemId == Item.FLINT.id)
+        if(itemStacks[0].itemId == Block.GRAVEL.id || itemStacks[0].itemId == Item.FLINT.id)
         {
             itemstack = new ItemStack(Item.GUNPOWDER);
         }
@@ -285,6 +302,7 @@ public class SdkTileEntityGrinder extends BlockEntity
         return 0;
     }
 
+    @Override
     public boolean canPlayerUse(PlayerEntity entityplayer)
     {
         if(world.getBlockEntity(x, y, z) != this)
@@ -296,10 +314,11 @@ public class SdkTileEntityGrinder extends BlockEntity
         }
     }
 
-    private ItemStack itemStacks[];
+    private ItemStack[] itemStacks;
     public int burnTime;
     public int currentItemBurnTime;
     public int cookTime;
     public boolean isActive;
-    private Random random;
+    private final Random random;
+    public boolean lastActive;
 }

@@ -1,5 +1,7 @@
 package net.kozibrodka.sdk.grinder;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.kozibrodka.sdk.tileEntity.SdkTileEntityGrinder;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -35,6 +37,7 @@ public class SdkContainerGrinder extends ScreenHandler
 
     }
 
+    @Override
     public void sendContentUpdates()
     {
         super.sendContentUpdates();
@@ -60,6 +63,7 @@ public class SdkContainerGrinder extends ScreenHandler
         currentItemBurnTime = grinder.currentItemBurnTime;
     }
 
+    @Override
     public void setProperty(int i, int j)
     {
         if(i == 0)
@@ -76,13 +80,47 @@ public class SdkContainerGrinder extends ScreenHandler
         }
     }
 
+    @Override
     public boolean canUse(PlayerEntity entityplayer)
     {
         return grinder.canPlayerUse(entityplayer);
     }
 
-    private SdkTileEntityGrinder grinder;
+    private final SdkTileEntityGrinder grinder;
     private int cookTime;
     private int burnTime;
     private int currentItemBurnTime;
+
+    @Environment(EnvType.SERVER)
+    @Override
+    public void addListener(ScreenHandlerListener listener) {
+        super.addListener(listener);
+        listener.onPropertyUpdate(this, 0, grinder.cookTime);
+        listener.onPropertyUpdate(this, 1, grinder.burnTime);
+        listener.onPropertyUpdate(this, 2, grinder.currentItemBurnTime);
+    }
+
+//    @Override
+//    public void sendContentUpdates() {
+//        super.sendContentUpdates();
+//
+//        for (Object listener : listeners) {
+//            ScreenHandlerListener shl = (ScreenHandlerListener) listener;
+//            if (this.cookTime != grinder.cookTime) shl.onPropertyUpdate(this, 0, grinder.cookTime);
+//            if (this.burnTime != grinder.burnTime) shl.onPropertyUpdate(this, 1, grinder.burnTime);
+//            if (this.currentItemBurnTime != grinder.currentItemBurnTime) shl.onPropertyUpdate(this, 2, grinder.currentItemBurnTime);
+//        }
+//
+//        this.cookTime = grinder.cookTime;
+//        this.burnTime = grinder.burnTime;
+//        this.currentItemBurnTime = grinder.currentItemBurnTime;
+//    }
+//
+//    @Environment(EnvType.CLIENT)
+//    @Override
+//    public void setProperty(int id, int value) {
+//        if (id == 0) grinder.cookTime = value;
+//        if (id == 1) grinder.burnTime = value;
+//        if (id == 2) grinder.currentItemBurnTime = value;
+//    }
 }

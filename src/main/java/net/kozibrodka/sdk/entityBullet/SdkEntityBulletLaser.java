@@ -3,6 +3,7 @@ package net.kozibrodka.sdk.entityBullet;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.kozibrodka.sdk.entity.SdkEntityLaserWolf;
 import net.kozibrodka.sdk.entityNade.SdkEntitySmokeFX;
 import net.kozibrodka.sdk.events.EntityListener;
 import net.kozibrodka.sdk.events.ItemListener;
@@ -12,6 +13,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
@@ -50,6 +53,40 @@ public class SdkEntityBulletLaser extends SdkEntityBullet implements EntitySpawn
     public void playServerSound(World world)
     {
         world.playSound(this, ((SdkItemGun) ItemListener.itemGunLaser).firingSound, ((SdkItemGun)ItemListener.itemGunLaser).soundRangeFactor, 1.0F / (random.nextFloat() * 0.1F + 0.95F));
+    }
+
+    protected MobEntity getClosestEntityLiving(Entity entity, double d) {
+        double d1 = -1.0D;
+        MobEntity entityliving = null;
+        List list = world.getEntities(this, boundingBox.expand(d, d, d));
+
+        for (Object o : list) {
+            Entity entity1 = (Entity) o;
+            if (!(entity1 instanceof MobEntity)) {
+                continue;
+            }
+            double d2 = entity1.getSquaredDistance(entity.x, entity.y, entity.z);
+            if ((d < 0.0D || d2 < d * d) && (d1 == -1.0D || d2 < d1) && ((MobEntity) entity1).canSee(entity)) {
+                d1 = d2;
+                entityliving = (MobEntity) entity1;
+            }
+        }
+        return entityliving;
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public void processServerEntityStatus(byte status) {
+        if (status == 6) {
+            MobEntity hited = getClosestEntityLiving(this,2.0D);
+            if(hited != null) {
+                for (int i1 = 0; i1 < 16; i1++) {
+                    doSmoke(hited.x, hited.y + (double)(hited.height / 2.0F), hited.z, hited.width / 2.0F, hited.height / 2.0F);
+                }
+            }
+        }  else {
+            super.processServerEntityStatus(status);
+        }
     }
 
     @Override
@@ -106,31 +143,29 @@ public class SdkEntityBulletLaser extends SdkEntityBullet implements EntitySpawn
         {
             if(movingobjectposition.entity != null)
             {
-                boolean flag = false; //TODO
-//                if(owner instanceof SdkEntityLaserWolf)       //inna czesc moda
-//                {
-//                    SdkEntityLaserWolf sdkentitylaserwolf = (SdkEntityLaserWolf)owner;
-//                    if(movingobjectposition.field_1989 instanceof EntityWolf)
-//                    {
-//                        EntityWolf entitywolf = (EntityWolf)movingobjectposition.field_1989;
-//                        if(sdkentitylaserwolf.getWolfOwner().equals(entitywolf.getWolfOwner()))
-//                        {
-//                            flag = true;
-//                        }
-//                    } else
-//                    if(movingobjectposition.field_1989 instanceof EntityPlayer)
-//                    {
-//                        EntityPlayer entityplayer = (EntityPlayer)movingobjectposition.field_1989;
-//                        if(sdkentitylaserwolf.getWolfOwner().equals(entityplayer.username))
-//                        {
-//                            flag = true;
-//                        }
-//                    }
-//                }
+                boolean flag = false;
+                if(owner instanceof SdkEntityLaserWolf sdkentitylaserwolf)
+                {
+                    if(movingobjectposition.entity instanceof WolfEntity entitywolf)
+                    {
+                        if(sdkentitylaserwolf.getOwnerName().equals(entitywolf.getOwnerName()))
+                        {
+                            flag = true;
+                        }
+                    } else
+                    if(movingobjectposition.entity instanceof PlayerEntity entityplayer)
+                    {
+                        if(sdkentitylaserwolf.getOwnerName().equals(entityplayer.name))
+                        {
+                            flag = true;
+                        }
+                    }
+                }
                 if(!flag)
                 {
                     if(movingobjectposition.entity instanceof MobEntity)
                     {
+                        world.broadcastEntityEvent(this, (byte)6);
                         if(entity instanceof PigEntity && !world.isRemote)
                         {
                             int l = random.nextInt(3);

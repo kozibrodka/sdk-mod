@@ -34,16 +34,19 @@ public class SdkBlockNuke extends TemplateBlock
         }
     }
 
+    @Override
     public int getTickRate()
     {
         return 40;
     }
 
+    @Override
     public void onPlaced(World world, int i, int j, int k)
     {
         world.scheduleBlockUpdate(i, j, k, id, getTickRate());
     }
 
+    @Override
     public void onTick(World world, int i, int j, int k, Random random)
     {
         if(!checkExplode(world, i, j, k))
@@ -52,6 +55,7 @@ public class SdkBlockNuke extends TemplateBlock
         }
     }
 
+    @Override
     public void neighborUpdate(World world, int i, int j, int k, int l)
     {
         if(l > 0 && Block.BLOCKS[l].canEmitRedstonePower() && world.isPowered(i, j, k))
@@ -84,15 +88,17 @@ public class SdkBlockNuke extends TemplateBlock
 
     public void explode(World world, int i, int j, int k)
     {
-        onBlockDestroyedByPlayer(world, i, j, k, 0);
+        onMetadataChange(world, i, j, k, 0);
         world.setBlock(i, j, k, 0);
     }
 
+    @Override
     public int getDroppedItemCount(Random random)
     {
         return 0;
     }
 
+    @Override
     public void onDestroyedByExplosion(World world, int i, int j, int k)
     {
         SdkEntityNukePrimed sdkentitynukeprimed = new SdkEntityNukePrimed(world, (float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F);
@@ -100,17 +106,13 @@ public class SdkBlockNuke extends TemplateBlock
         world.spawnEntity(sdkentitynukeprimed);
     }
 
-    public void onBlockDestroyedByPlayer(World world, int i, int j, int k, int l)
+    @Override
+    public void onMetadataChange(World world, int i, int j, int k, int l)
     {
-        if(world.isRemote)
-        {
-            return;
-        } else
-        {
+        if(!world.isRemote) {
             SdkEntityNukePrimed sdkentitynukeprimed = new SdkEntityNukePrimed(world, (float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F);
             world.spawnEntity(sdkentitynukeprimed);
-            world.playSound(sdkentitynukeprimed, "random.fuse", 1.0F, 1.0F);
-            return;
+//            world.playSound(sdkentitynukeprimed, "random.fuse", 1.0F, 1.0F); //TODO SOUND....
         }
     }
 }

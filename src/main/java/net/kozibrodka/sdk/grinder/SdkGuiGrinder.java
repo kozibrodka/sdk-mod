@@ -14,15 +14,17 @@ public class SdkGuiGrinder extends HandledScreen
         grinder = sdktileentitygrinder;
     }
 
+    @Override
     protected void drawForeground()
     {
         textRenderer.draw("Grinder", backgroundWidth / 2 - textRenderer.getWidth("Grinder") / 2, 6, 0x404040);
         textRenderer.draw("Inventory", 8, (backgroundHeight - 96) + 2, 0x404040);
     }
 
+    @Override
     protected void drawBackground(float f)
     {
-        int i = minecraft.textureManager.getTextureId("/assets/sdk/stationapi/textures/item/guiGrinder.png");
+        int i = minecraft.textureManager.getTextureId("/assets/sdk/stationapi/textures/gui/guiGrinder.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         minecraft.textureManager.bindTexture(i);
         int j = (width - backgroundWidth) / 2;
@@ -37,5 +39,5 @@ public class SdkGuiGrinder extends HandledScreen
         drawTexture(j + 79, k + 34, 176, 14, i1 + 1, 16);
     }
 
-    private SdkTileEntityGrinder grinder;
+    private final SdkTileEntityGrinder grinder;
 }

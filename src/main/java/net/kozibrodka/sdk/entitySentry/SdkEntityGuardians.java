@@ -108,33 +108,6 @@ public class SdkEntityGuardians extends MobEntity
     protected boolean okToAttack(Entity entity)
     {
         boolean flag = false;
-        if(!aiManagerIsPetNotFound && (entity instanceof LivingEntity))
-        {
-            try
-            {
-                if(aiManagerIsPet == null)
-                {
-                    Class class1;
-                    try
-                    {
-                        class1 = Class.forName("mod_AIManager");
-                    }
-                    catch(Exception exception1)
-                    {
-                        class1 = Class.forName("net.minecraft.src.mod_AIManager");
-                    }
-                    aiManagerIsPet = class1.getDeclaredMethod("isPet", LivingEntity.class);
-                }
-                flag = ((Boolean)aiManagerIsPet.invoke(null, new Object[] {
-                        entity
-                })).booleanValue();
-            }
-            catch(Exception exception)
-            {
-                System.out.println("mod_AIManager not found in SdkEntityGuardians. Ignore this exception if you do not have it installed.");
-                aiManagerIsPetNotFound = true;
-            }
-        }
         return !flag && !(entity instanceof SdkEntityGuardians) && (!(entity instanceof PlayerEntity) || !((PlayerEntity)entity).name.equals(getOwner())) && (!(entity instanceof WolfEntity) || !((WolfEntity)entity).isTamed() || !((WolfEntity)entity).getOwnerName().equals(getOwner()));
     }
 

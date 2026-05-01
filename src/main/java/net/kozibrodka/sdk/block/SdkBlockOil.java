@@ -1,5 +1,7 @@
 package net.kozibrodka.sdk.block;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.EnvironmentInterface;
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk.events.TextureListener;
 import net.kozibrodka.sdk_api.ingame.mod_SdkBase;
@@ -23,6 +25,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.Random;
 
+@EnvironmentInterface(value = EnvType.CLIENT, itf = BlockWithWorldRenderer.class)
 public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
 {
 
@@ -219,7 +222,8 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         setFireAbove(world, i, j, k, world.getBlockMeta(i, j, k));
     }
 
-    public void onNeighborBlockChange(World world, int i, int j, int k, int l)
+    @Override
+    public void neighborUpdate(World world, int i, int j, int k, int l)
     {
         if(world.isRemote)
         {
@@ -268,7 +272,7 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
                                 int k2 = Math.abs(i - l) + Math.abs(k - j1);
                                 if(k2 == 1 && world.getBlockId(i2, i1 - 1, j2) == id)
                                 {
-                                    onNeighborBlockChange(world, i2, i1 - 1, j2, id);
+                                    neighborUpdate(world, i2, i1 - 1, j2, id);
                                 }
                             }
 
@@ -310,29 +314,17 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
     public boolean renderWorld(BlockRenderManager renderblocks, BlockView iblockaccess, int i, int j, int k) {
         Tessellator tessellator = Tessellator.INSTANCE;
         int l = TextureListener.oil_juction;
-//        if(renderblocks.overrideBlockTexture >= 0)
-//        {
-//            l = renderblocks.overrideBlockTexture;
-//        }
         float f = getLuminance(iblockaccess, i, j, k);
         tessellator.color(f, f, f);
-
-
-//        int i1 = (l & 0xf) << 4;
-//        int j1 = l & 0xf0;
-//        double d = (float)i1 / 256F;
-//        double d1 = ((float)i1 + 15.99F) / 256F;
-//        double d2 = (float)j1 / 256F;
-//        double d3 = ((float)j1 + 15.99F) / 256F;
-
         Atlas.Sprite atlasTX =  Atlases.getTerrain().getTexture(l);
         double d = atlasTX.getStartU();
         double d1 = atlasTX.getEndU();
         double d2 = atlasTX.getStartV();
         double d3 = atlasTX.getEndV();
-
         float f1 = 0.0F;
-        float f2 = 0.03125F/16;
+//        float f2 = 0.03125F/16;
+//        float f2 = 0.03125F/256;
+        float f2 = 0.03125F;
         boolean flag = iblockaccess.getBlockId(i - 1, j, k) == id || !iblockaccess.shouldSuffocate(i - 1, j, k) && iblockaccess.getBlockId(i - 1, j - 1, k) == id;
         boolean flag1 = iblockaccess.getBlockId(i + 1, j, k) == id || !iblockaccess.shouldSuffocate(i + 1, j, k) && iblockaccess.getBlockId(i + 1, j - 1, k) == id;
         boolean flag2 = iblockaccess.getBlockId(i, j, k - 1) == id || !iblockaccess.shouldSuffocate(i, j, k - 1) && iblockaccess.getBlockId(i, j - 1, k - 1) == id;
@@ -357,12 +349,15 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
             }
         }
         //TODO FIX
-        float f3 = 0.3125F/16;
+//        float f3 = 0.3125F/16;
+//        float f3 = 0.3125F/256;
+        float f3 = 0.3125F;
         float f4 = i;
         float f5 = i + 1;
         float f6 = k;
         float f7 = k + 1;
-        float f16 = 256;
+//        float f16 = 256;
+        float f16 = 64;
         byte byte0 = 0;
         if((flag || flag1) && !flag2 && !flag3)
         {
@@ -375,13 +370,6 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         if(byte0 != 0)
         {
             int k1 = TextureListener.oil_line;
-//            i1 = (k1 & 0xf) << 4;
-//            j1 = k1 & 0xf0;
-//            d = (float)i1 / 256F;
-//            d1 = ((float)i1 + 15.99F) / 256F;
-//            d2 = (float)j1 / 256F;
-//            d3 = ((float)j1 + 15.99F) / 256F;
-
              atlasTX =  Atlases.getTerrain().getTexture(k1);
              d = atlasTX.getStartU();
              d1 = atlasTX.getEndU();
@@ -448,10 +436,167 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         {
             if(byte0 == 0)
             {
-//                d = (float)(i1 + 16) / 256F;
-//                d1 = ((float)(i1 + 16) + 15.99F) / 256F;
-//                d2 = (float)j1 / 256F;
-//                d3 = ((float)j1 + 15.99F) / 256F;
+                atlasTX =  Atlases.getTerrain().getTexture(TextureListener.oil_line);
+                d = atlasTX.getStartU();
+                d1 = atlasTX.getEndU();
+                d2 = atlasTX.getStartV();
+                d3 = atlasTX.getEndV();
+            }
+            if(iblockaccess.shouldSuffocate(i - 1, j, k) && iblockaccess.getBlockId(i - 1, j + 1, k) == id)
+            {
+                tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k + 1) + f1, d1, d2);
+                tessellator.vertex((float)i + f2, (float)(j) - f1, (float)(k + 1) + f1, d, d2);
+                tessellator.vertex((float)i + f2, (float)(j) - f1, (float)(k) - f1, d, d3);
+                tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k) - f1, d1, d3);
+            }
+            if(iblockaccess.shouldSuffocate(i + 1, j, k) && iblockaccess.getBlockId(i + 1, j + 1, k) == id)
+            {
+                tessellator.vertex((float)(i + 1) - f2, (float)(j) - f1, (float)(k + 1) + f1, d, d3);
+                tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k + 1) + f1, d1, d3);
+                tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k) - f1, d1, d2);
+                tessellator.vertex((float)(i + 1) - f2, (float)(j) - f1, (float)(k) - f1, d, d2);
+            }
+            if(iblockaccess.shouldSuffocate(i, j, k - 1) && iblockaccess.getBlockId(i, j + 1, k - 1) == id)
+            {
+                tessellator.vertex((float)(i + 1) + f1, (float)(j) - f1, (float)k + f2, d, d3);
+                tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)k + f2, d1, d3);
+                tessellator.vertex((float)(i) - f1, (float)(j + 1) + f1, (float)k + f2, d1, d2);
+                tessellator.vertex((float)(i) - f1, (float)(j) - f1, (float)k + f2, d, d2);
+            }
+            if(iblockaccess.shouldSuffocate(i, j, k + 1) && iblockaccess.getBlockId(i, j + 1, k + 1) == id)
+            {
+                tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d1, d2);
+                tessellator.vertex((float)(i + 1) + f1, (float)(j) - f1, (float)(k + 1) - f2, d, d2);
+                tessellator.vertex((float)(i) - f1, (float)(j) - f1, (float)(k + 1) - f2, d, d3);
+                tessellator.vertex((float)(i) - f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d1, d3);
+            }
+        }
+        int l1 = iblockaccess.getBlockMeta(i, j, k);
+        if(l1 != 0)
+        {
+            renderblocks.renderFire(Block.FIRE, i, j, k);
+        }
+        return true;
+    }
+
+//    @Override
+    public boolean renderWorld2(BlockRenderManager renderblocks, BlockView iblockaccess, int i, int j, int k) {
+        Tessellator tessellator = Tessellator.INSTANCE;
+        int l = TextureListener.oil_juction;
+        float f = getLuminance(iblockaccess, i, j, k);
+        tessellator.color(f, f, f);
+        Atlas.Sprite atlasTX =  Atlases.getTerrain().getTexture(l);
+        double d = atlasTX.getStartU();
+        double d1 = atlasTX.getEndU();
+        double d2 = atlasTX.getStartV();
+        double d3 = atlasTX.getEndV();
+        float f1 = 0.0F;
+        float f2 = 0.03125F;
+        boolean flag = iblockaccess.getBlockId(i - 1, j, k) == id || !iblockaccess.shouldSuffocate(i - 1, j, k) && iblockaccess.getBlockId(i - 1, j - 1, k) == id;
+        boolean flag1 = iblockaccess.getBlockId(i + 1, j, k) == id || !iblockaccess.shouldSuffocate(i + 1, j, k) && iblockaccess.getBlockId(i + 1, j - 1, k) == id;
+        boolean flag2 = iblockaccess.getBlockId(i, j, k - 1) == id || !iblockaccess.shouldSuffocate(i, j, k - 1) && iblockaccess.getBlockId(i, j - 1, k - 1) == id;
+        boolean flag3 = iblockaccess.getBlockId(i, j, k + 1) == id || !iblockaccess.shouldSuffocate(i, j, k + 1) && iblockaccess.getBlockId(i, j - 1, k + 1) == id;
+        if(!iblockaccess.shouldSuffocate(i, j + 1, k))
+        {
+            if(iblockaccess.shouldSuffocate(i - 1, j, k) && iblockaccess.getBlockId(i - 1, j + 1, k) == id)
+            {
+                flag = true;
+            }
+            if(iblockaccess.shouldSuffocate(i + 1, j, k) && iblockaccess.getBlockId(i + 1, j + 1, k) == id)
+            {
+                flag1 = true;
+            }
+            if(iblockaccess.shouldSuffocate(i, j, k - 1) && iblockaccess.getBlockId(i, j + 1, k - 1) == id)
+            {
+                flag2 = true;
+            }
+            if(iblockaccess.shouldSuffocate(i, j, k + 1) && iblockaccess.getBlockId(i, j + 1, k + 1) == id)
+            {
+                flag3 = true;
+            }
+        }
+        float f3 = 0.3125F;
+        float f4 = i + 0;
+        float f5 = i + 1;
+        float f6 = k + 0;
+        float f7 = k + 1;
+        byte byte0 = 0;
+        if((flag || flag1) && !flag2 && !flag3)
+        {
+            byte0 = 1;
+        }
+        if((flag2 || flag3) && !flag1 && !flag)
+        {
+            byte0 = 2;
+        }
+        if(byte0 != 0)
+        {
+            atlasTX =  Atlases.getTerrain().getTexture(TextureListener.oil_line);
+            d = atlasTX.getStartU();
+            d1 = atlasTX.getEndU();
+            d2 = atlasTX.getStartV();
+            d3 = atlasTX.getEndV();
+        }
+        if(byte0 == 0)
+        {
+            if(flag1 || flag2 || flag3 || flag)
+            {
+                if(!flag)
+                {
+                    f4 += f3;
+                }
+                if(!flag)
+                {
+                    d += f3 / 16F;
+                }
+                if(!flag1)
+                {
+                    f5 -= f3;
+                }
+                if(!flag1)
+                {
+                    d1 -= f3 / 16F;
+                }
+                if(!flag2)
+                {
+                    f6 += f3;
+                }
+                if(!flag2)
+                {
+                    d2 += f3 / 16F;
+                }
+                if(!flag3)
+                {
+                    f7 -= f3;
+                }
+                if(!flag3)
+                {
+                    d3 -= f3 / 16F;
+                }
+            }
+            tessellator.vertex(f5 + f1, (float)j + f2, f7 + f1, d1, d3);
+            tessellator.vertex(f5 + f1, (float)j + f2, f6 - f1, d1, d2);
+            tessellator.vertex(f4 - f1, (float)j + f2, f6 - f1, d, d2);
+            tessellator.vertex(f4 - f1, (float)j + f2, f7 + f1, d, d3);
+        }
+        if(byte0 == 1)
+        {
+            tessellator.vertex(f5 + f1, (float)j + f2, f7 + f1, d1, d3);
+            tessellator.vertex(f5 + f1, (float)j + f2, f6 - f1, d1, d2);
+            tessellator.vertex(f4 - f1, (float)j + f2, f6 - f1, d, d2);
+            tessellator.vertex(f4 - f1, (float)j + f2, f7 + f1, d, d3);
+        }
+        if(byte0 == 2)
+        {
+            tessellator.vertex(f5 + f1, (float)j + f2, f7 + f1, d1, d3);
+            tessellator.vertex(f5 + f1, (float)j + f2, f6 - f1, d, d3);
+            tessellator.vertex(f4 - f1, (float)j + f2, f6 - f1, d, d2);
+            tessellator.vertex(f4 - f1, (float)j + f2, f7 + f1, d1, d2);
+        }
+        if(!iblockaccess.shouldSuffocate(i, j + 1, k))
+        {
+            if(byte0 == 0)
+            {
                 atlasTX =  Atlases.getTerrain().getTexture(TextureListener.oil_line);
                 d = atlasTX.getStartU();
                 d1 = atlasTX.getEndU();
@@ -495,3 +640,5 @@ public class SdkBlockOil extends TemplateBlock implements BlockWithWorldRenderer
         return true;
     }
 }
+
+

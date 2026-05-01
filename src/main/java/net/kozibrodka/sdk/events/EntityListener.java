@@ -12,6 +12,7 @@ import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.event.entity.EntityRegister;
 import net.modificationstation.stationapi.api.event.registry.EntityHandlerRegistryEvent;
 import net.modificationstation.stationapi.api.event.registry.MobHandlerRegistryEvent;
+import net.modificationstation.stationapi.api.event.worldgen.biome.BiomeModificationEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.Namespace;
@@ -99,6 +100,23 @@ public class EntityListener {
         Registry.register(event.registry, MOD_ID.id("NadeSticky"), SdkEntityGrenadeSticky::new);
         Registry.register(event.registry, MOD_ID.id("NadeStun"), SdkEntityGrenadeStun::new);
 
+//        Registry.register(event.registry, MOD_ID.id("SentryAk47"), SdkEntitySentryAk47::new);
+//        Registry.register(event.registry, MOD_ID.id("SentryDeagle"), SdkEntitySentryDeagle::new);
+//        Registry.register(event.registry, MOD_ID.id("SentryMp5"), SdkEntitySentryMp5::new);
+//        Registry.register(event.registry, MOD_ID.id("SentryRocketLauncher"), SdkEntitySentryRocketLauncher::new);
+//        Registry.register(event.registry, MOD_ID.id("SentryRocketLauncherLaser"), SdkEntitySentryRocketLauncherLaser::new);
+//        Registry.register(event.registry, MOD_ID.id("SentryShotgun"), SdkEntitySentryShotgun::new);
+//        Registry.register(event.registry, MOD_ID.id("SentrySniper"), SdkEntitySentrySniper::new);
+//        Registry.register(event.registry, MOD_ID.id("SentryFlamethrower"), SdkEntitySentryFlamethrower::new);
+//        Registry.register(event.registry, MOD_ID.id("SentrySg552"), SdkEntitySentrySg552::new);
+//        Registry.register(event.registry, MOD_ID.id("SentryMinigun"), SdkEntitySentryMinigun::new);
+//        Registry.register(event.registry, MOD_ID.id("SentryLaser"), SdkEntitySentryLaser::new);
+//        Registry.register(event.registry, MOD_ID.id("SentryM4"), SdkEntitySentryM4::new);
+    }
+
+    @EventListener
+    public static void registerMobsHandlers(MobHandlerRegistryEvent event) {
+        Registry.register(event.registry, MOD_ID.id("LaserWolf"), SdkEntityLaserWolf::new);
         Registry.register(event.registry, MOD_ID.id("SentryAk47"), SdkEntitySentryAk47::new);
         Registry.register(event.registry, MOD_ID.id("SentryDeagle"), SdkEntitySentryDeagle::new);
         Registry.register(event.registry, MOD_ID.id("SentryMp5"), SdkEntitySentryMp5::new);
@@ -114,8 +132,8 @@ public class EntityListener {
     }
 
     @EventListener
-    public static void registerMobsHandlers(MobHandlerRegistryEvent event) {
-        Registry.register(event.registry, MOD_ID.id("LaserWolf"), SdkEntityLaserWolf::new);
+    public void registerEntitySpawn(BiomeModificationEvent event) {
+        //TODO wolferinio + opcja
     }
 
     public static Class sentryEntityClasses[];

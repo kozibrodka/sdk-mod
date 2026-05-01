@@ -63,8 +63,6 @@ public class SdkModelSentry extends EntityModel
     {
         for(int i = 0; i < headModels.length; i++)
         {
-//            headModels[i].yaw = sentry.yaw / 57.29578F; //TODO:
-//            headModels[i].pitch = sentry.pitch / 57.29578F;
             headModels[i].yaw = f3 / 57.29578F;
             headModels[i].pitch = f4 / 57.29578F;
         }

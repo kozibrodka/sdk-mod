@@ -24,6 +24,7 @@ public class SdkBlockGrinder extends TemplateBlockWithEntity
         super(iid, Material.STONE);
     }
 
+    @Override
     public int getTexture(int i)
     {
         if(i == 1)
@@ -35,15 +36,17 @@ public class SdkBlockGrinder extends TemplateBlockWithEntity
         }
     }
 
+    @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
-        SdkTileEntityGrinder sdktileentitygrinder = (SdkTileEntityGrinder)world.getBlockEntity(i, j, k);
-        if(sdktileentitygrinder.isActive)
+//        SdkTileEntityGrinder sdktileentitygrinder = (SdkTileEntityGrinder)world.getBlockEntity(i, j, k);
+        if(world.getBlockMeta(i,j,k) == 1)
         {
             world.addParticle("smoke", (float)i + (random.nextFloat() * 10F + 3F) / 16F, (float)j + 1.0F, (float)k + (random.nextFloat() * 10F + 3F) / 16F, 0.0D, 0.0D, 0.0D);
         }
     }
 
+    @Override
     public boolean onUse(World world, int i, int j, int k, PlayerEntity entityplayer)
     {
         if(world.isRemote)
@@ -54,12 +57,13 @@ public class SdkBlockGrinder extends TemplateBlockWithEntity
             SdkTileEntityGrinder sdktileentitygrinder = (SdkTileEntityGrinder)world.getBlockEntity(i, j, k);
 //            TODO: GUI done
 //            SdkTools.minecraft.displayGuiScreen(new SdkGuiGrinder(entityplayer.inventory, sdktileentitygrinder));
-            GuiHelper.openGUI(entityplayer, Identifier.of("sdk:openGrinder"), (Inventory) sdktileentitygrinder, new SdkContainerGrinder(entityplayer.inventory, (SdkTileEntityGrinder) sdktileentitygrinder));
+            GuiHelper.openGUI(entityplayer, Identifier.of("sdk:openGrinder"), sdktileentitygrinder, new SdkContainerGrinder(entityplayer.inventory, sdktileentitygrinder));
 
             return true;
         }
     }
 
+    @Override
     protected BlockEntity createBlockEntity()
     {
         return new SdkTileEntityGrinder();

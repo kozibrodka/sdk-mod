@@ -1,5 +1,7 @@
 package net.kozibrodka.sdk.block;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.EnvironmentInterface;
 import net.kozibrodka.sdk.events.TextureListener;
 import net.kozibrodka.sdk.tileEntity.SdkTileEntityRope;
 import net.minecraft.block.BlockWithEntity;
@@ -22,6 +24,7 @@ import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEn
 
 import java.util.Random;
 
+@EnvironmentInterface(value = EnvType.CLIENT, itf = BlockWithWorldRenderer.class)
 public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWorldRenderer //BlockWithInventoryRenderer
 {
 
@@ -73,21 +76,22 @@ public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWo
     {
         int l = world.getBlockMeta(i, j, k);
         float f = 0.125F;
+        float f2 = 0.25F;
         if(l == 2 || l == 6)
         {
-            setBoundingBox(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
+            setBoundingBox(0.0F + f2, 0.0F, 1.0F - f, 1.0F - f2, 1.0F, 1.0F);
         }
         if(l == 3 || l == 7)
         {
-            setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
+            setBoundingBox(0.0F + f2, 0.0F, 0.0F, 1.0F - f2, 1.0F, f);
         }
         if(l == 4 || l == 8)
         {
-            setBoundingBox(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+            setBoundingBox(1.0F - f, 0.0F, 0.0F + f2, 1.0F, 1.0F, 1.0F - f2);
         }
         if(l == 5 || l == 9)
         {
-            setBoundingBox(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
+            setBoundingBox(0.0F, 0.0F, 0.0F + f2, f, 1.0F, 1.0F - f2);
         }
         return super.getCollisionShape(world, i, j, k);
     }
@@ -97,21 +101,22 @@ public class SdkBlockRope extends TemplateBlockWithEntity implements BlockWithWo
     {
         int l = world.getBlockMeta(i, j, k);
         float f = 0.125F;
+        float f2 = 0.25F;
         if(l == 2 || l == 6)
         {
-            setBoundingBox(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
+            setBoundingBox(0.0F + f2, 0.0F, 1.0F - f, 1.0F - f2, 1.0F, 1.0F);
         }
         if(l == 3 || l == 7)
         {
-            setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
+            setBoundingBox(0.0F + f2, 0.0F, 0.0F, 1.0F - f2, 1.0F, f);
         }
         if(l == 4 || l == 8)
         {
-            setBoundingBox(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+            setBoundingBox(1.0F - f, 0.0F, 0.0F + f2, 1.0F, 1.0F, 1.0F - f2);
         }
         if(l == 5 || l == 9)
         {
-            setBoundingBox(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
+            setBoundingBox(0.0F, 0.0F, 0.0F + f2, f, 1.0F, 1.0F - f2);
         }
         return super.getBoundingBox(world, i, j, k);
     }

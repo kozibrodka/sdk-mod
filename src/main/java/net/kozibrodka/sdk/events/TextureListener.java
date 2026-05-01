@@ -99,7 +99,9 @@ public class TextureListener {
         BlockListener.blockOil.asItem().setTextureId(oil_juction);
         BlockListener.blockPlaque.asItem().setTextureId(plaque);
 
-//        Atlases.getGuiItems().addTextureBinder(Identifier.of(MOD_ID, "blockOil"), SdkTextureLightometerFX::new);
+//        Atlases.getGuiItems().addTextureBinder(Identifier.of(MOD_ID, "itemLightometer"), SdkTextureLightometerFX::new);
+
+
 //        Atlases.getGuiItems().addTextureBinder(10, SdkTextureLightometerFX::new)
 //        Atlases.getGuiItems().addTextureBinder("asda", SdkTextureLightometerFX::new);
     }

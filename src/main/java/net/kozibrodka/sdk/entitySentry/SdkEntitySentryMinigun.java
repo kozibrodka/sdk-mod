@@ -2,11 +2,15 @@
 package net.kozibrodka.sdk.entitySentry;
 
 
+import net.kozibrodka.sdk.events.EntityListener;
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk_api.utils.SdkItemGun;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
+import net.modificationstation.stationapi.api.server.entity.MobSpawnDataProvider;
+import net.modificationstation.stationapi.api.util.Identifier;
 
-public class SdkEntitySentryMinigun extends SdkEntitySentry
+public class SdkEntitySentryMinigun extends SdkEntitySentry implements MobSpawnDataProvider
 {
 
     public SdkEntitySentryMinigun(World world)
@@ -26,5 +30,10 @@ public class SdkEntitySentryMinigun extends SdkEntitySentry
         gun = (SdkItemGun) ItemListener.itemGunMinigun;
         ATTACK_DELAY = 5;
         range = 32F;
+    }
+
+    @Override
+    public Identifier getHandlerIdentifier() {
+        return Identifier.of(EntityListener.MOD_ID, "SentryMinigun");
     }
 }

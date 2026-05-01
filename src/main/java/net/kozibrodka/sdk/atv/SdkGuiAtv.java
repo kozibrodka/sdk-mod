@@ -15,15 +15,17 @@ public class SdkGuiAtv extends HandledScreen
         atv = sdkentityatv;
     }
 
+    @Override
     protected void drawForeground()
     {
         textRenderer.draw(atv.getName(), backgroundWidth / 2 - textRenderer.getWidth(atv.getName()) / 2, 6, 0x404040);
         textRenderer.draw("Inventory", 8, (backgroundHeight - 132) + 2, 0x404040);
     }
 
+    @Override
     protected void drawBackground(float f)
     {
-        int i = minecraft.textureManager.getTextureId("/assets/sdk/stationapi/textures/item/guiAtv.png");
+        int i = minecraft.textureManager.getTextureId("/assets/sdk/stationapi/textures/gui/guiAtv.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         minecraft.textureManager.bindTexture(i);
         int j = (width - backgroundWidth) / 2;
@@ -31,5 +33,5 @@ public class SdkGuiAtv extends HandledScreen
         drawTexture(j, k, 0, 0, backgroundWidth, backgroundHeight);
     }
 
-    private SdkEntityAtv atv;
+    private final SdkEntityAtv atv;
 }

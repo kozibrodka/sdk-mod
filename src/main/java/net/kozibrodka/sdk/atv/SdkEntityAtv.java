@@ -15,6 +15,9 @@ import net.minecraft.nbt.NbtFloat;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
+import net.modificationstation.stationapi.api.gui.screen.container.GuiHelper;
+import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.Namespace;
 
 public class SdkEntityAtv extends SdkEntityLandVehicle
         implements Inventory, SdkVehicle
@@ -352,7 +355,7 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
 //    public void altFireKey(PlayerEntity entityplayer) {
 //        fireGuns();
 //    }
-//
+
 //    @Override
 //    public void inventoryAtvKey(Minecraft minecraft, PlayerEntity entityplayer) {
 //        if(minecraft.currentScreen instanceof SdkGuiAtv){
@@ -379,6 +382,13 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
 
     @Override
     public void inventoryKey(PlayerEntity playerEntity) {
+//        minecraft.setScreen(new SdkGuiAtv(entityplayer.inventory, (SdkEntityAtv)entityplayer.vehicle));
+        GuiHelper.openGUI(
+                playerEntity,
+                Identifier.of(Namespace.of("sdk"), "openAtv"),
+                this,
+                new SdkContainerAtv(playerEntity.inventory, this)
+        );
     }
 
     @Override

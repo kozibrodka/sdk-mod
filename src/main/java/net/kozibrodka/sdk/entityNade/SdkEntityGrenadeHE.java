@@ -62,7 +62,7 @@ public class SdkEntityGrenadeHE extends SdkEntityGrenade implements EntitySpawnD
                     world.addParticle("smoke", x, y, z, world.random.nextDouble() - 0.5D, world.random.nextDouble() - 0.5D, world.random.nextDouble() - 0.5D);
                 }
             }
-            SdkExplosion explosion = new SdkExplosion(world, null, x,  y,  z, 3F, false, true, "random.explode", flagW);
+            SdkExplosion explosion = new SdkExplosion(world, null, x,  y,  z, 3F, false, true, "random.explode", flagW,0.3F);
             explosion.explodeA();
             explosion.explodeB(true);
             dead = true;

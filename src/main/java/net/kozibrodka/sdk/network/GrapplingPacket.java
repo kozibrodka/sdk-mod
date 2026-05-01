@@ -68,10 +68,8 @@ public class GrapplingPacket extends Packet implements ManagedPacket<GrapplingPa
         if(player == null){
             return;
         }
-        System.out.println("DOSZŁO");
         SdkEntityGrapplingHook hook = (SdkEntityGrapplingHook) ((ClientWorld)player.world).getEntity(this.entityId);
         if(hook != null){
-            System.out.println("DOSZŁO2 + " + hook.world.getPlayer(this.entityRoper));
             hook.owner = hook.world.getPlayer(this.entityRoper);
         }
     }

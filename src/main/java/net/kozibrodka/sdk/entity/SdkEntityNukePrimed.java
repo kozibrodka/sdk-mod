@@ -1,14 +1,19 @@
 
 package net.kozibrodka.sdk.entity;
 
-
-import net.kozibrodka.sdk.tileEntity.SdkExplosionNuke;
+import net.kozibrodka.sdk.events.EntityListener;
+import net.kozibrodka.sdk_api.utils.SdkExplosion;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
+import net.modificationstation.stationapi.api.server.entity.HasTrackingParameters;
+import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.TriState;
 
-public class SdkEntityNukePrimed extends Entity
+@HasTrackingParameters(trackingDistance = 240, updatePeriod = 1200, sendVelocity = TriState.TRUE)
+public class SdkEntityNukePrimed extends Entity implements EntitySpawnDataProvider
 {
 
     public SdkEntityNukePrimed(World world)
@@ -34,20 +39,26 @@ public class SdkEntityNukePrimed extends Entity
         prevZ = d2;
     }
 
+    @Override
     protected void initDataTracker()
     {
     }
 
+    @Override
     public boolean shouldRender(double d)
     {
         return true;
     }
 
+    @Override
     public boolean isCollidable()
     {
         return !dead;
     }
 
+    public boolean playedSound;
+
+    @Override
     public void tick()
     {
         prevX = x;
@@ -72,29 +83,50 @@ public class SdkEntityNukePrimed extends Entity
         {
             world.addParticle("smoke", x, y + 0.5D, z, 0.0D, 0.0D, 0.0D);
         }
+        if(!playedSound){
+            playedSound = true;
+            world.playSound(this, "random.fuse", 1.0F, 1.0F);
+        }
     }
 
     private void explode()
     {
-        SdkExplosionNuke sdkexplosionnuke = new SdkExplosionNuke(world, null, x, y, z, 8F, 0.0F, false);
-        sdkexplosionnuke.doExplosionA();
-        sdkexplosionnuke.doExplosionB();
+//        SdkExplosionNuke sdkexplosionnuke = new SdkExplosionNuke(world, null, x, y, z, 8F, 0.0F, false);
+//        sdkexplosionnuke.doExplosionA();
+//        sdkexplosionnuke.doExplosionB();
+        boolean flagW = false;
+        if(checkWaterCollisions()) {
+            flagW = true;
+        }
+        SdkExplosion explosion = new SdkExplosion(world, null, x,  y,  z, 8.0F, false, true, "random.explode", flagW, 0.0F); //todo 0 luck
+        explosion.explodeA();
+        explosion.explodeB(true);
     }
 
+    @Override
     protected void writeNbt(NbtCompound nbttagcompound)
     {
         nbttagcompound.putByte("Fuse", (byte)fuse);
     }
 
+    @Override
     protected void readNbt(NbtCompound nbttagcompound)
     {
         fuse = nbttagcompound.getByte("Fuse");
     }
 
+    @Override
     public float getShadowRadius()
     {
         return 0.0F;
     }
 
     public int fuse;
+
+    @Override
+    public Identifier getHandlerIdentifier() {
+        {
+            return Identifier.of(EntityListener.MOD_ID, "NukePrimed");
+        }
+    }
 }

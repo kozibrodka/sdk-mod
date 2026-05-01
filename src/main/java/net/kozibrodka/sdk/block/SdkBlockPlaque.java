@@ -1,5 +1,7 @@
 package net.kozibrodka.sdk.block;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.EnvironmentInterface;
 import net.kozibrodka.sdk.events.TextureListener;
 import net.kozibrodka.sdk.tileEntity.SdkTileEntityPlaque;
 import net.minecraft.block.Block;
@@ -20,6 +22,7 @@ import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEn
 
 import java.util.Random;
 
+@EnvironmentInterface(value = EnvType.CLIENT, itf = BlockWithWorldRenderer.class)
 public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWithWorldRenderer
 {
 
@@ -28,12 +31,18 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
         super(iid, Material.WOOD);
 //        renderType = k;
     }
+    @Override
+    public int getTexture(int side) {
+        return TextureListener.plaque;
+    }
 
+    @Override
     protected BlockEntity createBlockEntity()
     {
         return new SdkTileEntityPlaque();
     }
 
+    @Override
     public Box getCollisionShape(World world, int i, int j, int k)
     {
         int l = world.getBlockMeta(i, j, k);
@@ -57,6 +66,7 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
         return super.getCollisionShape(world, i, j, k);
     }
 
+    @Override
     public Box getBoundingBox(World world, int i, int j, int k)
     {
         int l = world.getBlockMeta(i, j, k);
@@ -80,21 +90,25 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
         return super.getBoundingBox(world, i, j, k);
     }
 
+    @Override
     public boolean isOpaque()
     {
         return false;
     }
 
+    @Override
     public boolean isFullCube()
     {
         return false;
     }
 
+    @Override
     public int getRenderType()
     {
         return renderType;
     }
 
+    @Override
     public boolean onUse(World world, int i, int j, int k, PlayerEntity entityplayer)
     {
         if(world.isRemote)
@@ -107,19 +121,19 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
         }
     }
 
+    @Override
     public void onBreak(World world, int i, int j, int k)
     {
         if(world.isRemote)
         {
-            return;
         } else
         {
             SdkTileEntityPlaque sdktileentityplaque = (SdkTileEntityPlaque)world.getBlockEntity(i, j, k);
             sdktileentityplaque.removed(world);
-            return;
         }
     }
 
+    @Override
     public boolean canPlaceAt(World world, int i, int j, int k)
     {
         if(world.method_1783(i - 1, j, k))
@@ -139,6 +153,7 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
         }
     }
 
+    @Override
     public void onPlaced(World world, int i, int j, int k, int l)
     {
         int i1 = world.getBlockMeta(i, j, k);
@@ -161,14 +176,11 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
         world.setBlockMeta(i, j, k, i1);
     }
 
+    @Override
     public void neighborUpdate(World world, int i, int j, int k, int l)
     {
         int i1 = world.getBlockMeta(i, j, k);
-        boolean flag = false;
-        if(i1 == 2 && world.method_1783(i, j, k + 1))
-        {
-            flag = true;
-        }
+        boolean flag = i1 == 2 && world.method_1783(i, j, k + 1);
         if(i1 == 3 && world.method_1783(i, j, k - 1))
         {
             flag = true;
@@ -189,6 +201,7 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
         super.neighborUpdate(world, i, j, k, l);
     }
 
+    @Override
     public int getDroppedItemCount(Random random)
     {
         return 1;
@@ -226,31 +239,32 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
         float f2 = 0.05F;
         if(k1 == 5)
         {
+            //TODO kombinowanie obustronnego wyswietlenia.....???
             tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k + 1) + f1, d, d2);
-            tessellator.vertex((float)i + f2, (float)(j + 0) - f1, (float)(k + 1) + f1, d, d3);
-            tessellator.vertex((float)i + f2, (float)(j + 0) - f1, (float)(k + 0) - f1, d1, d3);
-            tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k + 0) - f1, d1, d2);
+            tessellator.vertex((float)i + f2, (float)(j) - f1, (float)(k + 1) + f1, d, d3);
+            tessellator.vertex((float)i + f2, (float)(j) - f1, (float)(k) - f1, d1, d3);
+            tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k) - f1, d1, d2);
         }
         if(k1 == 4)
         {
-            tessellator.vertex((float)(i + 1) - f2, (float)(j + 0) - f1, (float)(k + 1) + f1, d1, d3);
+            tessellator.vertex((float)(i + 1) - f2, (float)(j) - f1, (float)(k + 1) + f1, d1, d3);
             tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k + 1) + f1, d1, d2);
-            tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k + 0) - f1, d, d2);
-            tessellator.vertex((float)(i + 1) - f2, (float)(j + 0) - f1, (float)(k + 0) - f1, d, d3);
+            tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k) - f1, d, d2);
+            tessellator.vertex((float)(i + 1) - f2, (float)(j) - f1, (float)(k) - f1, d, d3);
         }
         if(k1 == 3)
         {
-            tessellator.vertex((float)(i + 1) + f1, (float)(j + 0) - f1, (float)k + f2, d1, d3);
+            tessellator.vertex((float)(i + 1) + f1, (float)(j) - f1, (float)k + f2, d1, d3);
             tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)k + f2, d1, d2);
-            tessellator.vertex((float)(i + 0) - f1, (float)(j + 1) + f1, (float)k + f2, d, d2);
-            tessellator.vertex((float)(i + 0) - f1, (float)(j + 0) - f1, (float)k + f2, d, d3);
+            tessellator.vertex((float)(i) - f1, (float)(j + 1) + f1, (float)k + f2, d, d2);
+            tessellator.vertex((float)(i) - f1, (float)(j) - f1, (float)k + f2, d, d3);
         }
         if(k1 == 2)
         {
             tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d, d2);
-            tessellator.vertex((float)(i + 1) + f1, (float)(j + 0) - f1, (float)(k + 1) - f2, d, d3);
-            tessellator.vertex((float)(i + 0) - f1, (float)(j + 0) - f1, (float)(k + 1) - f2, d1, d3);
-            tessellator.vertex((float)(i + 0) - f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d1, d2);
+            tessellator.vertex((float)(i + 1) + f1, (float)(j) - f1, (float)(k + 1) - f2, d, d3);
+            tessellator.vertex((float)(i) - f1, (float)(j) - f1, (float)(k + 1) - f2, d1, d3);
+            tessellator.vertex((float)(i) - f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d1, d2);
         }
         return true;
     }

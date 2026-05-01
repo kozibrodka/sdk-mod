@@ -15,11 +15,13 @@ public class SdkBlockLighter extends TemplateBlock
         super(iid, Material.STONE);
     }
 
+    @Override
     public void onPlaced(World world, int i, int j, int k)
     {
         neighborUpdate(world, i, j, k, 0);
     }
 
+    @Override
     public void neighborUpdate(World world, int i, int j, int k, int l)
     {
         if(world.isPowered(i, j, k))
@@ -35,6 +37,7 @@ public class SdkBlockLighter extends TemplateBlock
         }
     }
 
+    @Override
     public int getTexture(int i)
     {
         if(i == 1)

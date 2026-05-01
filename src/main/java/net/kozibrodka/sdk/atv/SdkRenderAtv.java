@@ -38,59 +38,88 @@ public class SdkRenderAtv extends EntityRenderer
         GL11.glRotatef(225F, 0.0F, 0.0F, 1.0F);
         GL11.glTranslatef(-0.125F, 1.125F, 0.625F);
         Tessellator tessellator = Tessellator.INSTANCE;
-        for(int i = -1; i <= 1; i += 2)
-        {
-            ItemStack itemstack = null;
-            if(i == -1)
-            {
-                itemstack = sdkentityatv.gunA;
-            } else
-            {
-                itemstack = sdkentityatv.gunB;
-                GL11.glTranslatef(0.0F, 0.0F, -1.25F);
-            }
-            if(itemstack != null)
-            {
 
-//                int j = itemstack.getTexturePosition();   //juz widze ze zle
-                bindTexture("/gui/items.png");
-//                float f3 = (float)((j % 16) * 16 + 0) / 256F;
-//                float f4 = (float)((j % 16) * 16 + 16) / 256F;
-//                float f5 = (float)((j / 16) * 16 + 0) / 256F;
-//                float f6 = (float)((j / 16) * 16 + 16) / 256F;
 
-                int l = itemstack.getTextureId();
-                Atlas.Sprite testTex =  Atlases.getGuiItems().getTexture(l);
-                float f3 = (float)(testTex.getStartU());
-                float f4 = (float)(testTex.getEndU());
-                float f5 = (float)(testTex.getStartV());
-                float f6 = (float)(testTex.getEndV());
+        ItemStack itemstacka = sdkentityatv.gunA;
+        ItemStack itemstackb = sdkentityatv.gunB;
+        if(itemstacka != null){
+            bindTexture("/gui/items.png");
+            int l = itemstacka.getTextureId();
+            Atlas.Sprite testTex =  Atlases.getGuiItems().getTexture(l);
+            float f3 = (float)(testTex.getStartU());
+            float f4 = (float)(testTex.getEndU());
+            float f5 = (float)(testTex.getStartV());
+            float f6 = (float)(testTex.getEndV());
 
-                float f7 = 1.0F;
-                float f8 = 0.5F;
-                float f9 = 0.25F;
-                GL11.glPushMatrix();
-                tessellator.startQuads();
-                tessellator.color(f1, f1, f1);
-                tessellator.normal(0.0F, 1.0F, 0.0F);
-                tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
-                tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
-                tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
-                tessellator.vertex(0.0F - f8, 1.0F - f9, 0.0D, f3, f5);
-                tessellator.vertex(0.0F - f8, 1.0F - f9, 0.0D, f3, f5);
-                tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
-                tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
-                tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
-                tessellator.draw();
-                GL11.glPopMatrix();
-            }
+            float f7 = 1.0F;
+            float f8 = 0.5F;
+            float f9 = 0.25F;
+            GL11.glPushMatrix();
+            tessellator.startQuads();
+            tessellator.color(f1, f1, f1);
+            tessellator.normal(0.0F, 1.0F, 0.0F);
+            tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
+            tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
+            tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
+            tessellator.vertex(0.0F - f8, 1.0F - f9, 0.0D, f3, f5);
+            tessellator.vertex(0.0F - f8, 1.0F - f9, 0.0D, f3, f5);
+            tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
+            tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
+            tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
+            tessellator.draw();
+            GL11.glPopMatrix();
         }
+
+        /// /
+//        for(int i = -1; i <= 1; i += 2)
+//        {
+//            ItemStack itemstack = null;
+//            if(i == -1)
+//            {
+//                itemstack = sdkentityatv.gunA;
+//            } else
+//            {
+//                itemstack = sdkentityatv.gunB;
+//                GL11.glTranslatef(0.0F, 0.0F, -1.25F);
+//            }
+//            if(itemstack != null)
+//            {
+//
+//                bindTexture("/gui/items.png");
+//                int l = itemstack.getTextureId();
+//                Atlas.Sprite testTex =  Atlases.getGuiItems().getTexture(l);
+//                float f3 = (float)(testTex.getStartU());
+//                float f4 = (float)(testTex.getEndU());
+//                float f5 = (float)(testTex.getStartV());
+//                float f6 = (float)(testTex.getEndV());
+//
+//                float f7 = 1.0F;
+//                float f8 = 0.5F;
+//                float f9 = 0.25F;
+//                GL11.glPushMatrix();
+//                tessellator.startQuads();
+//                tessellator.color(f1, f1, f1);
+//                tessellator.normal(0.0F, 1.0F, 0.0F);
+//                tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
+//                tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
+//                tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
+//                tessellator.vertex(0.0F - f8, 1.0F - f9, 0.0D, f3, f5);
+//                tessellator.vertex(0.0F - f8, 1.0F - f9, 0.0D, f3, f5);
+//                tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
+//                tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
+//                tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
+//                tessellator.draw();
+//                GL11.glPopMatrix();
+//            }
+//        }
+        ///
 
         GL11.glPopMatrix();
         GL11.glDisable(32826 /*GL_RESCALE_NORMAL_EXT*/);
         GL11.glPopMatrix();
     }
 
+    @Override
     public void render(Entity entity, double d, double d1, double d2,
                        float f, float f1)
     {

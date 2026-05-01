@@ -1,11 +1,10 @@
 
 package net.kozibrodka.sdk.item;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+
 import net.kozibrodka.sdk.entitySentry.SdkEntitySentry;
+import net.kozibrodka.sdk.entitySentry.SdkEntitySentryMp5;
 import net.kozibrodka.sdk.events.EntityListener;
-import net.kozibrodka.sdk.events.TextureListener;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
@@ -17,7 +16,6 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 
 public class SdkItemSentry extends TemplateItem
@@ -29,21 +27,14 @@ public class SdkItemSentry extends TemplateItem
         setHasSubtypes(true);
     }
 
+    @Override
     public int getPlacementMetadata(int i)
     {
         return i;
     }
 
-//    @Environment(EnvType.CLIENT)
-//    public int getTexturePosition(int i) {
-//        switch(i){
-//            case 0: return TextureListener.grappling;
-//            case 1: return TextureListener.grappling;
-//            case 2: return TextureListener.empty;
-//            default: return 11;
-//        }
-//    }
 
+    @Override
     public ItemStack use(ItemStack itemstack, World world, PlayerEntity entityplayer)
     {
         float f = 1.0F;
@@ -80,18 +71,21 @@ public class SdkItemSentry extends TemplateItem
                 {
                     try
                     {
-                        Constructor constructor = EntityListener.sentryEntityClasses[itemstack.getDamage()].getConstructor(new Class[] {
-                            World.class
-                        });
+                        Constructor constructor = EntityListener.sentryEntityClasses[itemstack.getDamage()].getConstructor(World.class);
                         SdkEntitySentry sdkentitysentry = (SdkEntitySentry)constructor.newInstance(new Object[] {
                             world
                         });
                         sdkentitysentry.setOwner(entityplayer.name);
+//                        if(sdkentitysentry instanceof SdkEntitySentryMp5 mp5){
+//                            mp5.setOwner2(entityplayer.name); ///TEST
+//                        }
+
                         sdkentitysentry.setPositionAndAnglesKeepPrevAngles((double)i + 0.5D, (double)j + 1.0D, (double)k + 0.5D, 0.0F, 0.0F);
                         world.spawnEntity(sdkentitysentry);
                     }
                     catch(Exception exception)
                     {
+                        System.out.println(exception);
 //                        ModLoader.getLogger().throwing("SdkBlockSentry", "onBlockPlaced", nosuchmethodexception);
 //                        SdkTools.ThrowException("An impossible error has occured!", nosuchmethodexception);
                         return itemstack;
@@ -103,8 +97,9 @@ public class SdkItemSentry extends TemplateItem
         return itemstack;
     }
 
+    @Override
     public String getTranslationKey(ItemStack itemstack)
     {
-        return (new StringBuilder()).append(super.getTranslationKey()).append(".").append(itemstack.getDamage()).toString();
+        return super.getTranslationKey() + "." + itemstack.getDamage();
     }
 }

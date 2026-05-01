@@ -1,14 +1,25 @@
 package net.kozibrodka.sdk.tileEntity;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.kozibrodka.sdk.network.AskPacket;
+import net.kozibrodka.sdk_api.network.CoordSoundPacket;
+import net.kozibrodka.sdk_api.network.SdkPacketHelper;
+import net.kozibrodka.sdk_api.utils.SdkEnvTool;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.network.packet.PacketHelper;
+
+import java.util.List;
 
 public class SdkTileEntityPlaque extends BlockEntity
 {
@@ -18,10 +29,45 @@ public class SdkTileEntityPlaque extends BlockEntity
         itemStack = null;
     }
 
+    public boolean hasAsked;
+
+    @Override
+    public void tick() {
+        if(world.isRemote && !hasAsked){
+            hasAsked = true;
+            PacketHelper.send(new AskPacket(0, 0, x, y, z));
+        }
+    }
+
+    @Environment(EnvType.SERVER)
+    public void sendItemAll(int id, int meta, int x, int y, int z) {
+        List list2 = world.players;
+        if (!list2.isEmpty()) {
+            for (Object o : list2) {
+                ServerPlayerEntity player1 = (ServerPlayerEntity) o;
+                PacketHelper.sendTo(player1, new AskPacket(id, meta, x, y, z));
+            }
+        }
+    }
+
+    public void updateRender(){
+        if(SdkEnvTool.isEnvServ()){
+            if(itemStack == null){
+                sendItemAll(0, 0, x,y,z);
+            }else{
+                sendItemAll(itemStack.itemId, itemStack.getDamage(), x,y,z);
+            }
+        }
+    }
+
     public boolean activated(World world, PlayerEntity entityplayer)
     {
         ItemStack itemstack = entityplayer.getHand();
-        if(itemstack != null && itemstack.itemId < 256 && BlockRenderManager.isSideLit(Block.BLOCKS[itemstack.itemId].getRenderType()))
+//        if(itemstack != null && itemstack.itemId < 256 && BlockRenderManager.isSideLit(Block.BLOCKS[itemstack.itemId].getRenderType()))
+//        {
+//            return false;
+//        }
+        if(itemstack != null && itemstack.getItem() instanceof BlockItem)
         {
             return false;
         }
@@ -35,6 +81,7 @@ public class SdkTileEntityPlaque extends BlockEntity
             {
                 entityplayer.inventory.main[entityplayer.inventory.selectedSlot] = null;
                 itemStack = itemstack;
+                updateRender();
             } else
             {
                 itemstack.count--;
@@ -43,6 +90,7 @@ public class SdkTileEntityPlaque extends BlockEntity
                     entityplayer.inventory.main[entityplayer.inventory.selectedSlot] = null;
                 }
                 itemStack = new ItemStack(itemstack.getItem(), 1);
+                updateRender();
             }
             return true;
         }
@@ -50,18 +98,21 @@ public class SdkTileEntityPlaque extends BlockEntity
         {
             entityplayer.inventory.main[entityplayer.inventory.selectedSlot] = itemStack;
             itemStack = null;
+            updateRender();
             return true;
         }
         if(itemStack.itemId == itemstack.itemId && itemstack.count < itemstack.getItem().getMaxCount())
         {
             itemstack.count++;
             itemStack = null;
+            updateRender();
             return true;
         }
         if(itemstack.count == 1)
         {
             entityplayer.inventory.main[entityplayer.inventory.selectedSlot] = itemStack;
             itemStack = itemstack;
+            updateRender();
             return true;
         } else
         {
@@ -84,6 +135,7 @@ public class SdkTileEntityPlaque extends BlockEntity
         }
     }
 
+    @Override
     public void readNbt(NbtCompound nbttagcompound)
     {
         super.readNbt(nbttagcompound);
@@ -99,6 +151,7 @@ public class SdkTileEntityPlaque extends BlockEntity
         }
     }
 
+    @Override
     public void writeNbt(NbtCompound nbttagcompound)
     {
         super.writeNbt(nbttagcompound);

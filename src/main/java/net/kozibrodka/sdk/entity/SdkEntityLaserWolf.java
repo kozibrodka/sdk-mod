@@ -1,6 +1,7 @@
 
 package net.kozibrodka.sdk.entity;
 
+import net.kozibrodka.sdk.events.EntityListener;
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk.itemGun.SdkItemGunLaser;
 import net.kozibrodka.sdk_api.utils.SdkItemGun;
@@ -11,8 +12,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.server.entity.MobSpawnDataProvider;
+import net.modificationstation.stationapi.api.util.Identifier;
 
-public class SdkEntityLaserWolf extends WolfEntity
+public class SdkEntityLaserWolf extends WolfEntity implements MobSpawnDataProvider
 {
 
     public SdkEntityLaserWolf(World world)
@@ -22,6 +25,7 @@ public class SdkEntityLaserWolf extends WolfEntity
         texture = "/assets/sdk/stationapi/textures/mob/mobLaserWolf.png";
     }
 
+    @Override
     protected void initDataTracker()
     {
         super.initDataTracker();
@@ -49,6 +53,7 @@ public class SdkEntityLaserWolf extends WolfEntity
         dataTracker.set(20, Byte.valueOf((byte)(flag ? 1 : 0)));
     }
 
+    @Override
     public String getTexture()
     {
         if(isTamed())
@@ -78,6 +83,7 @@ public class SdkEntityLaserWolf extends WolfEntity
         }
     }
 
+    @Override
     public void writeNbt(NbtCompound nbttagcompound)
     {
         super.writeNbt(nbttagcompound);
@@ -85,6 +91,7 @@ public class SdkEntityLaserWolf extends WolfEntity
         nbttagcompound.putBoolean("HasArmour", getHasArmour());
     }
 
+    @Override
     public void readNbt(NbtCompound nbttagcompound)
     {
         super.readNbt(nbttagcompound);
@@ -92,6 +99,7 @@ public class SdkEntityLaserWolf extends WolfEntity
         setHasArmour(nbttagcompound.getBoolean("HasArmour"));
     }
 
+    @Override
     protected void dropItems()
     {
         if(getHasLaser())
@@ -103,11 +111,13 @@ public class SdkEntityLaserWolf extends WolfEntity
         }
     }
 
+    @Override
     public boolean damage(Entity entity, int i)
     {
         return super.damage(entity, getHasArmour() ? i / 2 : i);
     }
 
+    @Override
     protected void attack(Entity entity, float f)
     {
         if(getHasLaser())
@@ -129,6 +139,7 @@ public class SdkEntityLaserWolf extends WolfEntity
         }
     }
 
+    @Override
     public boolean interact(PlayerEntity entityplayer)
     {
         if(!world.isRemote && isTamed() && entityplayer.name.equals(getOwnerName()))
@@ -164,4 +175,9 @@ public class SdkEntityLaserWolf extends WolfEntity
     }
 
     public ItemStack laser;
+
+    @Override
+    public Identifier getHandlerIdentifier() {
+        return Identifier.of(EntityListener.MOD_ID, "LaserWolf");
+    }
 }
