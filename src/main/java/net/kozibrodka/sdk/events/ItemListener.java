@@ -34,7 +34,7 @@ public class ItemListener {
         itemBulletShell = new TemplateItem(Identifier.of(MOD_ID, "BulletShell")).setTranslationKey(MOD_ID, "BulletShell").setMaxCount(8);
         itemOil = new SdkItemOil(Identifier.of(MOD_ID, "Oil")).setTranslationKey(MOD_ID, "Oil");
 
-        //GUNS
+        //GUNS //todo balans peny
         itemGunAk47 = new SdkItemGunAk47(Identifier.of(MOD_ID, "GunAk47")).setTranslationKey(MOD_ID, "GunAk47");
         itemGunMp5 = new SdkItemGunMp5(Identifier.of(MOD_ID, "GunMp5")).setTranslationKey(MOD_ID, "GunMp5");
         itemGunShotgun = new SdkItemGunShotgun(Identifier.of(MOD_ID, "GunShotgun")).setTranslationKey(MOD_ID, "GunShotgun");
@@ -58,10 +58,10 @@ public class ItemListener {
         itemGrenadeIncendiaryLit = new SdkItemGrenadeIncendiary(Identifier.of(MOD_ID, "GrenadeIncendiaryLit")).setTranslationKey(MOD_ID, "GrenadeIncendiaryLit").setMaxCount(4);
 
         //UTIL
-        itemLightometer = new TemplateItem(Identifier.of(MOD_ID, "Lightometer")).setTranslationKey(MOD_ID, "Lightometer"); //TODO
+        itemLightometer = new TemplateItem(Identifier.of(MOD_ID, "Lightometer")).setTranslationKey(MOD_ID, "Lightometer");
         itemNightvisionGoggles = new ItemNightvision(Identifier.of(MOD_ID, "NightvisionGoggles")).setTranslationKey(MOD_ID, "NightvisionGoggles");
         itemScubaTank = new ItemScuba(Identifier.of(MOD_ID, "ScubaTank")).setTranslationKey(MOD_ID, "ScubaTank");
-        itemParachute = new ItemParachute(Identifier.of(MOD_ID, "Parachute")).setTranslationKey(MOD_ID, "Parachute");
+        itemParachute = new ItemParachute(Identifier.of(MOD_ID, "Parachute")).setTranslationKey(MOD_ID, "Parachute"); //TODO utils DMG itd...
         itemTelescope = new SdkTelescopeItem(Identifier.of(MOD_ID, "Telescope"), new float[]{1.0F, 0.5F, 0.25F, 0.125F, 0.0625F}, 0.0625F, "/assets/sdk/stationapi/textures/gui/miscTelescope.png").setTranslationKey(MOD_ID, "Telescope");
         itemJetPack = new ItemJetPack(Identifier.of(MOD_ID, "JetPack")).setTranslationKey(MOD_ID, "JetPack");
         itemGrapplingHook = new SdkItemGrapplingHook(Identifier.of(MOD_ID, "GrapplingHook")).setTranslationKey(MOD_ID, "GrapplingHook");

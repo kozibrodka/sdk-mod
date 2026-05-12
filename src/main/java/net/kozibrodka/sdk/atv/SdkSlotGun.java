@@ -14,11 +14,13 @@ class SdkSlotGun extends Slot
         super(iinventory, i, j, k);
     }
 
+    @Override
     public int getMaxItemCount()
     {
         return 1;
     }
 
+    @Override
     public boolean canInsert(ItemStack itemstack)
     {
         return itemstack.getItem() instanceof SdkItemGun;

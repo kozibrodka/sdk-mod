@@ -1,57 +1,45 @@
 
 package net.kozibrodka.sdk.render;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
-import javax.imageio.ImageIO;
-
-import net.fabricmc.loader.api.FabricLoader;
 import net.kozibrodka.sdk.events.ItemListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.texture.DynamicTexture;
 import net.minecraft.client.resource.pack.TexturePack;
 import net.minecraft.util.math.MathHelper;
-import net.modificationstation.stationapi.api.client.StationRenderAPI;
-import net.modificationstation.stationapi.api.client.texture.TextureHelper;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
-import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.client.texture.binder.StationTextureBinder;
 
-public class SdkTextureLightometerFX extends StationTextureBinder
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
+
+public class SdkTextureLightometerFX_old extends DynamicTexture
 {
-
-    private final Minecraft mc = (Minecraft) FabricLoader.getInstance().getGameInstance();
-    private int watchIconImageData[];
-    private int dialImageData[];
-    private double field_4222_j;
-    private double field_4221_k;
-
-public SdkTextureLightometerFX(Atlas.Sprite staticReference) {
-    super(staticReference);
-}
-
-    @Override
-    public void reloadFromTexturePack(TexturePack texturePack) {
-        Atlas.Sprite staticReference = this.getStaticReference();
-        int textureWidth = staticReference.getWidth();
-        int textureHeight = staticReference.getHeight();
-        int square = textureWidth * textureHeight;
-        this.dialImageData = new int[square];
-        this.watchIconImageData = StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).getSprite(staticReference.getId()).getContents().getBaseFrame().makePixelArray();
-        BufferedImage var2 = TextureHelper.scaleImage(TextureHelper.getTexture("/assets/sdk/stationapi/textures/gui/miscLightometer.png"), textureWidth, textureHeight);
-        var2.getRGB(0, 0, textureWidth, textureHeight, this.dialImageData, 0, textureWidth);
-        this.pixels = new byte[square * 4];
+    public SdkTextureLightometerFX_old(Minecraft minecraft)
+    {
+        super(ItemListener.itemLightometer.getTextureId(0));
+        watchIconImageData = new int[256];
+        dialImageData = new int[256];
+        mc = minecraft;
+        atlas = 1;
+        try
+        {
+            BufferedImage bufferedimage = ImageIO.read(Objects.requireNonNull((Minecraft.class).getResource("/assets/sdk/stationapi/textures/item/itemLightometer.png")));
+            bufferedimage.getRGB(0, 0, 16, 16, watchIconImageData, 0, 16);
+            bufferedimage = ImageIO.read(Objects.requireNonNull((Minecraft.class).getResource("/assets/sdk/stationapi/textures/gui/miscLightometer.png")));
+            bufferedimage.getRGB(0, 0, 16, 16, dialImageData, 0, 16);
+        }
+        catch(IOException ioexception)
+        {
+            ioexception.printStackTrace();
+        }
     }
 
 
     @Override
     public void tick()
     {
-        Atlas.Sprite staticReference = this.getStaticReference();
-        int textureWidth = staticReference.getWidth();
-        int textureHeight = staticReference.getHeight();
-        int square = textureWidth * textureHeight;
         double d = 0.0D;
         if(mc.world != null && mc.player != null)
         {
@@ -78,7 +66,7 @@ public SdkTextureLightometerFX(Atlas.Sprite staticReference) {
         field_4222_j += field_4221_k;
         double d2 = Math.sin(field_4222_j);
         double d3 = Math.cos(field_4222_j);
-        for(int i1 = 0; i1 < square; i1++)
+        for(int i1 = 0; i1 < 256; i1++)
         {
             int j1 = watchIconImageData[i1] >> 24 & 0xff;
             int k1 = watchIconImageData[i1] >> 16 & 0xff;
@@ -129,4 +117,11 @@ public SdkTextureLightometerFX(Atlas.Sprite staticReference) {
         f = f1 + (f - f1) / 3F;
         return f;
     }
+
+    private Minecraft mc;
+    private int watchIconImageData[];
+    private int dialImageData[];
+    private double field_4222_j;
+    private double field_4221_k;
+
 }

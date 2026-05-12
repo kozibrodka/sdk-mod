@@ -1,26 +1,27 @@
 package net.kozibrodka.sdk.atv;
 
-import net.fabricmc.loader.api.FabricLoader;
+import net.kozibrodka.sdk.events.EntityListener;
 import net.kozibrodka.sdk.events.ItemListener;
 import net.kozibrodka.sdk_api.utils.SdkItemCustomUseDelay;
 import net.kozibrodka.sdk_api.utils.SdkItemGun;
 import net.kozibrodka.sdk_api.utils.SdkVehicle;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtDouble;
-import net.minecraft.nbt.NbtFloat;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import net.modificationstation.stationapi.api.gui.screen.container.GuiHelper;
+import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
+import net.modificationstation.stationapi.api.server.entity.HasTrackingParameters;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.Namespace;
+import net.modificationstation.stationapi.api.util.TriState;
 
+@HasTrackingParameters(trackingDistance = 160, updatePeriod = 2, sendVelocity = TriState.TRUE)
 public class SdkEntityAtv extends SdkEntityLandVehicle
-        implements Inventory, SdkVehicle
+        implements Inventory, SdkVehicle, EntitySpawnDataProvider
 {
 
     public SdkEntityAtv(World world)
@@ -51,26 +52,32 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
         prevZ = d2;
     }
 
+
+    @Override
     public boolean isPushable() //canBePushe
     {
         return true;
     }
 
+    @Override
     public double getPassengerRidingHeight()
     {
-        return 0.29999999999999999D;
+        return 0.3D;
     }
 
+    @Override
     public float getEyeHeight()
     {
         return 0.7F;
     }
 
+    @Override
     public void onHurt()
     {
         world.playSound(this, "sdk:mechhurt", 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
     }
 
+    @Override
     public void onDeath()
     {
         if(deathTime == -13)
@@ -79,9 +86,13 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
         }
     }
 
+    @Override
     public void tick()
     {
         super.tick();
+        if(clientFIRE){
+            fireGuns();
+        }
         if(random.nextInt(MAX_HEALTH) > health * 2)
         {
             if(Math.random() < 0.75D)
@@ -115,6 +126,9 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
         }
         if(passenger != null)
         {
+//            if(SdkEnvTool.isEnvServ() && passenger instanceof PlayerEntity playerP){
+//                PacketHelper.sendTo(playerP, new GroundPacket(this.onGround));
+//            }
             if(soundLoopTime <= 0)
             {
                 world.playSound(x + velocityX * 1.5D, y + (onGround ? 0.0D : velocityY) * 1.5D, z + velocityZ * 1.5D, SOUND_RIDING, 1.0F, 1.0F + (float)(getSpeed() / MAX_SPEED / 4D));
@@ -128,7 +142,7 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
     }
 
     public void spawnParticles(String s, int i, boolean flag)
-    {
+    { //TODO PARTICLE new
         for(int j = 0; j < i; j++)
         {
             double d = (x + random.nextDouble() * (double)width * 1.5D) - (double)width * 0.75D;
@@ -148,6 +162,7 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
 
     }
 
+    @Override
     public boolean interact(PlayerEntity entityplayer)
     {
         if(entityplayer.getHand() != null && entityplayer.getHand().itemId == ItemListener.itemWrench.id)
@@ -177,40 +192,44 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
         return true;
     }
 
-    public void read(NbtCompound nbttagcompound)
-    {
-        NbtList nbttaglist = nbttagcompound.getList("Pos");
-        NbtList nbttaglist1 = nbttagcompound.getList("Motion");
-        NbtList nbttaglist2 = nbttagcompound.getList("Rotation");
-        setPosition(0.0D, 0.0D, 0.0D);
-        velocityX = ((NbtDouble)nbttaglist1.get(0)).value;
-        velocityY = ((NbtDouble)nbttaglist1.get(1)).value;
-        velocityZ = ((NbtDouble)nbttaglist1.get(2)).value;
-        if(Math.abs(velocityX) > 10D)
-        {
-            velocityX = 0.0D;
-        }
-        if(Math.abs(velocityY) > 10D)
-        {
-            velocityY = 0.0D;
-        }
-        if(Math.abs(velocityZ) > 10D)
-        {
-            velocityZ = 0.0D;
-        }
-        prevX = lastTickX = x = ((NbtDouble)nbttaglist.get(0)).value;
-        prevY = lastTickY = y = ((NbtDouble)nbttaglist.get(1)).value;
-        prevZ = lastTickZ = z = ((NbtDouble)nbttaglist.get(2)).value;
-        prevYaw = yaw = ((NbtFloat)nbttaglist2.get(0)).value;
-        prevPitch = pitch = ((NbtFloat)nbttaglist2.get(1)).value;
-        fallDistance = nbttagcompound.getFloat("FallDistance");
-        fireTicks = nbttagcompound.getShort("Fire");
-        air = nbttagcompound.getShort("Air");
-        onGround = nbttagcompound.getBoolean("OnGround");
-        setPosition(x, y, z);
-        readNbt(nbttagcompound);
-    }
+//    @Override
+//    public void read(NbtCompound nbttagcompound)
+//    {
+//        NbtList nbttaglist = nbttagcompound.getList("Pos");
+//        NbtList nbttaglist1 = nbttagcompound.getList("Motion");
+//        NbtList nbttaglist2 = nbttagcompound.getList("Rotation");
+//        setPosition(0.0D, 0.0D, 0.0D);
+//        velocityX = ((NbtDouble)nbttaglist1.get(0)).value;
+//        velocityY = ((NbtDouble)nbttaglist1.get(1)).value;
+//        velocityZ = ((NbtDouble)nbttaglist1.get(2)).value;
+//        if(Math.abs(velocityX) > 10D)
+//        {
+//            velocityX = 0.0D;
+//        }
+//        if(Math.abs(velocityY) > 10D)
+//        {
+//            velocityY = 0.0D;
+//        }
+//        if(Math.abs(velocityZ) > 10D)
+//        {
+//            velocityZ = 0.0D;
+//        }
+//        prevX = lastTickX = x = ((NbtDouble)nbttaglist.get(0)).value;
+//        prevY = lastTickY = y = ((NbtDouble)nbttaglist.get(1)).value;
+//        prevZ = lastTickZ = z = ((NbtDouble)nbttaglist.get(2)).value;
+//        prevYaw = yaw = ((NbtFloat)nbttaglist2.get(0)).value;
+//        prevPitch = pitch = ((NbtFloat)nbttaglist2.get(1)).value;
+//        fallDistance = nbttagcompound.getFloat("FallDistance");
+//        fireTicks = nbttagcompound.getShort("Fire");
+//        air = nbttagcompound.getShort("Air");
+//        onGround = nbttagcompound.getBoolean("OnGround");
+//        setPosition(x, y, z);
+//        readNbt(nbttagcompound);
+//
+//        System.out.println("READ");
+//    }
 
+    @Override
     public void readNbt(NbtCompound nbttagcompound)
     {
         NbtList nbttaglist = nbttagcompound.getList("GunA");
@@ -237,6 +256,7 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
         deathTime = nbttagcompound.getInt("DeathTime");
     }
 
+    @Override
     public void writeNbt(NbtCompound nbttagcompound)
     {
         NbtList nbttaglist = new NbtList();
@@ -273,11 +293,13 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
         }
     }
 
+    @Override
     public int size()
     {
         return 2;
     }
 
+    @Override
     public ItemStack getStack(int i)
     {
         if(i == 0)
@@ -293,6 +315,7 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
         }
     }
 
+    @Override
     public ItemStack removeStack(int i, int j)
     {
         ItemStack itemstack = null;
@@ -309,6 +332,7 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
         return itemstack;
     }
 
+    @Override
     public void setStack(int i, ItemStack itemstack)
     {
         if(itemstack == null || (itemstack.getItem() instanceof SdkItemGun))
@@ -324,20 +348,24 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
         }
     }
 
+    @Override
     public String getName()
     {
         return "ATV";
     }
 
+    @Override
     public int getMaxCountPerStack()
     {
         return 1;
     }
 
+    @Override
     public void markDirty()
     {
     }
 
+    @Override
     public boolean canPlayerUse(PlayerEntity entityplayer)
     {
         return entityplayer.getSquaredDistance(x, y, z) <= 64D;
@@ -351,38 +379,30 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
     public String SOUND_RIDING;
     public int SOUND_LOOP_TIME_MAX;
 
-//    @Override
-//    public void altFireKey(PlayerEntity entityplayer) {
-//        fireGuns();
-//    }
-
-//    @Override
-//    public void inventoryAtvKey(Minecraft minecraft, PlayerEntity entityplayer) {
-//        if(minecraft.currentScreen instanceof SdkGuiAtv){
-//            minecraft.setScreen(null);
-//        }else{
-//            minecraft.setScreen(new SdkGuiAtv(entityplayer.inventory, (SdkEntityAtv)entityplayer.vehicle));
-//        }
-//    }
-
     @Override
     public void setControls(boolean forward, boolean back, boolean left, boolean right, boolean up, boolean down, boolean fire) {
-
+        clientFORWARD = forward;
+        clientBACK = back;
+        clientLEFT= left;
+        clientRIGHT= right;
+        clientUP= up;
+        clientDOWN= down;
+        clientFIRE= fire;
     }
 
     @Override
     public void reloadKey() {
-
+        /// null
     }
 
     @Override
     public void exitKey(PlayerEntity playerEntity) {
-
+        playerEntity.setVehicle(null);
+        this.passenger = null;
     }
 
     @Override
     public void inventoryKey(PlayerEntity playerEntity) {
-//        minecraft.setScreen(new SdkGuiAtv(entityplayer.inventory, (SdkEntityAtv)entityplayer.vehicle));
         GuiHelper.openGUI(
                 playerEntity,
                 Identifier.of(Namespace.of("sdk"), "openAtv"),
@@ -393,31 +413,36 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
 
     @Override
     public void bombKey() {
-
+        /// null
     }
 
     @Override
     public void rocketKey() {
-
+        /// null
     }
 
     @Override
     public int getPercentHealth() {
-        return 0;
+        return (health/MAX_HEALTH)*100;
     }
 
     @Override
     public float getArmorFactor() {
-        return 0;
+        return 1.0F;
     }
 
     @Override
     public float getDmgReduce() {
-        return 0;
+        return 1.0F;
     }
 
     @Override
     public float getDmgBroken() {
-        return 0;
+        return 1.0F;
+    }
+
+    @Override
+    public Identifier getHandlerIdentifier() {
+        return Identifier.of(EntityListener.MOD_ID, "Atv");
     }
 }

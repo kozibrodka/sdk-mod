@@ -51,7 +51,7 @@ public class TextureListener {
         ItemListener.itemTelescope.setTexture(Identifier.of(MOD_ID, "item/itemTelescope"));
         ItemListener.itemJetPack.setTexture(Identifier.of(MOD_ID, "item/itemJetPack"));
         ItemListener.itemGoldCoin.setTexture(Identifier.of(MOD_ID, "item/itemGoldCoin"));
-        ItemListener.itemLightometer.setTexture(Identifier.of(MOD_ID, "item/itemLightometer"));
+        ItemListener.itemLightometer.setTexture(Identifier.of(MOD_ID, "item/itemLightometer")); ///
         ItemListener.itemNightvisionGoggles.setTexture(Identifier.of(MOD_ID, "item/itemNightvisionGoggles"));
         ItemListener.itemScubaTank.setTexture(Identifier.of(MOD_ID, "item/itemScubaTank"));
         ItemListener.itemParachute.setTexture(Identifier.of(MOD_ID, "item/itemParachute"));
@@ -99,7 +99,7 @@ public class TextureListener {
         BlockListener.blockOil.asItem().setTextureId(oil_juction);
         BlockListener.blockPlaque.asItem().setTextureId(plaque);
 
-//        Atlases.getGuiItems().addTextureBinder(Identifier.of(MOD_ID, "itemLightometer"), SdkTextureLightometerFX::new);
+        Atlases.getGuiItems().addTextureBinder(Identifier.of(MOD_ID, "item/itemLightometer"), SdkTextureLightometerFX::new);
 
 
 //        Atlases.getGuiItems().addTextureBinder(10, SdkTextureLightometerFX::new)

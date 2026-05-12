@@ -9,6 +9,7 @@ import net.kozibrodka.sdk.entityBullet.*;
 import net.kozibrodka.sdk.entityNade.*;
 import net.kozibrodka.sdk.entitySentry.*;
 import net.mine_diver.unsafeevents.listener.EventListener;
+import net.minecraft.world.biome.Biome;
 import net.modificationstation.stationapi.api.event.entity.EntityRegister;
 import net.modificationstation.stationapi.api.event.registry.EntityHandlerRegistryEvent;
 import net.modificationstation.stationapi.api.event.registry.MobHandlerRegistryEvent;
@@ -71,7 +72,7 @@ public class EntityListener {
     }
 
     @EventListener
-    public static void registerMobHandlers(EntityHandlerRegistryEvent event) {
+    public static void registerEntityHandlers(EntityHandlerRegistryEvent event) {
         Registry.register(event.registry, MOD_ID.id("Atv"), SdkEntityAtv::new);
         Registry.register(event.registry, MOD_ID.id("GrapplingHook"), SdkEntityGrapplingHook::new);
         Registry.register(event.registry, MOD_ID.id("NukePrimed"), SdkEntityNukePrimed::new);
@@ -133,6 +134,9 @@ public class EntityListener {
 
     @EventListener
     public void registerEntitySpawn(BiomeModificationEvent event) {
+        if(event.biome == Biome.FOREST || event.biome == Biome.TAIGA){
+            event.biome.addPassiveEntity(SdkEntityLaserWolf.class, 1);
+        }
         //TODO wolferinio + opcja
     }
 

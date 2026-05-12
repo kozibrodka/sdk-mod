@@ -1,8 +1,6 @@
 package net.kozibrodka.sdk.atv;
 
 
-import net.kozibrodka.sdk.atv.SdkEntityAtv;
-import net.kozibrodka.sdk.atv.SdkSlotGun;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.ScreenHandler;

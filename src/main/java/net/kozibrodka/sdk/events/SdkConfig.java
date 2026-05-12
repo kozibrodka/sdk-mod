@@ -1,7 +1,7 @@
 package net.kozibrodka.sdk.events;
 
 public class SdkConfig {
-    //TODO: render plaque items, oil render fix, config, sentry fix
+    //TODO: config,
     public static boolean sentriesKillAnimals = false;
     public static boolean explosionsDestroyBlocks = true;
     //spawn wolves

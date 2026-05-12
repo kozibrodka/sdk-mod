@@ -1,12 +1,14 @@
 package net.kozibrodka.sdk.atv;
 
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.Minecraft;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.kozibrodka.sdk.network.CarLoadPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
-import org.lwjgl.input.Keyboard;
+import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 
 import java.util.List;
 
@@ -61,20 +63,209 @@ public abstract class SdkEntityLandVehicle extends Entity
         prevZ = d2;
     }
 
+    /// Data-Tracking
+    @Override
     protected void initDataTracker()
     {
+        dataTracker.startTracking(16, (byte) 0); //onGround
+        dataTracker.startTracking(17, 0); //Turn
+        dataTracker.startTracking(18, 0); //Yaw
+
+        dataTracker.startTracking(29, (byte) 0); //HEALTH
+        dataTracker.startTracking(31, (byte) 0); //DEBUG
     }
 
-    public Box getCollisionAgainstShape(Entity entity)
+    //GROUND
+    public boolean getOnGround()
     {
-        return entity.boundingBox;
+        return (dataTracker.getByte(16) & 1) != 0;
+    }
+    public void setOnGround(boolean flag)
+    {
+        if(flag)
+        {
+            dataTracker.set(16, (byte) 1);
+        } else
+        {
+            dataTracker.set(16, (byte) 0);
+        }
     }
 
+    //TURNSPEED
+    public void setClientTurnSpeed(float age)
+    {
+        dataTracker.set(17, Float.floatToRawIntBits(age));
+    }
+    public float getClientTurnSpeed()
+    {
+        return Float.intBitsToFloat(dataTracker.getInt(17));
+    }
+
+    //YAW
+    public void setClientYaw(float age)
+    {
+        dataTracker.set(18, Float.floatToRawIntBits(age));
+    }
+    public float getClientYaw()
+    {
+        return Float.intBitsToFloat(dataTracker.getInt(18));
+    }
+    ///
+
+    /// Client interpolation and pos/rot
+    @Environment(EnvType.CLIENT)
+    private int clientInterpolationSteps;
+    @Environment(EnvType.CLIENT)
+    private double clientX;
+    @Environment(EnvType.CLIENT)
+    private double clientY;
+    @Environment(EnvType.CLIENT)
+    private double clientZ;
+    @Environment(EnvType.CLIENT)
+    private double clientYaw;
+    @Environment(EnvType.CLIENT)
+    private double clientPitch;
+    @Environment(EnvType.CLIENT)
+    private double clientPrevY;
+
+    /// Client velocity
+    @Environment(EnvType.CLIENT)
+    private double clientVelocityX;
+    @Environment(EnvType.CLIENT)
+    public double clientVelocityY;
+    @Environment(EnvType.CLIENT)
+    private double clientVelocityZ;
+    ///
+
+    public double getClientSpeed()
+    {
+        return Math.sqrt(clientVelocityX * clientVelocityX + clientVelocityZ * clientVelocityZ);
+    }
+
+    public double getClientTurnSpeedRender()
+    {
+        return scaleOnClientSpeed(TURN_SPEED_STOPPED, TURN_SPEED_FULL);
+    }
+
+    public double scaleOnClientSpeed(double d, double d1)
+    {
+        return d - (d - d1) * (getClientSpeed() / MAX_SPEED);
+    }
+
+    @Override
+    public Box getCollisionAgainstShape(Entity other) {
+        if (world.isRemote) {
+            return null;
+        }
+        return other == passenger ? null : other.boundingBox;
+    }
+
+    public void remoteTick(){
+        if(clientInterpolationSteps == 0){
+            return;
+        }
+
+        onGround = getOnGround();
+
+
+
+        double xt = x + (clientX - x) / clientInterpolationSteps;
+        double yt = y + (clientY - y) / 2;
+        double zt = z + (clientZ - z) / clientInterpolationSteps;
+
+            boolean flag1 = true;
+            if(getClientSpeed() != 0.0D)
+            {
+                double d2 = (clientYaw * 3.1415926535897931D) / 180D;
+                double d6 = Math.cos(d2);
+                flag1 = -d6 > 0.0D && clientVelocityX > 0.0D || -d6 < 0.0D && clientVelocityX < 0.0D;
+            }
+            int i = flag1 ? 1 : -1;
+            if(onGround && lastOnClientGround)
+            {
+                if(clientPrevY - clientY > 0.2D)
+                {
+                    pitch = 45 * i;
+                } else
+                if(clientPrevY - clientY < -0.2D)
+                {
+                    pitch = -45 * i;
+                } else
+                {
+                    pitch = 0.0F;
+                }
+            } else
+            {
+                setRotationPitch(Math.max(Math.min((float)((-90D * clientVelocityY) / getClientSpeed()) * (float)i, 90F), -90F) / 2.0F);
+            }
+            lastOnClientGround = onGround;
+            clientPrevY = clientY;
+
+        float marker1 = getClientTurnSpeed();
+        float merkar2 = getClientYaw();
+        float angleYaw = merkar2 % 360.0F;
+
+
+        double yrd = angleYaw - yaw;
+        while (yrd < 180F) yrd += 360F;
+        while (yrd > 180.0F) yrd -= 360.0F;
+        yaw += (float) (yrd / (clientInterpolationSteps - 2)); /// 0
+
+
+        if(!onGround && clientVelocityX == 0 && clientVelocityZ == 0){
+            pitch = (float) clientPitch;
+        }
+        setPosition(xt, yt, zt);
+        setRotation(yaw, pitch);
+
+        clientInterpolationSteps--;
+
+//        double d4 = getClientTurnSpeedRender() * (double)(flag1 ? 1 : -1);
+//        double d4 = getClientTurnSpeedRender();
+//        if(yrd == 0.0D){
+//            lastTurnSpeed = 0.0D;
+//        }
+//        if(yrd < 0.0D){
+//            lastTurnSpeed = d4 * -1;
+//        }
+//        if(yrd > 0.0D){
+//            lastTurnSpeed = d4;
+//        }
+
+        lastTurnSpeed = marker1;
+
+    }
+
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public void setPositionAndAnglesAvoidEntities(double x, double y, double z, float pitch, float yaw, int interpolationSteps) {
+        clientX = x;
+        clientY = y;
+        clientZ = z;
+        clientYaw = pitch;
+        clientPitch = yaw;
+//        clientInterpolationSteps = interpolationSteps + 4; /// 3 bazowo dostaje
+        clientInterpolationSteps = interpolationSteps + 1;
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public void setVelocityClient(double x, double y, double z) {
+        clientVelocityX = x;
+        clientVelocityY = y;
+        clientVelocityZ = z;
+    }
+
+    ///
+
+    @Override
     public Box getBoundingBox()
     {
         return boundingBox;
     }
 
+    @Override
     public boolean damage(Entity entity, int i)
     {
         if(MAX_HEALTH != -1)
@@ -98,16 +289,19 @@ public abstract class SdkEntityLandVehicle extends Entity
         markDead();
     }
 
+    @Override
     public boolean isCollidable() //canBeCollidedWith
     {
         return !dead;
     }
 
+    @Override
     public float getShadowRadius()
     {
         return 0.0F;
     }
 
+    @Override
     public boolean interact(PlayerEntity entityplayer)
     {
         if(passenger != null && (passenger instanceof PlayerEntity) && passenger != entityplayer)
@@ -121,9 +315,18 @@ public abstract class SdkEntityLandVehicle extends Entity
         return true;
     }
 
+    @Override
     public void tick()
     {
         super.tick();
+        if(world.isRemote){ //&& passenger != null
+            if(!receivedP){
+                receivedP = true;
+                PacketHelper.send(new CarLoadPacket(this.id));
+            }
+            remoteTick();
+            return;
+        }
         prevX = x;
         prevY = y;
         prevZ = z;
@@ -141,38 +344,39 @@ public abstract class SdkEntityLandVehicle extends Entity
             double d6 = Math.cos(d2);
             flag1 = -d6 > 0.0D && velocityX > 0.0D || -d6 < 0.0D && velocityX < 0.0D;
         }
+        double dc4 = 0.0D;
         if(onGround)
         {
             if(passenger != null)
             {
-                Minecraft minecraft = Minecraft.class.cast(FabricLoader.getInstance().getGameInstance());
+                double d4 = 0.0D;
                 if(getSpeed() != 0.0D)
                 {
-                    double d4 = 0.0D;
-                    if(minecraft.currentScreen == null && Keyboard.isKeyDown(minecraft.options.leftKey.code))
+                    if(this.clientLEFT)
                     {
                         d4 = -getTurnSpeed() * (double)(flag1 ? 1 : -1);
                     } else
-                    if(minecraft.currentScreen == null && Keyboard.isKeyDown(minecraft.options.rightKey.code))
+                    if(this.clientRIGHT)
                     {
                         d4 = getTurnSpeed() * (double)(flag1 ? 1 : -1);
                     }
                     if(d4 != 0.0D)
                     {
-                        yaw += d4;
+                        yaw += (float) d4; ///CAST addon
                         projectMotion(d4);
                     }
                     lastTurnSpeed = d4 * (double)(flag1 ? 1 : -1);
                 }
+                dc4 = d4;
                 double d5 = 0.0D;
                 if(passenger != null)
                 {
-                    if(minecraft.currentScreen == null && Keyboard.isKeyDown(minecraft.options.forwardKey.code))
+                    if(this.clientFORWARD)
                     {
                         d5 = -(flag1 ? getAccelForward() : ACCEL_BRAKE);
                         flag = true;
                     } else
-                    if(minecraft.currentScreen == null && Keyboard.isKeyDown(minecraft.options.backKey.code))
+                    if(this.clientBACK)
                     {
                         d5 = flag1 ? ACCEL_BRAKE : getAccelBackward();
                         flag = true;
@@ -275,6 +479,14 @@ public abstract class SdkEntityLandVehicle extends Entity
         {
             passenger = null;
         }
+        ///
+        if(!world.isRemote){
+            setOnGround(this.onGround);
+            setClientTurnSpeed((float) dc4);
+            setClientYaw(yaw);
+            this.dataTracker.set(29, (byte) health);
+            this.dataTracker.set(31, (byte) 1);
+        }
     }
 
     public double getMotionYaw()
@@ -376,8 +588,18 @@ public abstract class SdkEntityLandVehicle extends Entity
         return (float)(lastTurnSpeed * TURN_SPEED_RENDER_MULT);
     }
 
+    boolean clientFORWARD = false;
+    boolean clientBACK = false;
+    boolean clientLEFT= false;
+    boolean clientRIGHT= false;
+    boolean clientUP= false;
+    boolean clientDOWN= false;
+    boolean clientFIRE= false;
+
+    public boolean receivedP = false;
     private double lastTurnSpeed;
     public boolean lastOnGround;
+    public boolean lastOnClientGround;
     public int health;
     public double prevMotionX;
     public double prevMotionY;

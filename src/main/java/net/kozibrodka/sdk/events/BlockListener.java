@@ -7,7 +7,9 @@ import net.kozibrodka.sdk.atv.SdkGuiAtv;
 import net.kozibrodka.sdk.block.*;
 import net.kozibrodka.sdk.grinder.SdkGuiGrinder;
 import net.kozibrodka.sdk.network.AskPacket;
+import net.kozibrodka.sdk.network.CarLoadPacket;
 import net.kozibrodka.sdk.network.GrapplingPacket;
+import net.kozibrodka.sdk.network.GroundPacket;
 import net.kozibrodka.sdk.tileEntity.SdkTileEntityGrinder;
 import net.kozibrodka.sdk_api.network.*;
 import net.kozibrodka.sdk_api.utils.SdkMap;
@@ -47,8 +49,6 @@ public class BlockListener {
         blockRope = new SdkBlockRope(Identifier.of(MOD_ID, "blockRope")).setTranslationKey(MOD_ID, "blockRope").setHardness(4F).setSoundGroup(Block.WOOL_SOUND_GROUP).setResistance(10F);
         blockGrapplingHook =  new SdkBlockGrapplingHook(Identifier.of(MOD_ID, "blockGrapplingHook")).setTranslationKey(MOD_ID, "blockGrapplingHook").setHardness(0.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
 
-        //TODO: Render Item Lightometer?
-
         SdkMap.BREAKABLE_LIST.add(blockRope.id);
     }
 
@@ -80,6 +80,8 @@ public class BlockListener {
     public void registerPacket(PacketRegisterEvent event) {
         Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("grappling"), GrapplingPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("ask"), AskPacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("ground"), GroundPacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("carload"), CarLoadPacket.TYPE);
 
     }
 

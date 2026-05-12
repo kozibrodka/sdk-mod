@@ -55,8 +55,6 @@ public class SdkBlockGrinder extends TemplateBlockWithEntity
         } else
         {
             SdkTileEntityGrinder sdktileentitygrinder = (SdkTileEntityGrinder)world.getBlockEntity(i, j, k);
-//            TODO: GUI done
-//            SdkTools.minecraft.displayGuiScreen(new SdkGuiGrinder(entityplayer.inventory, sdktileentitygrinder));
             GuiHelper.openGUI(entityplayer, Identifier.of("sdk:openGrinder"), sdktileentitygrinder, new SdkContainerGrinder(entityplayer.inventory, sdktileentitygrinder));
 
             return true;

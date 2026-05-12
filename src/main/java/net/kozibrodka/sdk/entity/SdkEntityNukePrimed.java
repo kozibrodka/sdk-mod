@@ -91,14 +91,11 @@ public class SdkEntityNukePrimed extends Entity implements EntitySpawnDataProvid
 
     private void explode()
     {
-//        SdkExplosionNuke sdkexplosionnuke = new SdkExplosionNuke(world, null, x, y, z, 8F, 0.0F, false);
-//        sdkexplosionnuke.doExplosionA();
-//        sdkexplosionnuke.doExplosionB();
         boolean flagW = false;
         if(checkWaterCollisions()) {
             flagW = true;
         }
-        SdkExplosion explosion = new SdkExplosion(world, null, x,  y,  z, 8.0F, false, true, "random.explode", flagW, 0.0F); //todo 0 luck
+        SdkExplosion explosion = new SdkExplosion(world, null, x,  y,  z, 8.0F, false, true, "random.explode", flagW, 0.0F);
         explosion.explodeA();
         explosion.explodeB(true);
     }

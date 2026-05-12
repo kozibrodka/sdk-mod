@@ -112,7 +112,6 @@ public class SdkBlockNuke extends TemplateBlock
         if(!world.isRemote) {
             SdkEntityNukePrimed sdkentitynukeprimed = new SdkEntityNukePrimed(world, (float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F);
             world.spawnEntity(sdkentitynukeprimed);
-//            world.playSound(sdkentitynukeprimed, "random.fuse", 1.0F, 1.0F); //TODO SOUND....
         }
     }
 }

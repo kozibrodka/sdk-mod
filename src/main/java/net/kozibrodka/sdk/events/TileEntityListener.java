@@ -19,6 +19,5 @@ public class TileEntityListener {
         event.register(SdkTileEntityGrinder.class, String.valueOf(Identifier.of(MOD_ID, "TileGrinder")));
         event.register(SdkTileEntityRope.class, String.valueOf(Identifier.of(MOD_ID, "TileRope")));
         event.register(SdkTileEntityPlaque.class, String.valueOf(Identifier.of(MOD_ID, "TilePlaque")));
-//TODO: Custom render for tile entity SdkTileEntityRendererPlaque
     }
 }

@@ -29,6 +29,7 @@ public class SdkModelAtv extends EntityModel
         wheels[3].setPivot(-5F, 1.0F, -5F);
     }
 
+    @Override
     public void render(float f, float f1, float f2, float f3, float f4, float f5)
     {
         setAngles(f, f1, f2, f3, f4, f5);
@@ -41,6 +42,7 @@ public class SdkModelAtv extends EntityModel
 
     }
 
+    @Override
     public void setAngles(float f, float f1, float f2, float f3, float f4, float f5)
     {
         wheels[0].yaw = f4 / 57.29578F;
@@ -51,5 +53,5 @@ public class SdkModelAtv extends EntityModel
 
     public ModelPart body;
     public ModelPart front;
-    public ModelPart wheels[];
+    public ModelPart[] wheels;
 }

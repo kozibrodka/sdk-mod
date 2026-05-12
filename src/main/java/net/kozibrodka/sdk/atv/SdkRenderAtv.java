@@ -40,78 +40,78 @@ public class SdkRenderAtv extends EntityRenderer
         Tessellator tessellator = Tessellator.INSTANCE;
 
 
-        ItemStack itemstacka = sdkentityatv.gunA;
-        ItemStack itemstackb = sdkentityatv.gunB;
-        if(itemstacka != null){
-            bindTexture("/gui/items.png");
-            int l = itemstacka.getTextureId();
-            Atlas.Sprite testTex =  Atlases.getGuiItems().getTexture(l);
-            float f3 = (float)(testTex.getStartU());
-            float f4 = (float)(testTex.getEndU());
-            float f5 = (float)(testTex.getStartV());
-            float f6 = (float)(testTex.getEndV());
-
-            float f7 = 1.0F;
-            float f8 = 0.5F;
-            float f9 = 0.25F;
-            GL11.glPushMatrix();
-            tessellator.startQuads();
-            tessellator.color(f1, f1, f1);
-            tessellator.normal(0.0F, 1.0F, 0.0F);
-            tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
-            tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
-            tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
-            tessellator.vertex(0.0F - f8, 1.0F - f9, 0.0D, f3, f5);
-            tessellator.vertex(0.0F - f8, 1.0F - f9, 0.0D, f3, f5);
-            tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
-            tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
-            tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
-            tessellator.draw();
-            GL11.glPopMatrix();
-        }
+//        ItemStack itemstacka = sdkentityatv.gunA;
+//        ItemStack itemstackb = sdkentityatv.gunB;
+//        if(itemstacka != null){
+//            bindTexture("/gui/items.png");
+//            int l = itemstacka.getTextureId();
+//            Atlas.Sprite testTex =  Atlases.getGuiItems().getTexture(l);
+//            float f3 = (float)(testTex.getStartU());
+//            float f4 = (float)(testTex.getEndU());
+//            float f5 = (float)(testTex.getStartV());
+//            float f6 = (float)(testTex.getEndV());
+//
+//            float f7 = 1.0F;
+//            float f8 = 0.5F;
+//            float f9 = 0.25F;
+//            GL11.glPushMatrix();
+//            tessellator.startQuads();
+//            tessellator.color(f1, f1, f1);
+//            tessellator.normal(0.0F, 1.0F, 0.0F);
+//            tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
+//            tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
+//            tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
+//            tessellator.vertex(0.0F - f8, 1.0F - f9, 0.0D, f3, f5);
+//            tessellator.vertex(0.0F - f8, 1.0F - f9, 0.0D, f3, f5);
+//            tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
+//            tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
+//            tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
+//            tessellator.draw();
+//            GL11.glPopMatrix();
+//        }
 
         /// /
-//        for(int i = -1; i <= 1; i += 2)
-//        {
-//            ItemStack itemstack = null;
-//            if(i == -1)
-//            {
-//                itemstack = sdkentityatv.gunA;
-//            } else
-//            {
-//                itemstack = sdkentityatv.gunB;
-//                GL11.glTranslatef(0.0F, 0.0F, -1.25F);
-//            }
-//            if(itemstack != null)
-//            {
-//
-//                bindTexture("/gui/items.png");
-//                int l = itemstack.getTextureId();
-//                Atlas.Sprite testTex =  Atlases.getGuiItems().getTexture(l);
-//                float f3 = (float)(testTex.getStartU());
-//                float f4 = (float)(testTex.getEndU());
-//                float f5 = (float)(testTex.getStartV());
-//                float f6 = (float)(testTex.getEndV());
-//
-//                float f7 = 1.0F;
-//                float f8 = 0.5F;
-//                float f9 = 0.25F;
-//                GL11.glPushMatrix();
-//                tessellator.startQuads();
-//                tessellator.color(f1, f1, f1);
-//                tessellator.normal(0.0F, 1.0F, 0.0F);
-//                tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
-//                tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
-//                tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
-//                tessellator.vertex(0.0F - f8, 1.0F - f9, 0.0D, f3, f5);
-//                tessellator.vertex(0.0F - f8, 1.0F - f9, 0.0D, f3, f5);
-//                tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
-//                tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
-//                tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
-//                tessellator.draw();
-//                GL11.glPopMatrix();
-//            }
-//        }
+        for(int i = -1; i <= 1; i += 2)
+        {
+            ItemStack itemstack = null;
+            if(i == -1)
+            {
+                itemstack = sdkentityatv.gunA;
+            } else
+            {
+                itemstack = sdkentityatv.gunB;
+                GL11.glTranslatef(0.0F, 0.0F, -1.25F);
+            }
+            if(itemstack != null)
+            {
+
+                bindTexture("/gui/items.png");
+                int l = itemstack.getTextureId();
+                Atlas.Sprite testTex =  Atlases.getGuiItems().getTexture(l);
+                float f3 = (float)(testTex.getStartU());
+                float f4 = (float)(testTex.getEndU());
+                float f5 = (float)(testTex.getStartV());
+                float f6 = (float)(testTex.getEndV());
+
+                float f7 = 1.0F;
+                float f8 = 0.5F;
+                float f9 = 0.25F;
+                GL11.glPushMatrix();
+                tessellator.startQuads();
+                tessellator.color(f1, f1, f1);
+                tessellator.normal(0.0F, 1.0F, 0.0F);
+                tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
+                tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
+                tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
+                tessellator.vertex(0.0F - f8, 1.0F - f9, 0.0D, f3, f5);
+                tessellator.vertex(0.0F - f8, 1.0F - f9, 0.0D, f3, f5);
+                tessellator.vertex(f7 - f8, 1.0F - f9, 0.0D, f4, f5);
+                tessellator.vertex(f7 - f8, 0.0F - f9, 0.0D, f4, f6);
+                tessellator.vertex(0.0F - f8, 0.0F - f9, 0.0D, f3, f6);
+                tessellator.draw();
+                GL11.glPopMatrix();
+            }
+        }
         ///
 
         GL11.glPopMatrix();
