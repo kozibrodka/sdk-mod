@@ -29,7 +29,7 @@ public class SdkItemGunSniper extends SdkItemGun
         useDelay = 20;
         recoil = 8F;
         soundRangeFactor = 8F;
-        penetration = 1;
+        penetration = 1.5F;
         scopeOvText = "/assets/sdk/stationapi/textures/gui/miscScope.png";
         scopeMaxZoom = 0.125F;
         zoomSpeed = 0.075F;

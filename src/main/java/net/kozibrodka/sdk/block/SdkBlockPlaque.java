@@ -214,19 +214,9 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
         Block block = this;
         Tessellator tessellator = Tessellator.INSTANCE;
         int l = TextureListener.plaque;
-//        if(renderblocks.overrideBlockTexture >= 0)
-//        {
-//            l = renderblocks.overrideBlockTexture;
-//        }
+
         float f = block.getLuminance(iblockaccess, i, j, k);
         tessellator.color(f, f, f);
-        
-//        int i1 = (l & 0xf) << 4;
-//        int j1 = l & 0xf0;
-//        double d = (float)i1 / 256F;
-//        double d1 = ((float)i1 + 15.99F) / 256F;
-//        double d2 = (float)j1 / 256F;
-//        double d3 = ((float)j1 + 15.99F) / 256F;
 
         Atlas.Sprite atlasTX =  Atlases.getTerrain().getTexture(l);
         double d = atlasTX.getStartU();
@@ -237,13 +227,18 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
         int k1 = iblockaccess.getBlockMeta(i, j, k);
         float f1 = 0.0F;
         float f2 = 0.05F;
+        float f3 = 0.95F;
         if(k1 == 5)
         {
-            //TODO kombinowanie obustronnego wyswietlenia.....???
             tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k + 1) + f1, d, d2);
             tessellator.vertex((float)i + f2, (float)(j) - f1, (float)(k + 1) + f1, d, d3);
             tessellator.vertex((float)i + f2, (float)(j) - f1, (float)(k) - f1, d1, d3);
             tessellator.vertex((float)i + f2, (float)(j + 1) + f1, (float)(k) - f1, d1, d2);
+
+            tessellator.vertex((float)(i + 1) - f3, (float)(j) - f1, (float)(k + 1) + f1, d1, d3);
+            tessellator.vertex((float)(i + 1) - f3, (float)(j + 1) + f1, (float)(k + 1) + f1, d1, d2);
+            tessellator.vertex((float)(i + 1) - f3, (float)(j + 1) + f1, (float)(k) - f1, d, d2);
+            tessellator.vertex((float)(i + 1) - f3, (float)(j) - f1, (float)(k) - f1, d, d3);
         }
         if(k1 == 4)
         {
@@ -251,6 +246,11 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
             tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k + 1) + f1, d1, d2);
             tessellator.vertex((float)(i + 1) - f2, (float)(j + 1) + f1, (float)(k) - f1, d, d2);
             tessellator.vertex((float)(i + 1) - f2, (float)(j) - f1, (float)(k) - f1, d, d3);
+
+            tessellator.vertex((float)i + f3, (float)(j + 1) + f1, (float)(k + 1) + f1, d, d2);
+            tessellator.vertex((float)i + f3, (float)(j) - f1, (float)(k + 1) + f1, d, d3);
+            tessellator.vertex((float)i + f3, (float)(j) - f1, (float)(k) - f1, d1, d3);
+            tessellator.vertex((float)i + f3, (float)(j + 1) + f1, (float)(k) - f1, d1, d2);
         }
         if(k1 == 3)
         {
@@ -258,6 +258,11 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
             tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)k + f2, d1, d2);
             tessellator.vertex((float)(i) - f1, (float)(j + 1) + f1, (float)k + f2, d, d2);
             tessellator.vertex((float)(i) - f1, (float)(j) - f1, (float)k + f2, d, d3);
+
+            tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)(k + 1) - f3, d, d2);
+            tessellator.vertex((float)(i + 1) + f1, (float)(j) - f1, (float)(k + 1) - f3, d, d3);
+            tessellator.vertex((float)(i) - f1, (float)(j) - f1, (float)(k + 1) - f3, d1, d3);
+            tessellator.vertex((float)(i) - f1, (float)(j + 1) + f1, (float)(k + 1) - f3, d1, d2);
         }
         if(k1 == 2)
         {
@@ -265,6 +270,11 @@ public class SdkBlockPlaque extends TemplateBlockWithEntity implements BlockWith
             tessellator.vertex((float)(i + 1) + f1, (float)(j) - f1, (float)(k + 1) - f2, d, d3);
             tessellator.vertex((float)(i) - f1, (float)(j) - f1, (float)(k + 1) - f2, d1, d3);
             tessellator.vertex((float)(i) - f1, (float)(j + 1) + f1, (float)(k + 1) - f2, d1, d2);
+
+            tessellator.vertex((float)(i + 1) + f1, (float)(j) - f1, (float)k + f3, d1, d3);
+            tessellator.vertex((float)(i + 1) + f1, (float)(j + 1) + f1, (float)k + f3, d1, d2);
+            tessellator.vertex((float)(i) - f1, (float)(j + 1) + f1, (float)k + f3, d, d2);
+            tessellator.vertex((float)(i) - f1, (float)(j) - f1, (float)k + f3, d, d3);
         }
         return true;
     }

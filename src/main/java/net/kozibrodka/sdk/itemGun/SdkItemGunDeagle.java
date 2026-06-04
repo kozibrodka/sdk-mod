@@ -30,7 +30,7 @@ public class SdkItemGunDeagle extends SdkItemGun
         spread = 2.0F;
         useDelay = 8;
         recoil = 4F;
-        penetration = 1;
+        penetration = 1.5F;
     }
 
     @Override

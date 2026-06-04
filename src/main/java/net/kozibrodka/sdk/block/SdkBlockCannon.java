@@ -66,13 +66,13 @@ public class SdkBlockCannon extends TemplateBlock
             int i1 = world.getBlockMeta(i, j, k);
             if(i1 > 0)
             {
+                System.out.println(i + " " + j + " " + k);
                 world.setBlock(i, j, k, 0);
                 Explosion explosion = new Explosion(world, null, (float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, 4F);
                 world.playSound(i, j, k, "random.explode", 4F, (1.0F + (world.random.nextFloat() - world.random.nextFloat()) * 0.2F) * 0.7F);
-                if(SdkEnvTool.isEnvServ()){ //TODO x+0.5D ?? ...
-                    SdkPacketHelper.sendSoundAll(world,i,j,k,"random.explode", 4F, (1.0F + (world.random.nextFloat() - world.random.nextFloat()) * 0.2F) * 0.7F);
+                if(SdkEnvTool.isEnvServ()){
+                    SdkPacketHelper.sendSoundAll(world,i+0.5D,j+0.5D,k+0.5D,"random.explode", 4F, (1.0F + (world.random.nextFloat() - world.random.nextFloat()) * 0.2F) * 0.7F);
                 }
-                //TODO api coords packet all
                 for(int j1 = 0; j1 < i1; j1++)
                 {
                     explosion.explode();

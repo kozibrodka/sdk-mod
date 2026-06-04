@@ -28,7 +28,7 @@ public class SdkItemGunMp5 extends SdkItemGun
         spread = 1.0F;
         useDelay = 2;
         recoil = 1.0F;
-        penetration = 0;
+        penetration = 0.0F;
     }
 
     @Override

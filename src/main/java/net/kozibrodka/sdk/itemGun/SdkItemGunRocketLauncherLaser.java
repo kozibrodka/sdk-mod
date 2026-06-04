@@ -27,7 +27,7 @@ public class SdkItemGunRocketLauncherLaser extends SdkItemGun
         spread = 0.0F;
         useDelay = 40;
         recoil = 0.0F;
-        penetration = 3;
+        penetration = 3.5F;
         bulletDrop = 0.0F;
         explosionPower = 3.0F;
         explosionBlocks = true;

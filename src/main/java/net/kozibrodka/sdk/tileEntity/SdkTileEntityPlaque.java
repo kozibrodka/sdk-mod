@@ -2,13 +2,9 @@ package net.kozibrodka.sdk.tileEntity;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.kozibrodka.sdk.network.AskPacket;
-import net.kozibrodka.sdk_api.network.CoordSoundPacket;
-import net.kozibrodka.sdk_api.network.SdkPacketHelper;
+import net.kozibrodka.sdk.network.AskPlaquePacket;
 import net.kozibrodka.sdk_api.utils.SdkEnvTool;
-import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -35,7 +31,7 @@ public class SdkTileEntityPlaque extends BlockEntity
     public void tick() {
         if(world.isRemote && !hasAsked){
             hasAsked = true;
-            PacketHelper.send(new AskPacket(0, 0, x, y, z));
+            PacketHelper.send(new AskPlaquePacket(0, 0, x, y, z));
         }
     }
 
@@ -45,7 +41,7 @@ public class SdkTileEntityPlaque extends BlockEntity
         if (!list2.isEmpty()) {
             for (Object o : list2) {
                 ServerPlayerEntity player1 = (ServerPlayerEntity) o;
-                PacketHelper.sendTo(player1, new AskPacket(id, meta, x, y, z));
+                PacketHelper.sendTo(player1, new AskPlaquePacket(id, meta, x, y, z));
             }
         }
     }

@@ -3,12 +3,17 @@ package net.kozibrodka.sdk.atv;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.kozibrodka.sdk.network.CarCrashPacket;
 import net.kozibrodka.sdk.network.CarLoadPacket;
+import net.kozibrodka.sdk_api.utils.SdkEnvTool;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
+import net.modificationstation.stationapi.api.server.entity.HasTrackingParameters;
+import net.modificationstation.stationapi.api.util.TriState;
 
 import java.util.List;
 
@@ -25,18 +30,18 @@ public abstract class SdkEntityLandVehicle extends Entity
         prevMotionZ = 0.0D;
         lastCollidedEntity = null;
         ACCEL_FORWARD_STOPPED = 0.02D;
-        ACCEL_FORWARD_FULL = 0.0050000000000000001D;
+        ACCEL_FORWARD_FULL = 0.005D;
         ACCEL_BACKWARD_STOPPED = 0.01D;
-        ACCEL_BACKWARD_FULL = 0.0025000000000000001D;
-        ACCEL_BRAKE = 0.040000000000000001D;
+        ACCEL_BACKWARD_FULL = 0.0025D;
+        ACCEL_BRAKE = 0.04D;
         TURN_SPEED_STOPPED = 10D;
         TURN_SPEED_FULL = 2D;
         MAX_SPEED = 0.75D;
-        FALL_SPEED = 0.059999999999999998D;
+        FALL_SPEED = 0.06D;
         ROTATION_PITCH_DELTA_MAX = 10D;
-        SPEED_MULT_WATER = 0.90000000000000002D;
-        SPEED_MULT_UNMOUNTED = 0.94999999999999996D;
-        SPEED_MULT_DECEL = 0.94999999999999996D;
+        SPEED_MULT_WATER = 0.9D;
+        SPEED_MULT_UNMOUNTED = 0.95D;
+        SPEED_MULT_DECEL = 0.95D;
         STOP_SPEED = 0.01D;
         TURN_SPEED_RENDER_MULT = 2D;
         COLLISION_SPEED_MIN = 0.5D;
@@ -68,11 +73,11 @@ public abstract class SdkEntityLandVehicle extends Entity
     protected void initDataTracker()
     {
         dataTracker.startTracking(16, (byte) 0); //onGround
-        dataTracker.startTracking(17, 0); //Turn
-        dataTracker.startTracking(18, 0); //Yaw
+        dataTracker.startTracking(17, 0); //Yaw
+        dataTracker.startTracking(18, 0); //Gun A
+        dataTracker.startTracking(19, 0); //Gun B
 
         dataTracker.startTracking(29, (byte) 0); //HEALTH
-        dataTracker.startTracking(31, (byte) 0); //DEBUG
     }
 
     //GROUND
@@ -91,25 +96,16 @@ public abstract class SdkEntityLandVehicle extends Entity
         }
     }
 
-    //TURNSPEED
-    public void setClientTurnSpeed(float age)
+    //YAW
+    public void setClientYaw(float age)
     {
         dataTracker.set(17, Float.floatToRawIntBits(age));
     }
-    public float getClientTurnSpeed()
+    public float getClientYaw()
     {
         return Float.intBitsToFloat(dataTracker.getInt(17));
     }
 
-    //YAW
-    public void setClientYaw(float age)
-    {
-        dataTracker.set(18, Float.floatToRawIntBits(age));
-    }
-    public float getClientYaw()
-    {
-        return Float.intBitsToFloat(dataTracker.getInt(18));
-    }
     ///
 
     /// Client interpolation and pos/rot
@@ -130,11 +126,11 @@ public abstract class SdkEntityLandVehicle extends Entity
 
     /// Client velocity
     @Environment(EnvType.CLIENT)
-    private double clientVelocityX;
+    public double clientVelocityX;
     @Environment(EnvType.CLIENT)
     public double clientVelocityY;
     @Environment(EnvType.CLIENT)
-    private double clientVelocityZ;
+    public double clientVelocityZ;
     ///
 
     public double getClientSpeed()
@@ -158,17 +154,14 @@ public abstract class SdkEntityLandVehicle extends Entity
             return null;
         }
         return other == passenger ? null : other.boundingBox;
+//        return other.boundingBox;
     }
 
     public void remoteTick(){
         if(clientInterpolationSteps == 0){
             return;
         }
-
         onGround = getOnGround();
-
-
-
         double xt = x + (clientX - x) / clientInterpolationSteps;
         double yt = y + (clientY - y) / 2;
         double zt = z + (clientZ - z) / clientInterpolationSteps;
@@ -176,7 +169,8 @@ public abstract class SdkEntityLandVehicle extends Entity
             boolean flag1 = true;
             if(getClientSpeed() != 0.0D)
             {
-                double d2 = (clientYaw * 3.1415926535897931D) / 180D;
+//                double d2 = (clientYaw * 3.1415926535897931D) / 180D;
+                double d2 = (yaw * 3.1415926535897931D) / 180D;
                 double d6 = Math.cos(d2);
                 flag1 = -d6 > 0.0D && clientVelocityX > 0.0D || -d6 < 0.0D && clientVelocityX < 0.0D;
             }
@@ -201,39 +195,34 @@ public abstract class SdkEntityLandVehicle extends Entity
             lastOnClientGround = onGround;
             clientPrevY = clientY;
 
-        float marker1 = getClientTurnSpeed();
         float merkar2 = getClientYaw();
         float angleYaw = merkar2 % 360.0F;
 
-
+        float prevRYaw = yaw;
         double yrd = angleYaw - yaw;
         while (yrd < 180F) yrd += 360F;
         while (yrd > 180.0F) yrd -= 360.0F;
         yaw += (float) (yrd / (clientInterpolationSteps - 2)); /// 0
 
-
-        if(!onGround && clientVelocityX == 0 && clientVelocityZ == 0){
-            pitch = (float) clientPitch;
-        }
+        double pyrd1 = yaw - prevRYaw; //
         setPosition(xt, yt, zt);
         setRotation(yaw, pitch);
-
         clientInterpolationSteps--;
 
-//        double d4 = getClientTurnSpeedRender() * (double)(flag1 ? 1 : -1);
-//        double d4 = getClientTurnSpeedRender();
-//        if(yrd == 0.0D){
-//            lastTurnSpeed = 0.0D;
-//        }
-//        if(yrd < 0.0D){
-//            lastTurnSpeed = d4 * -1;
-//        }
-//        if(yrd > 0.0D){
-//            lastTurnSpeed = d4;
-//        }
+        double d4 = getClientTurnSpeedRender();
+        if(pyrd1 == 0.0D){ // yrd
+            lastTurnSpeed = 0.0D;
+        }
+        if(pyrd1 < 0.0D){ // yrd
+            lastTurnSpeed = d4 * -1;
+        }
+        if(pyrd1 > 0.0D){ // yrd
+            lastTurnSpeed = d4;
+        }
 
-        lastTurnSpeed = marker1;
-
+        health = dataTracker.getByte(29);
+        gunIdA = dataTracker.getInt(18);
+        gunIdB = dataTracker.getInt(19);
     }
 
 
@@ -245,7 +234,6 @@ public abstract class SdkEntityLandVehicle extends Entity
         clientZ = z;
         clientYaw = pitch;
         clientPitch = yaw;
-//        clientInterpolationSteps = interpolationSteps + 4; /// 3 bazowo dostaje
         clientInterpolationSteps = interpolationSteps + 1;
     }
 
@@ -256,7 +244,6 @@ public abstract class SdkEntityLandVehicle extends Entity
         clientVelocityY = y;
         clientVelocityZ = z;
     }
-
     ///
 
     @Override
@@ -268,8 +255,12 @@ public abstract class SdkEntityLandVehicle extends Entity
     @Override
     public boolean damage(Entity entity, int i)
     {
+        if(world.isRemote){
+            return false;
+        }
         if(MAX_HEALTH != -1)
         {
+            world.broadcastEntityEvent(this, (byte)6);
             onHurt();
             health -= i;
             if(health <= 0)
@@ -441,7 +432,7 @@ public abstract class SdkEntityLandVehicle extends Entity
             for(int j = 0; j < list.size(); j++)
             {
                 Entity entity = (Entity)list.get(j);
-                if(entity != passenger && entity.isPushable()) //canbepushed
+                if(entity != passenger && entity.isPushable())
                 {
                     handleCollision(entity);
                 }
@@ -467,25 +458,29 @@ public abstract class SdkEntityLandVehicle extends Entity
             }
             if(COLLISION_FLIGHT_PLAYER)
             {
+                PlayerEntity entityplayerP = (PlayerEntity)passenger;
                 passenger.addVelocity(prevMotionX, prevMotionY + 1.0D, prevMotionZ);
                 passenger.setVehicle(null);
+                world.broadcastEntityEvent(this, (byte)10);
+                if(SdkEnvTool.isEnvServ()) {
+                    PacketHelper.sendTo(entityplayerP, new CarCrashPacket(prevMotionX, prevMotionY + 1.0D, prevMotionZ));
+                }
             }
         }
         lastCollidedEntity = null;
         prevMotionX = velocityX;
         prevMotionY = velocityY;
         prevMotionZ = velocityZ;
-        if(passenger != null && passenger.dead)
+        if(passenger != null && (passenger.dead || !passenger.isAlive()))
         {
-            passenger = null;
+            passenger.setVehicle(null);
+            world.broadcastEntityEvent(this, (byte)10);
         }
         ///
         if(!world.isRemote){
             setOnGround(this.onGround);
-            setClientTurnSpeed((float) dc4);
             setClientYaw(yaw);
             this.dataTracker.set(29, (byte) health);
-            this.dataTracker.set(31, (byte) 1);
         }
     }
 
@@ -596,6 +591,8 @@ public abstract class SdkEntityLandVehicle extends Entity
     boolean clientDOWN= false;
     boolean clientFIRE= false;
 
+    public int gunIdA = 0;
+    public int gunIdB = 0;
     public boolean receivedP = false;
     private double lastTurnSpeed;
     public boolean lastOnGround;

@@ -3,10 +3,10 @@ package net.kozibrodka.sdk.network;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.FabricLoader;
-import net.kozibrodka.sdk.entity.SdkEntityGrapplingHook;
-import net.kozibrodka.sdk_api.utils.SdkVehicle;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.NetworkHandler;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.world.ClientWorld;
@@ -18,24 +18,28 @@ import org.jetbrains.annotations.NotNull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
-public class GroundPacket extends Packet implements ManagedPacket<GroundPacket> {
+public class PassengerPacket extends Packet implements ManagedPacket<PassengerPacket> {
 
-    public static final PacketType<GroundPacket> TYPE = PacketType.builder(true, true, GroundPacket::new).build();
+    public static final PacketType<PassengerPacket> TYPE = PacketType.builder(true, true, PassengerPacket::new).build();
 
-    private boolean ground;
+    private int entityId;
+    private String entityJokey;
 
-    public GroundPacket() {
+    public PassengerPacket() {
     }
 
-    public GroundPacket(boolean id) {
-        this.ground = id;
+    public PassengerPacket(int id, String roper) {
+        this.entityId = id;
+        this.entityJokey = roper;
     }
 
     @Override
     public void read(DataInputStream stream) {
         try {
-            this.ground = stream.readBoolean();
+            this.entityId = stream.readInt();
+            this.entityJokey = stream.readUTF();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,7 +48,8 @@ public class GroundPacket extends Packet implements ManagedPacket<GroundPacket> 
     @Override
     public void write(DataOutputStream stream) {
         try {
-            stream.writeBoolean(this.ground);
+            stream.writeInt(this.entityId);
+            stream.writeUTF(this.entityJokey);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,9 +69,12 @@ public class GroundPacket extends Packet implements ManagedPacket<GroundPacket> 
         if(player == null){
             return;
         }
-        if(player.vehicle != null){
-//            player.vehicle.onGround = this.ground;
-        }
+                Entity panzer1 = ((ClientWorld)player.world).getEntity(this.entityId);
+                PlayerEntity jokey1 = player.world.getPlayer(this.entityJokey);
+
+                if(panzer1 != null && jokey1 != null && !Objects.equals(jokey1.name, player.name)){
+                    jokey1.setVehicle(panzer1);
+                }
     }
 
     @Environment(EnvType.SERVER)
@@ -75,11 +83,11 @@ public class GroundPacket extends Packet implements ManagedPacket<GroundPacket> 
 
     @Override
     public int size() {
-        return 0;
+        return 3;
     }
 
     @Override
-    public @NotNull PacketType<GroundPacket> getType() {
+    public @NotNull PacketType<PassengerPacket> getType() {
         return TYPE;
     }
 }

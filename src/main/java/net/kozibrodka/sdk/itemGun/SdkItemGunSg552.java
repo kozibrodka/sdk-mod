@@ -28,7 +28,7 @@ public class SdkItemGunSg552 extends SdkItemGun
         spread = 0.25F;
         useDelay = 5;
         recoil = 3F;
-        penetration = 0;
+        penetration = 1.5F;
         scopeOvText = "/assets/sdk/stationapi/textures/gui/miscScope.png";
         scopeMaxZoom = 0.25F;
         zoomSpeed = 0.075F;

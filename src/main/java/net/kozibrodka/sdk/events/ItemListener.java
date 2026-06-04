@@ -34,7 +34,7 @@ public class ItemListener {
         itemBulletShell = new TemplateItem(Identifier.of(MOD_ID, "BulletShell")).setTranslationKey(MOD_ID, "BulletShell").setMaxCount(8);
         itemOil = new SdkItemOil(Identifier.of(MOD_ID, "Oil")).setTranslationKey(MOD_ID, "Oil");
 
-        //GUNS //todo balans peny
+        //GUNS
         itemGunAk47 = new SdkItemGunAk47(Identifier.of(MOD_ID, "GunAk47")).setTranslationKey(MOD_ID, "GunAk47");
         itemGunMp5 = new SdkItemGunMp5(Identifier.of(MOD_ID, "GunMp5")).setTranslationKey(MOD_ID, "GunMp5");
         itemGunShotgun = new SdkItemGunShotgun(Identifier.of(MOD_ID, "GunShotgun")).setTranslationKey(MOD_ID, "GunShotgun");
@@ -47,6 +47,7 @@ public class ItemListener {
         itemGunFlamethrower = new SdkItemGunFlamethrower(Identifier.of(MOD_ID, "GunFlamethrower")).setTranslationKey(MOD_ID, "GunFlamethrower");
         itemGunRocketLauncherLaser = new SdkItemGunRocketLauncherLaser(Identifier.of(MOD_ID, "GunRocketLauncherLaser")).setTranslationKey(MOD_ID, "GunRocketLauncherLaser");
         itemGunRocketLauncher = new SdkItemGunRocketLauncher(Identifier.of(MOD_ID, "GunRocketLauncher")).setTranslationKey(MOD_ID, "GunRocketLauncher");
+        /// Penetraction = 1.5F for medium/heavy bullet (car dmg), 3.5F for Bazooka, Flame, Laser (tank dmg)
 
         //NADES
         itemGrenade = new SdkItemGrenadeAP(Identifier.of(MOD_ID, "Grenade")).setTranslationKey(MOD_ID, "Grenade").setMaxCount(4);
@@ -61,13 +62,14 @@ public class ItemListener {
         itemLightometer = new TemplateItem(Identifier.of(MOD_ID, "Lightometer")).setTranslationKey(MOD_ID, "Lightometer");
         itemNightvisionGoggles = new ItemNightvision(Identifier.of(MOD_ID, "NightvisionGoggles")).setTranslationKey(MOD_ID, "NightvisionGoggles");
         itemScubaTank = new ItemScuba(Identifier.of(MOD_ID, "ScubaTank")).setTranslationKey(MOD_ID, "ScubaTank");
-        itemParachute = new ItemParachute(Identifier.of(MOD_ID, "Parachute")).setTranslationKey(MOD_ID, "Parachute"); //TODO utils DMG itd...
+        itemParachute = new ItemParachute(Identifier.of(MOD_ID, "Parachute")).setTranslationKey(MOD_ID, "Parachute");
         itemTelescope = new SdkTelescopeItem(Identifier.of(MOD_ID, "Telescope"), new float[]{1.0F, 0.5F, 0.25F, 0.125F, 0.0625F}, 0.0625F, "/assets/sdk/stationapi/textures/gui/miscTelescope.png").setTranslationKey(MOD_ID, "Telescope");
         itemJetPack = new ItemJetPack(Identifier.of(MOD_ID, "JetPack")).setTranslationKey(MOD_ID, "JetPack");
         itemGrapplingHook = new SdkItemGrapplingHook(Identifier.of(MOD_ID, "GrapplingHook")).setTranslationKey(MOD_ID, "GrapplingHook");
         itemRope = new TemplateItem(Identifier.of(MOD_ID, "Rope")).setTranslationKey(MOD_ID, "Rope");
         itemGoldCoin = new TemplateItem(Identifier.of(MOD_ID, "GoldCoin")).setTranslationKey(MOD_ID, "GoldCoin");
         itemOilDrop = new TemplateItem(Identifier.of(MOD_ID, "OilDrop")).setTranslationKey(MOD_ID, "OilDrop");
+        /// Ewentualnie zmiany dla durability Scuba Tank i NightVisionGoogles.
 
         itemAtv = new SdkItemAtv(Identifier.of(MOD_ID, "Atv")).setTranslationKey(MOD_ID, "Atv");
         itemAtvBody = new TemplateItem(Identifier.of(MOD_ID, "AtvBody")).setTranslationKey(MOD_ID, "AtvBody");

@@ -3,9 +3,11 @@ package net.kozibrodka.sdk.network;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.FabricLoader;
+import net.kozibrodka.sdk.atv.SdkEntityAtv;
 import net.kozibrodka.sdk.atv.SdkEntityLandVehicle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.NetworkHandler;
 import net.minecraft.network.packet.Packet;
@@ -26,9 +28,13 @@ public class CarLoadPacket extends Packet implements ManagedPacket<CarLoadPacket
     public static final PacketType<CarLoadPacket> TYPE = PacketType.builder(true, true, CarLoadPacket::new).build();
 
     private int entityId;
-    private String entityPass;
+    private String entityPass = "";
     private float entityYaw;
     private float entityPitch;
+    private boolean entityGround;
+    private int entityHealth;
+    private int gunAID;
+    private int gunBID;
 
     public CarLoadPacket() {
     }
@@ -42,19 +48,28 @@ public class CarLoadPacket extends Packet implements ManagedPacket<CarLoadPacket
         this.entityPass = pass;
     }
 
-    public CarLoadPacket(int id, float ya, float pi) {
+    public CarLoadPacket(int id, float ya, float pi, boolean gr, int ht, int a, int b, String pass) {
         this.entityId = id;
         this.entityYaw = ya;
         this.entityPitch = pi;
+        this.entityGround = gr;
+        this.entityHealth = ht;
+        this.gunAID = a;
+        this.gunBID = b;
+        this.entityPass = pass;
     }
 
     @Override
     public void read(DataInputStream stream) {
         try {
             this.entityId = stream.readInt();
-//            this.entityPass = stream.readUTF();
+            this.entityPass = stream.readUTF();
             this.entityYaw = stream.readFloat();
             this.entityPitch = stream.readFloat();
+            this.entityGround = stream.readBoolean();
+            this.entityHealth = stream.readInt();
+            this.gunAID = stream.readInt();
+            this.gunBID = stream.readInt();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,9 +79,13 @@ public class CarLoadPacket extends Packet implements ManagedPacket<CarLoadPacket
     public void write(DataOutputStream stream) {
         try {
             stream.writeInt(this.entityId);
-//            stream.writeUTF(this.entityPass);
+            stream.writeUTF(this.entityPass);
             stream.writeFloat(this.entityYaw);
             stream.writeFloat(this.entityPitch);
+            stream.writeBoolean(this.entityGround);
+            stream.writeInt(this.entityHealth);
+            stream.writeInt(this.gunAID);
+            stream.writeInt(this.gunBID);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,14 +107,16 @@ public class CarLoadPacket extends Packet implements ManagedPacket<CarLoadPacket
         }
         Entity vehicleEntity = ((ClientWorld)player.world).getEntity(this.entityId);
         if(vehicleEntity instanceof SdkEntityLandVehicle landVeh){
-            vehicleEntity.yaw = this.entityYaw;
-            vehicleEntity.pitch = this.entityPitch;
-//            vehicleEntity.pitch = 0;
-//            landVeh.clientVelocityY = 10;
-//            vehicleEntity.onGround = true;
-//            System.out.println(vehicleEntity.x + "  " + vehicleEntity.z);
-//            System.out.println(vehicleEntity.clie + "  " + landVeh.clientVelocityY);
+            landVeh.setOnGround(this.entityGround);
+            landVeh.getDataTracker().set(29, (byte) this.entityHealth);
+            landVeh.setClientYaw(this.entityYaw);
+            landVeh.getDataTracker().set(18, this.gunAID);
+            landVeh.getDataTracker().set(19, this.gunBID);
 
+            PlayerEntity jokey1 = player.world.getPlayer(this.entityPass);
+                if(jokey1 != null){
+                    jokey1.setVehicle(landVeh);
+                }
         }
     }
 
@@ -108,8 +129,15 @@ public class CarLoadPacket extends Packet implements ManagedPacket<CarLoadPacket
 
         Entity vehicleEntity = ((ServerWorld)player.world).getEntity(this.entityId);
 
-        if(vehicleEntity != null){
-            PacketHelper.sendTo(player, new CarLoadPacket(vehicleEntity.id, vehicleEntity.yaw, vehicleEntity.pitch));
+        if(vehicleEntity instanceof SdkEntityAtv landVeh){
+            String sPass = "";
+            if(vehicleEntity.passenger instanceof PlayerEntity plPass){
+                sPass = plPass.name;
+            }
+
+            PacketHelper.sendTo(player, new CarLoadPacket(vehicleEntity.id, vehicleEntity.yaw, vehicleEntity.pitch, vehicleEntity.onGround, landVeh.health, landVeh.getDataTracker().getInt(18), landVeh.getDataTracker().getInt(19), sPass));
+//            PacketHelper.sendTo(player, new CarLoadPacket(vehicleEntity.id, vehicleEntity.yaw, vehicleEntity.pitch, vehicleEntity.onGround, landVeh.health, landVeh.gunA.itemId, landVeh.gunB.itemId, sPass));
+
         }
     }
 

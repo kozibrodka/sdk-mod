@@ -3,15 +3,12 @@ package net.kozibrodka.sdk.network;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.FabricLoader;
-import net.kozibrodka.sdk.entitySentry.SdkEntitySentry;
 import net.kozibrodka.sdk.tileEntity.SdkTileEntityPlaque;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetworkHandler;
 import net.minecraft.network.packet.Packet;
-import net.minecraft.world.ClientWorld;
-import net.minecraft.world.ServerWorld;
 import net.modificationstation.stationapi.api.entity.player.PlayerHelper;
 import net.modificationstation.stationapi.api.network.packet.ManagedPacket;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
@@ -22,9 +19,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class AskPacket extends Packet implements ManagedPacket<AskPacket> {
+public class AskPlaquePacket extends Packet implements ManagedPacket<AskPlaquePacket> {
 
-    public static final PacketType<AskPacket> TYPE = PacketType.builder(true, true, AskPacket::new).build();
+    public static final PacketType<AskPlaquePacket> TYPE = PacketType.builder(true, true, AskPlaquePacket::new).build();
 
     private int itemId;
     private int itemMeta;
@@ -32,10 +29,10 @@ public class AskPacket extends Packet implements ManagedPacket<AskPacket> {
     private int y;
     private int z;
 
-    public AskPacket() {
+    public AskPlaquePacket() {
     }
 
-    public AskPacket(int id, int meta, int a, int b, int c) {
+    public AskPlaquePacket(int id, int meta, int a, int b, int c) {
         this.itemId = id;
         this.itemMeta = meta;
         this.x = a;
@@ -103,9 +100,9 @@ public class AskPacket extends Packet implements ManagedPacket<AskPacket> {
         SdkTileEntityPlaque sdktileentityplaque = (SdkTileEntityPlaque)player.world.getBlockEntity(x,y,z);
         if(sdktileentityplaque != null){
             if(sdktileentityplaque.itemStack == null){
-                PacketHelper.sendTo(player, new AskPacket(0, 0, x,y,z));
+                PacketHelper.sendTo(player, new AskPlaquePacket(0, 0, x,y,z));
             }else{
-                PacketHelper.sendTo(player, new AskPacket(sdktileentityplaque.itemStack.itemId, sdktileentityplaque.itemStack.getDamage(), x,y,z));
+                PacketHelper.sendTo(player, new AskPlaquePacket(sdktileentityplaque.itemStack.itemId, sdktileentityplaque.itemStack.getDamage(), x,y,z));
             }
         }
 
@@ -117,7 +114,7 @@ public class AskPacket extends Packet implements ManagedPacket<AskPacket> {
     }
 
     @Override
-    public @NotNull PacketType<AskPacket> getType() {
+    public @NotNull PacketType<AskPlaquePacket> getType() {
         return TYPE;
     }
 }

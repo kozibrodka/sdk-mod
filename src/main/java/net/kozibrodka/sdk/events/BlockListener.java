@@ -6,12 +6,8 @@ import net.kozibrodka.sdk.atv.SdkEntityAtv;
 import net.kozibrodka.sdk.atv.SdkGuiAtv;
 import net.kozibrodka.sdk.block.*;
 import net.kozibrodka.sdk.grinder.SdkGuiGrinder;
-import net.kozibrodka.sdk.network.AskPacket;
-import net.kozibrodka.sdk.network.CarLoadPacket;
-import net.kozibrodka.sdk.network.GrapplingPacket;
-import net.kozibrodka.sdk.network.GroundPacket;
+import net.kozibrodka.sdk.network.*;
 import net.kozibrodka.sdk.tileEntity.SdkTileEntityGrinder;
-import net.kozibrodka.sdk_api.network.*;
 import net.kozibrodka.sdk_api.utils.SdkMap;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
@@ -79,9 +75,11 @@ public class BlockListener {
     @EventListener
     public void registerPacket(PacketRegisterEvent event) {
         Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("grappling"), GrapplingPacket.TYPE);
-        Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("ask"), AskPacket.TYPE);
-        Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("ground"), GroundPacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("ask"), AskPlaquePacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("carload"), CarLoadPacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("carcrash"), CarCrashPacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("passenger"), PassengerPacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("glowa"), PassHeadRotPacket.TYPE);
 
     }
 

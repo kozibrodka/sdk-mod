@@ -74,12 +74,22 @@ public class SdkRenderAtv extends EntityRenderer
         for(int i = -1; i <= 1; i += 2)
         {
             ItemStack itemstack = null;
+//            int idA = sdkentityatv.getGunIdA();
+//            int idB = sdkentityatv.getGunIdB();
             if(i == -1)
             {
-                itemstack = sdkentityatv.gunA;
+                if(sdkentityatv.world.isRemote){
+                    itemstack = sdkentityatv.clientgunA;
+                }else{
+                    itemstack = sdkentityatv.gunA;
+                }
             } else
             {
-                itemstack = sdkentityatv.gunB;
+                if(sdkentityatv.world.isRemote){
+                    itemstack = sdkentityatv.clientgunB;
+                }else{
+                    itemstack = sdkentityatv.gunB;
+                }
                 GL11.glTranslatef(0.0F, 0.0F, -1.25F);
             }
             if(itemstack != null)

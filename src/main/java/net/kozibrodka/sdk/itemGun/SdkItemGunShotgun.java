@@ -28,7 +28,7 @@ public class SdkItemGunShotgun extends SdkItemGun
         spread = 8F;
         useDelay = 16;
         recoil = 8F;
-        penetration = 0;
+        penetration = 0.0F;
     }
 
     @Override

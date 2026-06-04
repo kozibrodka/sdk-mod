@@ -255,13 +255,14 @@ public class SdkEntityBulletLaser extends SdkEntityBullet implements EntitySpawn
     public void damageEntity(Entity entity)
     {
         int l = (damage- ((timeInAir-1)/10)); /// Opad DMG z czasem
+        int lV = (vehicleDamage- ((timeInAir-1)/10));
         if (entity instanceof LivingEntity) {
             SdkTools.attackEntityIgnoreDelay((LivingEntity) entity, owner, l);
         } else {
             if(entity instanceof SdkVehicle panzer)
             {
                 if(penetration > panzer.getArmorFactor()){
-                    entity.damage(this, l);
+                    entity.damage(this, l + lV);
                 }
             }else {
                 entity.damage(owner, l);

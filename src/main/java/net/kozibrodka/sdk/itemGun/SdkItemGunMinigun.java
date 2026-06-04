@@ -28,7 +28,7 @@ public class SdkItemGunMinigun extends SdkItemGun
         spread = 2.0F;
         useDelay = 1;
         recoil = 1.0F;
-        penetration = 0;
+        penetration = 0.0F;
     }
 
     @Override

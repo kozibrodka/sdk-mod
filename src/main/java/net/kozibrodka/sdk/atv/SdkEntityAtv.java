@@ -1,27 +1,34 @@
 package net.kozibrodka.sdk.atv;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.kozibrodka.sdk.events.EntityListener;
 import net.kozibrodka.sdk.events.ItemListener;
-import net.kozibrodka.sdk_api.utils.SdkItemCustomUseDelay;
-import net.kozibrodka.sdk_api.utils.SdkItemGun;
-import net.kozibrodka.sdk_api.utils.SdkVehicle;
+import net.kozibrodka.sdk.network.PassHeadRotPacket;
+import net.kozibrodka.sdk.network.PassengerPacket;
+import net.kozibrodka.sdk_api.ingame.mod_SdkBase;
+import net.kozibrodka.sdk_api.particle.SdkFireSmokeParticle;
+import net.kozibrodka.sdk_api.particle.SdkFlameParticle;
+import net.kozibrodka.sdk_api.utils.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.world.World;
-import net.minecraft.world.explosion.Explosion;
 import net.modificationstation.stationapi.api.gui.screen.container.GuiHelper;
+import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
 import net.modificationstation.stationapi.api.server.entity.HasTrackingParameters;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.TriState;
 
+import java.util.Objects;
+
 @HasTrackingParameters(trackingDistance = 160, updatePeriod = 2, sendVelocity = TriState.TRUE)
 public class SdkEntityAtv extends SdkEntityLandVehicle
-        implements Inventory, SdkVehicle, EntitySpawnDataProvider
+        implements Inventory, SdkVehicle, EntitySpawnDataProvider // EntitySpawnDataProvider
 {
 
     public SdkEntityAtv(World world)
@@ -60,6 +67,20 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
     }
 
     @Override
+    public float getBrightnessAtEyes(float tickDelta) {
+        if(mod_SdkBase.thermoVision){
+            return 2.0F;
+        }else{
+            return super.getBrightnessAtEyes(tickDelta);
+        }
+    }
+
+    @Override
+    public boolean shouldRender(double distance) {
+        return true;
+    }
+
+    @Override
     public double getPassengerRidingHeight()
     {
         return 0.3D;
@@ -82,6 +103,7 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
     {
         if(deathTime == -13)
         {
+            world.broadcastEntityEvent(this, (byte)7);
             deathTime = DEATH_TIME_MAX;
         }
     }
@@ -90,10 +112,15 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
     public void tick()
     {
         super.tick();
+        if(world.isRemote){
+            clientTick();
+            return;
+            /// CLIENT TICK.
+        }
         if(clientFIRE){
             fireGuns();
         }
-        if(random.nextInt(MAX_HEALTH) > health * 2)
+        if(random.nextInt(MAX_HEALTH) > health * 2 && SdkEnvTool.isEnvClient())
         {
             if(Math.random() < 0.75D)
             {
@@ -111,14 +138,22 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
         {
             if(deathTime == 0)
             {
-                Explosion explosion = new Explosion(world, null, x, (float)y, (float)z, 3F);
-                explosion.explode();
-                world.playSound(x, y, z, "random.explode", 4F, (1.0F + (world.random.nextFloat() - world.random.nextFloat()) * 0.2F) * 0.7F);
-                spawnParticles("explode", 64, true);
-                spawnParticles("smoke", 64, true);
+                world.broadcastEntityEvent(this, (byte)8);
+                boolean flagW = false;
+                if(checkWaterCollisions()){
+                    flagW = true;
+                }
+                SdkExplosion explosion1 = new SdkExplosion(world, null, x,  y,  z, 3F, false, false, "random.explode", flagW,0.3F);
+                explosion1.explodeA();
+                explosion1.explodeB(false);
+                if(SdkEnvTool.isEnvClient()) {
+                    spawnParticles("explode", 64, true);
+                    spawnParticles("smoke", 64, true);
+                }
+
                 markDead();
             } else
-            if(random.nextInt(DEATH_TIME_MAX) > deathTime)
+            if(random.nextInt(DEATH_TIME_MAX) > deathTime && SdkEnvTool.isEnvClient())
             {
                 spawnParticles("flame", 8, false);
             }
@@ -126,9 +161,6 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
         }
         if(passenger != null)
         {
-//            if(SdkEnvTool.isEnvServ() && passenger instanceof PlayerEntity playerP){
-//                PacketHelper.sendTo(playerP, new GroundPacket(this.onGround));
-//            }
             if(soundLoopTime <= 0)
             {
                 world.playSound(x + velocityX * 1.5D, y + (onGround ? 0.0D : velocityY) * 1.5D, z + velocityZ * 1.5D, SOUND_RIDING, 1.0F, 1.0F + (float)(getSpeed() / MAX_SPEED / 4D));
@@ -141,8 +173,85 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
         }
     }
 
+    public void clientTick(){
+        if(random.nextInt(MAX_HEALTH) > health * 2)
+        {
+            if(Math.random() < 0.75D)
+            {
+                spawnParticles("smoke", 4, false);
+            } else
+            {
+                spawnParticles("largesmoke", 1, false);
+            }
+        }
+        if(deathTime >= 0)
+        {
+            if(random.nextInt(DEATH_TIME_MAX) > deathTime)
+            {
+                spawnParticles("flame", 8, false);
+            }
+            deathTime--;
+        }
+        if(passenger != null)
+        {
+            if(soundLoopTime <= 0)
+            {
+                world.playSound(x + clientVelocityX * 1.5D, y + (onGround ? 0.0D : clientVelocityY) * 1.5D, z + clientVelocityZ * 1.5D, SOUND_RIDING, 1.0F, 1.0F + (float)(getClientSpeed() / MAX_SPEED / 4D));
+                soundLoopTime = SOUND_LOOP_TIME_MAX;
+            }
+            soundLoopTime--;
+            /// Głowa Packet
+            if(Objects.equals(SdkToolsRender.minecraft.player.name, ((PlayerEntity) passenger).name)){
+                PacketHelper.send(new PassHeadRotPacket(passenger.yaw, passenger.pitch));
+            }
+        } else
+        {
+            soundLoopTime = 0;
+        }
+        ///
+        if(gunIdA == 0){
+            clientgunA = null;
+        }else{
+            clientgunA = new ItemStack(gunIdA, 1, 0);
+        }
+        if(gunIdB == 0){
+            clientgunB = null;
+        }else{
+            clientgunB = new ItemStack(gunIdB, 1, 0);
+        }
+        ///
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public void processServerEntityStatus(byte status) {
+        if (status == 6) {
+            world.playSound(this, "sdk:mechhurt", 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
+        } else if (status == 7) {
+            deathTime = DEATH_TIME_MAX;
+            health = 0;
+        } else if (status == 8) {
+            boolean flagW = false;
+            if(checkWaterCollisions()){
+                flagW = true;
+            }
+            SdkExplosion explosion1 = new SdkExplosion(world, null, x,  y,  z, 3F, false, false, "random.explode", flagW,0.3F);
+            explosion1.explodeA();
+            explosion1.explodeB(false);
+            spawnParticles("explode", 64, true);
+            spawnParticles("smoke", 64, true);
+        }  else if (status == 9){
+            world.playSound(this, "sdk:wrench", 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
+        } else if (status == 10){
+            this.passenger = null;
+        }else{
+            super.processServerEntityStatus(status);
+        }
+    }
+
+    @Environment(EnvType.CLIENT)
     public void spawnParticles(String s, int i, boolean flag)
-    { //TODO PARTICLE new
+    {
         for(int j = 0; j < i; j++)
         {
             double d = (x + random.nextDouble() * (double)width * 1.5D) - (double)width * 0.75D;
@@ -151,12 +260,18 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
             double d3 = flag ? random.nextDouble() - 0.5D : 0.0D;
             double d4 = flag ? random.nextDouble() - 0.5D : 0.0D;
             double d5 = flag ? random.nextDouble() - 0.5D : 0.0D;
-            if(Math.random() < 0.75D)
-            {
-                world.addParticle(s, d, d1, d2, d3, d4, d5);
-            } else
-            {
-                world.addParticle(s, d, d1, d2, d3, d4, d5);
+
+            if(Objects.equals(s, "largesmoke")){
+                SdkFireSmokeParticle particl = new SdkFireSmokeParticle(world, d, d1, d2, d3, d4, d5, 2.5F);
+                SdkToolsRender.minecraft.particleManager.addParticle(particl);
+            }
+            if(Objects.equals(s, "smoke")){
+                SdkFireSmokeParticle particl = new SdkFireSmokeParticle(world, d, d1, d2, d3, d4, d5, 1.0F);
+                SdkToolsRender.minecraft.particleManager.addParticle(particl);
+            }
+            if(Objects.equals(s, "flame")){
+                SdkFlameParticle particl = new SdkFlameParticle(world, d, d1, d2, d3, d4, d5);
+                SdkToolsRender.minecraft.particleManager.addParticle(particl);
             }
         }
 
@@ -165,10 +280,19 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
     @Override
     public boolean interact(PlayerEntity entityplayer)
     {
+        if(world.isRemote){
+            if(entityplayer.getHand() != null && entityplayer.getHand().itemId == ItemListener.itemWrench.id && health > 0 && health < MAX_HEALTH){
+                entityplayer.swingHand();
+                return true;
+            }
+            SdkItemCustomUseDelay.doNotUseThisTick = world.getTime();
+            return true;
+        }
         if(entityplayer.getHand() != null && entityplayer.getHand().itemId == ItemListener.itemWrench.id)
         {
             if(health > 0 && health < MAX_HEALTH)
             {
+                world.broadcastEntityEvent(this, (byte)9);
                 world.playSound(this, "sdk:wrench", 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
                 health = Math.min(health + 4, MAX_HEALTH);
                 entityplayer.swingHand();
@@ -188,6 +312,13 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
         {
             entityplayer.setVehicle(this);
             SdkItemCustomUseDelay.doNotUseThisTick = world.getTime();
+            if(SdkEnvTool.isEnvServ()) {
+                if(passenger instanceof PlayerEntity passPL){
+                    PacketHelper.sendToAllTracking(this, new PassengerPacket(this.id, passPL.name));
+                }else{
+                    world.broadcastEntityEvent(this, (byte)10);
+                }
+            }
         }
         return true;
     }
@@ -240,6 +371,7 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
             if(byte0 == 0)
             {
                 gunA = new ItemStack(nbttagcompound1);
+                dataTracker.set(18, gunA.itemId);
             }
         }
         NbtList nbttaglist1 = nbttagcompound.getList("GunB");
@@ -250,6 +382,7 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
             if(byte1 == 0)
             {
                 gunB = new ItemStack(nbttagcompound2);
+                dataTracker.set(19, gunA.itemId);
             }
         }
         health = nbttagcompound.getInt("Health");
@@ -323,11 +456,17 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
         {
             itemstack = gunA;
             gunA = null;
+            if(!world.isRemote) {
+                dataTracker.set(18, 0);
+            }
         } else
         if(i == 1 && gunB != null)
         {
             itemstack = gunB;
             gunB = null;
+            if(!world.isRemote) {
+                dataTracker.set(19, 0);
+            }
         }
         return itemstack;
     }
@@ -340,10 +479,16 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
             if(i == 0)
             {
                 gunA = itemstack;
+                if(!world.isRemote) {
+                    dataTracker.set(18, gunA.itemId);
+                }
             } else
             if(i == 1)
             {
                 gunB = itemstack;
+                if(!world.isRemote) {
+                    dataTracker.set(19, gunB.itemId);
+                }
             }
         }
     }
@@ -373,6 +518,8 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
 
     public ItemStack gunA;
     public ItemStack gunB;
+    public ItemStack clientgunA;
+    public ItemStack clientgunB;
     public int deathTime;
     public int DEATH_TIME_MAX;
     public int soundLoopTime;
@@ -399,6 +546,7 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
     public void exitKey(PlayerEntity playerEntity) {
         playerEntity.setVehicle(null);
         this.passenger = null;
+        world.broadcastEntityEvent(this, (byte)10);
     }
 
     @Override
@@ -423,12 +571,12 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
 
     @Override
     public int getPercentHealth() {
-        return (health/MAX_HEALTH)*100;
+        return (int) (((double)health/(double)MAX_HEALTH)*100D);
     }
 
     @Override
     public float getArmorFactor() {
-        return 1.0F;
+        return -1.0F;
     }
 
     @Override
@@ -439,6 +587,16 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
     @Override
     public float getDmgBroken() {
         return 1.0F;
+    }
+
+    @Override
+    public String getAmmoName() {
+        return "";
+    }
+
+    @Override
+    public String getBombName() {
+        return "";
     }
 
     @Override

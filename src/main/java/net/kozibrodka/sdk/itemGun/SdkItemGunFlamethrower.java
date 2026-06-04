@@ -30,7 +30,7 @@ public class SdkItemGunFlamethrower extends SdkItemGun
         recoil = 0.0F;
         soundDelay = 12;
         soundRangeFactor = 2.0F;
-        penetration = 3;
+        penetration = 3.5F;
         ammoRenderLiquid = true;
         bucketAmmo = Item.BUCKET.id;
         bulletDrop = 0.0F;

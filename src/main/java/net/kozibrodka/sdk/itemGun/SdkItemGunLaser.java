@@ -28,7 +28,7 @@ public class SdkItemGunLaser extends SdkItemGun
         useDelay = 10;
         recoil = 0.0F;
         soundRangeFactor = 2.0F;
-        penetration = 3;
+        penetration = 3.5F;
         ammoRenderLiquid = true;
         bulletDrop = 0.0F;
         panzerDamage = 10;
