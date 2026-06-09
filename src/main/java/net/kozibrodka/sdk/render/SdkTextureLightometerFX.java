@@ -2,14 +2,10 @@
 package net.kozibrodka.sdk.render;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
-import javax.imageio.ImageIO;
+
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.kozibrodka.sdk.events.ItemListener;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.texture.DynamicTexture;
 import net.minecraft.client.resource.pack.TexturePack;
 import net.minecraft.util.math.MathHelper;
 import net.modificationstation.stationapi.api.client.StationRenderAPI;
@@ -17,6 +13,7 @@ import net.modificationstation.stationapi.api.client.texture.TextureHelper;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.client.texture.binder.StationTextureBinder;
+
 
 public class SdkTextureLightometerFX extends StationTextureBinder
 {

@@ -79,7 +79,7 @@ public class EntityListener {
         event.register(MOD_ID.id("Parachute"), SdkEntityParachute::new);
 
         event.register(MOD_ID.id("BulletCasing"), EntityBulletCasing::new);
-        event.register(MOD_ID.id("Method…"), EntityShellCasing::new);
+        event.register(MOD_ID.id("ShellCasing"), EntityShellCasing::new);
 
         event.register(MOD_ID.id("BulletAk47"), SdkEntityBulletAk47::new);
         event.register(MOD_ID.id("BulletDeagle"), SdkEntityBulletDeagle::new);

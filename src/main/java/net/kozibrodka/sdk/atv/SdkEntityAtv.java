@@ -382,7 +382,7 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
             if(byte1 == 0)
             {
                 gunB = new ItemStack(nbttagcompound2);
-                dataTracker.set(19, gunA.itemId);
+                dataTracker.set(19, gunB.itemId);
             }
         }
         health = nbttagcompound.getInt("Health");

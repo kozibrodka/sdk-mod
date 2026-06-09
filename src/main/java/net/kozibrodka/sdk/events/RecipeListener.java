@@ -81,8 +81,8 @@ public class RecipeListener {
 
     public void addNadeRecipes(RecipeRegisterEvent event){
 //        CraftingRegistry.addShapedRecipe(new ItemInstance(ItemListener.itemSentrya, 1), );
-        CraftingRegistry.addShapedRecipe(new ItemStack(ItemListener.itemGrenade, 1), "X#X", "#X#", "X#X", Character.valueOf('X'), Item.GUNPOWDER, Character.valueOf('#'), Item.IRON_INGOT);
-        CraftingRegistry.addShapedRecipe(new ItemStack(ItemListener.itemGrenadeHe, 1), "X#X", "#L#", "X#X", Character.valueOf('X'), Item.GUNPOWDER, Character.valueOf('#'), Item.IRON_INGOT, 'L', new ItemStack(Item.DYE, 1,4));
+        CraftingRegistry.addShapedRecipe(new ItemStack(ItemListener.itemGrenadeHe, 1), "X#X", "#X#", "X#X", Character.valueOf('X'), Item.GUNPOWDER, Character.valueOf('#'), Item.IRON_INGOT);
+        CraftingRegistry.addShapedRecipe(new ItemStack(ItemListener.itemGrenade, 1), "X#X", "#L#", "X#X", Character.valueOf('X'), Item.GUNPOWDER, Character.valueOf('#'), Item.IRON_INGOT, 'L', new ItemStack(Item.DYE, 1,4));
         CraftingRegistry.addShapedRecipe(new ItemStack(ItemListener.itemGrenadeStun, 1), "X#X", "#Y#", "X#X", Character.valueOf('X'), Item.GUNPOWDER, Character.valueOf('#'), Item.IRON_INGOT, Character.valueOf('Y'), Item.GLOWSTONE_DUST);
         CraftingRegistry.addShapedRecipe(new ItemStack(ItemListener.itemGrenadeSmoke, 1), "X#X", "#Y#", "X#X", Character.valueOf('X'), Item.GUNPOWDER, Character.valueOf('#'), Item.IRON_INGOT, Character.valueOf('Y'), Item.FLINT);
         CraftingRegistry.addShapelessRecipe(new ItemStack(ItemListener.itemGrenadeSticky, 1), new ItemStack(ItemListener.itemGrenade), new ItemStack(Item.SLIMEBALL));
