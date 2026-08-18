@@ -95,7 +95,8 @@ public class SdkEntityNukePrimed extends Entity implements EntitySpawnDataProvid
         if(checkWaterCollisions()) {
             flagW = true;
         }
-        SdkExplosion explosion = new SdkExplosion(world, null, x,  y,  z, 8.0F, false, true, "random.explode", flagW, 0.0F);
+        SdkExplosion explosion = new SdkExplosion(world, null, x,  y,  z, 8.0F, false, true, "random.explode", flagW);
+        explosion.setDropLuck(0.0F);
         explosion.explodeA();
         explosion.explodeB(true);
     }

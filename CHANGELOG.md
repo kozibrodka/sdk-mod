@@ -1,1 +1,1 @@
-- Initial Release
+- Fixed crashes and bugs

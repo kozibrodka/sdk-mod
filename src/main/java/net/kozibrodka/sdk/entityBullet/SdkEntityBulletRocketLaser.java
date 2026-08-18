@@ -29,6 +29,7 @@ public class SdkEntityBulletRocketLaser extends SdkEntityShell implements Entity
         rotationYawOffset = 0.0F;
         setBoundingBoxSpacing(0.25F, 0.25F);
         bulletDrop = ((SdkItemGun) ItemListener.itemGunRocketLauncherLaser).bulletDrop;
+        exploPower = ((SdkItemGun) ItemListener.itemGunRocketLauncherLaser).explosionPower;
     }
 
     public SdkEntityBulletRocketLaser(World world, Entity entity, SdkItemGun sdkitemgun, float f, float f1, float f2, float f3, float f4) {
@@ -36,6 +37,15 @@ public class SdkEntityBulletRocketLaser extends SdkEntityShell implements Entity
         rotationYawOffset = 0.0F;
         setBoundingBoxSpacing(0.25F, 0.25F);
         rotationYawOffset = f3;
+    }
+
+    @Override
+    public void addMoveParticle(int tick) {
+        if(tick % 2 == 0) {
+            double d = 0.625D;
+            double d1 = Math.sqrt(velocityX * velocityX + velocityZ * velocityZ + velocityY * velocityY);
+            world.addParticle("smoke", x - (velocityX / d1) * d, y - (velocityY / d1) * d, z - (velocityZ / d1) * d, 0.0D, 0.0D, 0.0D);
+        }
     }
 
     @Override

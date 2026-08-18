@@ -19,6 +19,7 @@ public class SdkItemGunRocketLauncherLaser extends SdkItemGun
         firingSound = "sdk:rocket";
         reloadSound = "sdk:reload";
         emptySound = "sdk:gunempty";
+//        explosionSound = "random.explode";
         ammoHudText = "/assets/sdk/stationapi/textures/gui/guiAmmoBullet.png";
         requiredBullet = ItemListener.itemBulletRocketLaser;
         numBullets = 1;

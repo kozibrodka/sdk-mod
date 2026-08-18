@@ -4,11 +4,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kozibrodka.sdk.events.EntityListener;
 import net.kozibrodka.sdk.events.ItemListener;
-import net.kozibrodka.sdk.network.PassHeadRotPacket;
 import net.kozibrodka.sdk.network.PassengerPacket;
 import net.kozibrodka.sdk_api.ingame.mod_SdkBase;
-import net.kozibrodka.sdk_api.particle.SdkFireSmokeParticle;
-import net.kozibrodka.sdk_api.particle.SdkFlameParticle;
+import net.kozibrodka.sdk_api.particle.vanilla.SdkFireSmokeParticle;
+import net.kozibrodka.sdk_api.particle.vanilla.SdkFlameParticle;
 import net.kozibrodka.sdk_api.utils.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -143,7 +142,7 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
                 if(checkWaterCollisions()){
                     flagW = true;
                 }
-                SdkExplosion explosion1 = new SdkExplosion(world, null, x,  y,  z, 3F, false, false, "random.explode", flagW,0.3F);
+                SdkExplosion explosion1 = new SdkExplosion(world, null, x,  y,  z, 3F, false, false, "random.explode", flagW);
                 explosion1.explodeA();
                 explosion1.explodeB(false);
                 if(SdkEnvTool.isEnvClient()) {
@@ -200,10 +199,6 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
                 soundLoopTime = SOUND_LOOP_TIME_MAX;
             }
             soundLoopTime--;
-            /// Głowa Packet
-            if(Objects.equals(SdkToolsRender.minecraft.player.name, ((PlayerEntity) passenger).name)){
-                PacketHelper.send(new PassHeadRotPacket(passenger.yaw, passenger.pitch));
-            }
         } else
         {
             soundLoopTime = 0;
@@ -235,7 +230,7 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
             if(checkWaterCollisions()){
                 flagW = true;
             }
-            SdkExplosion explosion1 = new SdkExplosion(world, null, x,  y,  z, 3F, false, false, "random.explode", flagW,0.3F);
+            SdkExplosion explosion1 = new SdkExplosion(world, null, x,  y,  z, 3F, false, false, "random.explode", flagW);
             explosion1.explodeA();
             explosion1.explodeB(false);
             spawnParticles("explode", 64, true);
@@ -285,7 +280,10 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
                 entityplayer.swingHand();
                 return true;
             }
-            SdkItemCustomUseDelay.doNotUseThisTick = world.getTime();
+            if(!(passenger != null && (passenger instanceof PlayerEntity) && passenger != entityplayer))
+            {
+                SdkItemCustomUseDelay.doNotUseThisTick = world.getTime();
+            }
             return true;
         }
         if(entityplayer.getHand() != null && entityplayer.getHand().itemId == ItemListener.itemWrench.id)
@@ -597,6 +595,11 @@ public class SdkEntityAtv extends SdkEntityLandVehicle
     @Override
     public String getBombName() {
         return "";
+    }
+
+    @Override
+    public boolean canPassengerUseGun() {
+        return true;
     }
 
     @Override

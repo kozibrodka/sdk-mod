@@ -1,5 +1,8 @@
 # SDK MOD Legacy Unofficial
 
+## Credits
+Original mod created by ScottyDoesKnow (SDK) in 2010. Although he has since left the community, this project is an unofficial port made to honor his incredible work and preserve this legendary piece of Minecraft history for the modern Beta 1.7.3 Fabric ecosystem. All original concepts and designs belong to him.
+
 ## Setup
 
 [See the StationAPI wiki.](https://github.com/ModificationStation/StationAPI/wiki)

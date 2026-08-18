@@ -79,8 +79,6 @@ public class BlockListener {
         Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("carload"), CarLoadPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("carcrash"), CarCrashPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("passenger"), PassengerPacket.TYPE);
-        Registry.register(PacketTypeRegistry.INSTANCE, MOD_ID.id("glowa"), PassHeadRotPacket.TYPE);
-
     }
 
     //blocks
